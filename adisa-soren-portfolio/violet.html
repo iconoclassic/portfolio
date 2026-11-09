@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en" data-radius="soft" data-buttons="solid">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Violet Case Study</title>
+<meta name="description" content="Violet is an LLM-based agent that supports people with chronic conditions between visits, around the clock. I led the foundational research that set its character: how it sounds, what it never says, and when it hands off to a care team.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Giving a personal health agent a character people trust: a case study by Adisa Soren">
+<meta name="theme-color" content="#f7f9fa">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+  /* page CSS: only what the system lacks */
+  .kicker { color: var(--muted); }
+  .stack { display: grid; gap: var(--s-4); align-content: start; }
+  .list { display: grid; gap: var(--s-3); }
+  .list li { padding-left: var(--s-5); position: relative; }
+  .list li::before { content: ""; position: absolute; left: 0; top: .78em; width: 10px; height: 1px; background: var(--ink); }
+  .figs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--gutter); padding-top: var(--s-5); border-top: 1px solid var(--line); margin-top: var(--s-7); }
+  .figs dt { font-size: var(--t-small); color: var(--muted); }
+  .figs dd { margin: var(--s-1) 0 0; }
+  .card .t-label { color: var(--muted); }
+  .steps { counter-reset: step; }
+  .step__n { font: 400 var(--t-h3)/1 var(--font-display); letter-spacing: var(--display-tracking); color: var(--accent); }
+  .q { font: 400 var(--t-lead)/1.45 var(--font-text); }
+  .q + .q { margin-top: var(--s-3); }
+  /* phase visuals: drawn stand-ins, not the real survey */
+  .mock { display: grid; gap: var(--s-2); padding: var(--s-4); border-radius: var(--r-md); background: var(--bg); border: 1px solid var(--line); margin-top: var(--s-2); }
+  .mock__row { display: grid; grid-template-columns: 52px minmax(0, 1fr) 52px; align-items: center; gap: var(--s-3); font-size: var(--t-small); }
+  .mock__head { color: var(--muted); font-size: var(--t-label); font-weight: 500; }
+  .mock__head span:last-child, .mock__head span:first-child { text-align: center; }
+  .mock__concept { padding: var(--s-2) var(--s-3); border-radius: var(--r-sm); background: var(--surface); }
+  .dot { width: 16px; height: 16px; border-radius: 999px; border: 1.5px solid var(--line-strong); justify-self: center; }
+  .dot.is-on { border-color: var(--accent); background: radial-gradient(circle, var(--accent) 0 4px, transparent 4.5px); }
+  .sort { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s-3); }
+  .sort__col { display: grid; gap: var(--s-2); align-content: start; }
+  .sort__col > span { font-size: var(--t-label); font-weight: 500; color: var(--muted); }
+  .sort__chip { height: 28px; border-radius: var(--r-sm); background: var(--surface); }
+  .sort__col:first-child .sort__chip { background: color-mix(in oklab, var(--accent) 16%, var(--bg)); }
+  .phase__meta { display: flex; flex-wrap: wrap; gap: var(--s-2) var(--s-5); font-size: var(--t-small); color: var(--muted); }
+  .phase__meta b { color: var(--ink); font-weight: 500; }
+  /* bar chart */
+  .chart { display: grid; gap: var(--s-3); }
+  .chart__title { font-weight: 500; }
+  .bars { display: grid; gap: var(--s-2); margin: 0; }
+  .bar { display: grid; grid-template-columns: 84px minmax(0, 1fr) 52px; align-items: center; gap: var(--s-3); position: relative; }
+  .bar dt { font-size: var(--t-small); color: var(--muted); }
+  .bar dd { margin: 0; }
+  .bar__track { height: 20px; }
+  .bar__fill { height: 100%; width: var(--v); background: var(--p-muted); border-radius: 0 4px 4px 0; }
+  .bar.is-hi .bar__fill { background: var(--accent); }
+  .bar__val { font-size: var(--t-small); text-align: right; font-variant-numeric: tabular-nums; }
+  .bar:hover .bar__fill, .bar:focus-within .bar__fill { filter: brightness(1.12); }
+  .chart__note { font-size: var(--t-small); color: var(--muted); }
+  .chart__note b { color: var(--ink); font-weight: 500; }
+  /* tables */
+  .tbl-wrap { overflow-x: auto; }
+  .tbl { width: 100%; border-collapse: collapse; font-size: var(--t-body); min-width: 640px; }
+  .tbl th { text-align: left; font: 500 var(--t-small)/1.4 var(--font-text); color: var(--muted); padding: 0 var(--s-4) var(--s-3) 0; border-bottom: 1px solid var(--line-strong); vertical-align: bottom; }
+  .tbl td { padding: var(--s-4) var(--s-4) var(--s-4) 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+  .tbl td:first-child { font-weight: 500; white-space: nowrap; }
+  .tbl .num { font: 400 var(--t-h3)/1 var(--font-display); letter-spacing: var(--display-tracking); white-space: nowrap; }
+  .tbl .num small { font: 400 var(--t-small)/1.4 var(--font-text); letter-spacing: 0; color: var(--muted); display: block; margin-top: var(--s-2); white-space: normal; max-width: 28ch; }
+  .tbl--compare td:nth-child(3) { color: var(--ink); }
+  .tbl--compare td:nth-child(2) { color: var(--muted); }
+  .quote blockquote { font-size: var(--t-h3); }
+  .split2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--gutter); }
+  .note-row { display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--gutter); }
+  .note-row h3 { font: 500 var(--t-card)/1.3 var(--font-text); letter-spacing: -0.01em; }
+  .note-row p { color: var(--ink); }
+  .impact h3 { font: 500 var(--t-card)/1.3 var(--font-text); letter-spacing: -0.01em; margin-bottom: var(--s-4); }
+  .back { margin-top: var(--s-6); }
+  .next { display: flex; flex-wrap: wrap; gap: var(--s-3) var(--s-6); align-items: baseline; }
+  @media (max-width: 1023px) {
+    .split2, .note-row { grid-template-columns: minmax(0, 1fr); }
+  }
+  @media (max-width: 639px) {
+    .figs { grid-template-columns: 1fr 1fr; }
+    .sort { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .bar { grid-template-columns: 72px minmax(0, 1fr) 48px; }
+  }
+
+  /* drafts: placeholder content to verify or replace before publishing */
+  .tbd { background: color-mix(in oklab, #f5c518 30%, transparent); box-shadow: inset 0 -1px 0 #9a7600; border-radius: 2px; padding: 0 2px; }
+  .draft-note { display: inline-flex; gap: var(--s-2); align-items: center; font: 500 var(--t-label)/1.4 var(--font-text); padding: var(--s-1) var(--s-3); border-radius: 999px; background: color-mix(in oklab, #f5c518 30%, transparent); color: var(--ink); }
+  .next { display: flex; flex-wrap: wrap; gap: var(--s-3) var(--s-6); align-items: baseline; margin-top: var(--s-6); }
+  .insights > li { grid-template-columns: minmax(0, 1fr); }
+  .insights > li > p { color: var(--ink); font-size: var(--t-body); }
+</style>
+</head>
+<body>
+<header class="nav">
+  <div class="wrap nav__bar">
+    <a class="skip-link" href="#top">Skip to content</a>
+    <a class="nav__logo" href="index.html">Adisa Soren</a>
+    <nav class="nav__links" aria-label="Main">
+      <div class="nav__item"><a class="nav__link" href="#situation">Situation</a></div>
+      <div class="nav__item"><a class="nav__link" href="#method">Method</a></div>
+      <div class="nav__item"><a class="nav__link" href="#findings">Findings</a></div>
+      <div class="nav__item"><a class="nav__link" href="#result">Result</a></div>
+    </nav>
+    <div class="nav__actions">
+      <a class="nav__link" href="index.html#work">All work</a>
+      <a class="btn btn--primary" href="index.html#contact">Contact Adisa</a>
+    </div>
+    <button class="nav__toggle" type="button" aria-expanded="false" aria-label="Menu">
+      <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M2 5h14M2 13h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero hero--statement" aria-labelledby="hero-h">
+    <div class="wrap"><div class="hero-text hero__in">
+      <div>
+        <p class="hero-notice">Case study · Violet · <span class="tbd">2023 to 2024</span> &nbsp; <span class="draft-note">Draft · highlighted text is placeholder</span></p>
+        <h1 id="hero-h">Giving a personal health agent a character people trust</h1>
+        <p class="hero__lead">Violet is an LLM-based agent that supports people with chronic conditions between visits, around the clock. I led the foundational research that set its character: how it sounds, what it never says, and when it hands off to a care team.</p>
+        <div class="btn-row">
+          <a class="btn btn--primary" href="#findings">Read the findings<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a>
+          <a class="btn btn--secondary" href="index.html#work">Back to all work</a>
+        </div>
+      </div>
+      <dl class="hero__facts"><div><dt>Role</dt><dd>Staff UX researcher, research lead</dd></div><div><dt>Partners</dt><dd>UX design, content strategy, clinical</dd></div><div><dt>Timeline</dt><dd><span class="tbd">Six months</span></dd></div><div><dt>Methods</dt><dd><span class="tbd">Diary study, Wizard of Oz sessions, tone workshops</span></dd></div></dl>
+    </div></div>
+  </section>
+
+  <section class="section" id="situation" aria-labelledby="sit-h">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="t-label kicker">Situation</p>
+        <h2 id="sit-h">Care teams can't be there at 2 a.m. <span class="muted">An agent can, if people trust it.</span></h2>
+      </div>
+      <div class="split2">
+        <div class="stack"><h3 class="t-card">Context</h3><ul class="list"><li>Questions about symptoms, medication and daily routines come up between visits, when no one on the care team is available.</li><li>An LLM agent could answer around the clock, but how it should sound and behave was undecided.</li><li>Design, content strategy and clinical each held a different picture of the agent's personality.</li></ul></div>
+        <div class="stack"><h3 class="t-card">Constraints</h3><ul class="list"><li>The agent had to escalate to a clinician in time, every time a symptom called for it.</li><li><span class="tbd">The MVP was planned to launch within two quarters.</span></li><li><span class="tbd">Tone rules had to be specific enough for content designers to write prompts against.</span></li></ul></div>
+      </div>
+      <dl class="figs"><div><dt>CSAT three months after launch</dt><dd class="t-stat">86%</dd></div><div><dt>Hours a day the agent answers</dt><dd class="t-stat">24</dd></div><div><dt>People in the foundational research</dt><dd class="t-stat"><span class="tbd">32</span></dd></div></dl>
+    </div>
+  </section>
+
+  <section class="section" id="task" aria-labelledby="task-h">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="t-label kicker">Task</p>
+        <h2 id="task-h">Agree on who Violet is. <span class="muted">Before anyone wrote a prompt.</span></h2>
+        <p>Build one character framework that UX design, content strategy and clinical could all sign off on, covering personality, tone, boundaries and escalation.</p>
+      </div>
+      <div class="grid"><article class="card span-4"><p class="t-label">One character</p><h3>A shared personality</h3><p>A short description every team could test a response against.</p></article><article class="card span-4"><p class="t-label">Clear boundaries</p><h3>What it never does</h3><p>The topics and phrasings the agent avoids, and what it says instead.</p></article><article class="card span-4"><p class="t-label">Timely escalation</p><h3>When and how it hands off</h3><p>The moments that go to a person, and how the agent explains the handoff.</p></article></div>
+    </div>
+  </section>
+
+  <section class="section" id="method" aria-labelledby="method-h">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="t-label kicker">Action</p>
+        <h2 id="method-h">Three studies. <span class="muted">Listen, simulate, then agree.</span></h2>
+      </div>
+      <div class="grid"><article class="card span-4"><p class="t-label">Study 1 · Diary study</p><h3>What do people need between visits?</h3><p>Participants managing chronic conditions logged the questions and worries that came up day to day.</p><p class="phase__meta"><span><b><span class="tbd">N = 32</span>, <span class="tbd">three weeks</span></b></span></p></article><article class="card span-4"><p class="t-label">Study 2 · Wizard of Oz</p><h3>How should the agent sound?</h3><p>A researcher played the agent in scripted conversations, switching tone and escalation styles between sessions.</p><p class="phase__meta"><span><b><span class="tbd">N = 16</span> participants</b></span></p></article><article class="card span-4"><p class="t-label">Study 3 · Tone workshops</p><h3>Can every team agree?</h3><p>UX design, content strategy and clinical sorted sample responses into on-character and off-character.</p><p class="phase__meta"><span><b><span class="tbd">Three</span> workshops</b></span></p></article></div>
+    </div>
+  </section>
+
+  <section class="section" id="findings" aria-labelledby="find-h">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="t-label kicker">Findings</p>
+        <h2 id="find-h">Warm, brief and honest about its limits. <span class="muted">People trusted the agent more when it said what it couldn't do.</span></h2>
+      </div>
+      <div class="grid grid--top">
+        <ul class="rows insights span-7"><li><span class="rows__name">A coach, not a cheerleader</span><p>Participants wanted plain encouragement tied to their own goals. Upbeat filler read as fake and lowered trust.</p></li><li><span class="rows__name">Explained handoffs build trust</span><p>An escalation that named who would follow up, and when, raised confidence in the agent rather than lowering it.</p></li><li><span class="rows__name">Consistency beats cleverness</span><p>Small shifts in tone between conversations made people doubt that the advice was reliable.</p></li></ul>
+        <figure class="quote span-4 start-9">
+          <blockquote>“<span class="tbd">When it told me it was passing this to my nurse and why, I trusted it more, not less.</span>”</blockquote>
+          <figcaption class="person"><span class="person__role muted">Participant managing a chronic condition</span></figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="recommend" aria-labelledby="rec-h">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="t-label kicker">Recommendations</p>
+        <h2 id="rec-h">What we built toward.</h2>
+      </div>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr><th scope="col">Recommendation</th><th scope="col">Why</th><th scope="col">What it looks like</th></tr></thead>
+          <tbody><tr><td>Personality</td><td>People want plain encouragement tied to their goals.</td><td>Warm and direct; never chirpy, never clinical jargon.</td></tr><tr><td>Boundaries</td><td>Overreach is what breaks trust fastest.</td><td>Never diagnoses; says what it can't help with and where to go instead.</td></tr><tr><td>Escalation</td><td>Explained handoffs raise confidence.</td><td>Names the person who will follow up and the time frame, every time.</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="section impact" id="result" aria-labelledby="res-h">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="t-label kicker">Result</p>
+        <h2 id="res-h">A character every team could build to. <span class="muted">And people liked talking to it.</span></h2>
+      </div>
+      <div class="split2"><div><h3>Product</h3><ul class="list"><li>The character framework aligned UX design, content strategy and clinical on Violet's personality and tone.</li><li>The MVP reached 86% CSAT within three months of launch.</li></ul></div><div><h3>Practice</h3><ul class="list"><li><span class="tbd">The framework became the voice guide for later agent features.</span></li><li><span class="tbd">Escalation wording was reviewed and approved by clinical leadership before launch.</span></li></ul></div></div>
+      <p class="next"><a class="link" href="lightpath.html">Next case study: Verily Lightpath</a><a class="link" href="index.html#work">Back to all work</a></p>
+    </div>
+  </section>
+</main>
+
+<footer class="footer closing" id="contact" aria-labelledby="close-h">
+  <div class="wrap">
+    <div class="closing__cta close--type">
+      <div class="section-head">
+        <h2 id="close-h">Talk through this work with Adisa</h2>
+        <p><span style="user-select: all">brc83@cornell.edu</span> · <a class="link" href="https://www.linkedin.com/in/adsoren" target="_blank" rel="noopener">LinkedIn</a></p>
+      </div>
+      <a class="btn btn--primary btn--xl btn--wide" href="mailto:brc83@cornell.edu">Email Adisa<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a>
+    </div>
+    <div class="closing__links">
+      <div class="footer__legal">
+        <span>&copy; 2026 Adisa Soren · New York</span>
+        <span><a href="index.html">Home</a> &nbsp; <a href="index.html#experience">Experience</a></span>
+      </div>
+    </div>
+  </div>
+</footer>
+<script src="assets/site.js"></script>
+</body>
+</html>
