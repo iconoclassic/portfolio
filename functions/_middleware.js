@@ -70,8 +70,8 @@ function page(next, error, status) {
 <main>
   <span class="name">Adisa Soren</span>
   <div style="display:grid;gap:12px">
-    <h1>UX research portfolio</h1>
-    <p>This portfolio is shared privately. Enter the password from my application or email.</p>
+    <h1>Professional Portfolio</h1>
+    <p>This portfolio is shared privately. Enter the password from my application.</p>
   </div>
   <form method="post" action="${LOGIN}">
     <input type="hidden" name="next" value="${esc(next)}">
