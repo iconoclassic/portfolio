@@ -80,7 +80,7 @@ function page(next, error, status) {
     ${error ? '<p class="error" id="err" role="alert">That password didn\'t work. Check it and try again.</p>' : ''}
     <button type="submit">View portfolio</button>
   </form>
-  <p class="foot">No password? Email brc83@cornell.edu.</p>
+  <p class="foot">No password? Email asoren@iconoclassique.com.</p>
 </main>
 </body>
 </html>`;
