@@ -108,6 +108,23 @@
   .shot figcaption span { color: var(--muted); font-size: var(--t-small); }
   @media (min-width: 1024px) { .shot__frame { aspect-ratio: auto; max-height: none; height: clamp(200px, calc(100svh - 585px), 420px); } }
   @media (max-width: 639px) { .shot__frame { max-height: 320px; } }
+
+  /* the care console: a screenshot beside its caption; the image links to itself at full size */
+  .console { align-items: start; }
+  .console__fig { margin: 0; }
+  .console__fig a { display: inline-block; border-radius: var(--r-lg); }
+  .console__fig img { display: block; width: auto; height: auto; max-width: 100%; border-radius: var(--r-lg); border: 1px solid var(--line); background: #fff; box-shadow: 0 1px 2px color-mix(in oklab, var(--ink) 6%, transparent); }
+  .console__fig a:hover img { border-color: var(--line-strong); }
+  .console__fig a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .console__text h3 { font: 500 var(--t-card)/1.3 var(--font-text); letter-spacing: -0.01em; }
+  .console__text p { color: var(--ink); }
+  .console__text .t-small { color: var(--muted); }
+  .rail { display: flex; flex-wrap: wrap; gap: var(--s-2); }
+  .rail li { padding: var(--s-1) var(--s-3); border-radius: 999px; background: var(--bg); border: 1px solid var(--line); font-size: var(--t-small); }
+  @media (min-width: 1024px) {
+    #console .group:first-child .console__fig img { max-height: calc(100svh - 430px); }
+    #console .group:last-child .console__fig img { max-height: calc(100svh - 250px); }
+  }
 </style>
 </head>
 <body>
@@ -266,6 +283,41 @@
         </figure>
       </div>
       <p class="t-small muted" style="margin-top: var(--s-5)">Simulated product views, from <a class="link" href="https://verily.com/solutions/me+lightpath" target="_blank" rel="noopener">verily.com</a></p>
+    </div>
+  </section>
+
+  <section class="section g2" id="console" aria-labelledby="con-h">
+    <div class="wrap">
+      <div class="group">
+        <div class="section-head">
+          <p class="t-label kicker">What launched · the care team’s side</p>
+          <h2 id="con-h">The care console. <span class="muted">Each member’s plan, a click from their data.</span></h2>
+        </div>
+        <div class="grid console">
+          <figure class="console__fig span-8">
+            <a href="assets/img/console-care-plan.webp" target="_blank" rel="noopener" aria-label="Open the care plan screenshot at full size"><img src="assets/img/console-care-plan.webp" width="1800" height="1081" loading="lazy" alt="The care console's Care Plan screen for an example member. A member summary lists critical attributes (insulin, CGM), program conditions (hypertension, type 2 diabetes), motivators and strengths, barriers and a scratchpad, with a Goals section below. The left rail links to Trends, Care plan, Meds, Devices, Visit and Resources."></a>
+          </figure>
+          <div class="console__text stack span-4 start-9">
+            <h3>Care plan</h3>
+            <p>A member’s plan opens with what to know before reaching out: critical attributes such as insulin use, program conditions, motivators, barriers and a shared scratchpad.</p>
+            <ul class="rail"><li>Trends</li><li>Care plan</li><li>Meds</li><li>Devices</li><li>Visit</li><li>Resources</li></ul>
+            <p class="t-small">The side rail keeps every view of the member one click away.</p>
+          </div>
+        </div>
+      </div>
+      <div class="group">
+        <div class="grid console">
+          <figure class="console__fig span-8">
+            <a href="assets/img/console-trends.webp" target="_blank" rel="noopener" aria-label="Open the trends screenshot at full size"><img src="assets/img/console-trends.webp" width="1800" height="1420" loading="lazy" alt="Two care console screens joined by arrows. Trends shows tiles for A1c (9.6%, above goal), glucose (1 reading in range per day against a goal of 2) and blood pressure (126/78, elevated). Clicking the glucose tile opens a Glucose view with daily and weekly tabs, average glucose of 118 mg/dL, time in range, readings in range and total steps."></a>
+          </figure>
+          <div class="console__text stack span-4 start-9">
+            <h3>From a trend to the readings behind it</h3>
+            <p>Trends lead with A1c, glucose and blood pressure, each against the member’s goal. One click opens glucose, with daily and weekly views of readings, time in range and steps.</p>
+            <p>This click-through is the prep the LLM record summary was built to shorten.</p>
+            <p class="t-small">Illustrative member data. Select an image to see it full size.</p>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
