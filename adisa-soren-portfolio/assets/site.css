@@ -1940,5 +1940,5 @@ h1.ly-locked { white-space: nowrap; text-wrap: nowrap; }
   .nav:not(.is-open) .nav__actions + .nav__toggle { margin-left: auto; }
 }
 
-/* the header links' underline (hover, focus and current page) is Kitsune blue, not the ink */
-.nav__link::before, .nav__link[aria-current="page"]::after { background: var(--brand-blue, #3239f2); }
+/* the header links' underline (hover, focus and current page) is Kitsune blue, not the ink, and 3px thick */
+.nav__link::before, .nav__link[aria-current="page"]::after { background: var(--brand-blue, #3239f2); height: 3px; border-radius: 3px; }
