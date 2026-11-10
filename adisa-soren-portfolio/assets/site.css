@@ -1923,7 +1923,8 @@ h1.ly-locked { white-space: nowrap; text-wrap: nowrap; }
 
 /* ---------------------------------------------------------------- the lockup
    The header's home link is the mark and "Soren" as one lockup: the word sits on the A's baseline,
-   its letters about 46% of the A's height, starting where the A's right foot ends. --A is the A's
+   its letters about 46% of the A's height, set off from the A's right foot by the same gap as the
+   letters keep from one another (about 2px at desktop size). --A is the A's
    drawn height. adisa-mark.png has transparent margins (12% of its width left, 11% right, 12% of its
    height below), so the image takes negative margins and its box ends where the A's ink does.
    The word is Urbanist, the display face: "S" spans 0.72em of ink, and at line-height 1 the baseline
@@ -1932,7 +1933,7 @@ h1.ly-locked { white-space: nowrap; text-wrap: nowrap; }
 .nav__lockup { display: inline-flex; align-items: flex-end; }
 .nav__logo img.nav__mark {
   height: calc(var(--A) * 1.152); width: auto; flex: none;
-  margin: calc(var(--A) * -0.016) calc(var(--A) * -0.136) calc(var(--A) * -0.136) calc(var(--A) * -0.112);
+  margin: calc(var(--A) * -0.016) calc(var(--A) * -0.088) calc(var(--A) * -0.136) calc(var(--A) * -0.112);
 }
 .nav__logo .nav__word { font: 500 calc(var(--A) * 0.634)/1 var(--font-display); letter-spacing: 0.002em; margin-bottom: -0.15em; white-space: nowrap; }
 @media (max-width: 639px) { .nav__logo { --A: 34px; gap: 0; } }
