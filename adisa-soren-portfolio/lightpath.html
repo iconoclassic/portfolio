@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Verily Lightpath Case Study</title>
-<meta name="description" content="Lightpath is a two-sided platform for chronic disease management. I aligned senior leaders on its three-year product vision, then helped define and evaluate an LLM capability that summarizes patient records and recommends next-best clinical actions.">
+<meta name="description" content="Verily Lightpath is a personalized care program for chronic conditions, delivered through the Verily Me app. I aligned senior leaders on its three-year product vision, then helped define and evaluate an LLM capability that summarizes member records and recommends next-best clinical actions.">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Helping care teams act 35% faster in chronic care: a case study by Adisa Soren">
 <meta name="theme-color" content="#f7f9fa">
@@ -86,6 +86,17 @@
   .next { display: flex; flex-wrap: wrap; gap: var(--s-3) var(--s-6); align-items: baseline; margin-top: var(--s-6); }
   .insights > li { grid-template-columns: minmax(0, 1fr); }
   .insights > li > p { color: var(--ink); font-size: var(--t-body); }
+
+  /* what launched: the care team, the programs, and what the research fed */
+  .team { display: flex; flex-wrap: wrap; gap: var(--s-2); }
+  .team li { padding: var(--s-2) var(--s-3); border-radius: 999px; background: var(--bg); border: 1px solid var(--line); font-size: var(--t-small); }
+  .programs > li { grid-template-columns: minmax(0, 1fr); }
+  .programs > li > p { color: var(--muted); font-size: var(--t-small); }
+  .launch-quote { margin: 0; padding-left: var(--s-4); border-left: 2px solid var(--accent); }
+  .launch-quote blockquote { margin: 0; font: 400 var(--t-h3)/1.25 var(--font-display); letter-spacing: var(--display-tracking); }
+  .launch-quote figcaption { margin-top: var(--s-3); font-size: var(--t-small); color: var(--muted); }
+  .tint { background: color-mix(in oklab, var(--accent) 7%, var(--bg)); border-color: color-mix(in oklab, var(--accent) 20%, var(--bg)); }
+  @media (max-width: 1023px) { #launched .grid > .stack + .stack { margin-top: var(--s-6); } }
 </style>
 </head>
 <body>
@@ -115,13 +126,13 @@
       <div>
         <p class="hero-notice">Case study · Verily Lightpath · <span class="tbd">2021 to 2025</span> &nbsp; <span class="draft-note">Draft · highlighted text is placeholder</span></p>
         <h1 id="hero-h">Helping care teams act 35% faster in chronic care</h1>
-        <p class="hero__lead">Lightpath is a two-sided platform for chronic disease management. I aligned senior leaders on its three-year product vision, then helped define and evaluate an LLM capability that summarizes patient records and recommends next-best clinical actions.</p>
+        <p class="hero__lead">Verily Lightpath is a care program for chronic conditions in the Verily Me app. I aligned senior leaders on its three-year vision, then helped define and evaluate an LLM capability that summarizes member records and suggests next-best clinical actions.</p>
         <div class="btn-row">
           <a class="btn btn--primary" href="#findings">Read the findings<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a>
           <a class="btn btn--secondary" href="index.html#work">Back to all work</a>
         </div>
       </div>
-      <dl class="hero__facts"><div><dt>Role</dt><dd>Staff UX researcher</dd></div><div><dt>Partners</dt><dd>PM, UX design, clinical, product analytics</dd></div><div><dt>Users</dt><dd>Physicians, nurse practitioners, health coaches, patients</dd></div><div><dt>Methods</dt><dd>Interviews, survey, vision workshops, iterative evaluation</dd></div></dl>
+      <dl class="hero__facts"><div><dt>Role</dt><dd>Staff UX researcher</dd></div><div><dt>Partners</dt><dd>PM, design, clinical, analytics</dd></div><div><dt>Users</dt><dd>Physicians, NPs, health coaches, members</dd></div><div><dt>Methods</dt><dd>Interviews, survey, vision workshops, evaluation rounds</dd></div></dl>
     </div></div>
   </section>
 
@@ -132,7 +143,7 @@
         <h2 id="sit-h">Care teams had more patients than hours. <span class="muted">Every visit started with reading the chart.</span></h2>
       </div>
       <div class="split2">
-        <div class="stack"><h3 class="t-card">Context</h3><ul class="list"><li>The platform served two sides: people managing chronic conditions, and the clinicians and coaches who care for them.</li><li>Leaders across product, commercial and clinical had different views of where the platform should go next.</li><li>Physicians, nurse practitioners and health coaches spent much of their prep time reading records to decide what to do next.</li></ul></div>
+        <div class="stack"><h3 class="t-card">Context</h3><ul class="list"><li>The platform served two sides: members in the Verily Me app, and the coaches and clinicians behind them.</li><li>Leaders across product, commercial and clinical had different views of where the platform should go next.</li><li>Member records arrive from health information exchanges: more to read before anyone can act.</li></ul></div>
         <div class="stack"><h3 class="t-card">Constraints</h3><ul class="list"><li>A product vision had to hold for three years while the market for AI in care moved quickly.</li><li>Any AI recommendation had to be safe, traceable and easy for a clinician to overrule.</li><li><span class="tbd">Clinicians could give research only short sessions between patients.</span></li></ul></div>
       </div>
       <dl class="figs"><div><dt>Faster provider time to action</dt><dd class="t-stat">35%</dd></div><div><dt>Years in the product vision</dt><dd class="t-stat">3</dd></div><div><dt>Clinicians and coaches interviewed</dt><dd class="t-stat"><span class="tbd">40</span></dd></div></dl>
@@ -191,13 +202,45 @@
     </div>
   </section>
 
+  <section class="section" id="launched" aria-labelledby="launch-h">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="t-label kicker">What launched</p>
+        <h2 id="launch-h">Verily Lightpath. <span class="muted">Care team time, matched to clinical need.</span></h2>
+      </div>
+      <div class="grid grid--top">
+        <div class="span-6 stack">
+          <figure class="launch-quote">
+            <blockquote>“Clinical resourcing is purposefully matched to a member’s clinical need.”</blockquote>
+            <figcaption>Verily, on Lightpath’s program design</figcaption>
+          </figure>
+          <h3 class="t-card" style="margin-top: var(--s-4)">One care team around each member</h3>
+          <ul class="team">
+            <li>Health coaches</li><li>Metabolic health</li><li>Nutritional support</li><li>Behavioral wellness</li><li>Precision prescribing</li><li>Medication adherence</li>
+          </ul>
+          <p class="muted">Medical provider coverage in all 50 states, with Vi, the AI companion, supporting members 24/7 between touchpoints.</p>
+        </div>
+        <div class="span-5 start-8 stack">
+          <h3 class="t-card">Care programs by level of need</h3>
+          <ul class="rows programs">
+            <li><span class="rows__name">Metabolic Intensive</span><p>Type 1 diabetes, type 2 diabetes with an A1c above 8%, or blood pressure above 130/80, including comorbidities</p></li>
+            <li><span class="rows__name">Weight Loss Intensive</span></li>
+            <li><span class="rows__name">Improvement</span></li>
+            <li><span class="rows__name">Achievement</span></li>
+          </ul>
+          <p class="t-small muted">Pathways cover type 1 and type 2 diabetes, prediabetes, weight management, hypertension and hyperlipidemia.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="section impact" id="result" aria-labelledby="res-h">
     <div class="wrap">
       <div class="section-head">
         <p class="t-label kicker">Result</p>
         <h2 id="res-h">A vision leaders signed, and a faster workflow. <span class="muted">Launched as Verily Lightpath.</span></h2>
       </div>
-      <div class="split2"><div><h3>Strategy</h3><ul class="list"><li>Senior stakeholders aligned on a three-year product vision and strategy, including AI-enabled clinical workflows.</li><li>The platform launched as Verily Lightpath.</li></ul></div><div><h3>Product</h3><ul class="list"><li>The LLM record summary cut average provider time to action by 35% within three months of launch.</li><li><span class="tbd">The role-based summary pattern was reused across later care team tools.</span></li></ul></div></div>
+      <div class="split2"><div><h3>Strategy</h3><ul class="list"><li>Senior stakeholders aligned on a three-year product vision and strategy, including AI-enabled clinical workflows.</li><li>The platform launched as <a class="link" href="https://verily.com/solutions/me+lightpath" target="_blank" rel="noopener">Verily Lightpath</a>, delivered through Verily Me and built on Verily Pre.</li></ul></div><div><h3>Product</h3><ul class="list"><li>The LLM record summary cut average provider time to action by 35% within three months of launch.</li><li><span class="tbd">The role-based summary pattern was reused across later care team tools.</span></li></ul></div></div>
       <p class="next"><a class="link" href="workbench.html">Next case study: Workbench AI</a><a class="link" href="index.html#work">Back to all work</a></p>
     </div>
   </section>
