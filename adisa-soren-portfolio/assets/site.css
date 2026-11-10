@@ -1920,3 +1920,14 @@ h1.ly-locked { white-space: nowrap; text-wrap: nowrap; }
   main > .hero .hero__facts { display: none; }
   .hero--triptych .ly-collage { min-height: 180px; margin-block: var(--s-5); }
 }
+
+/* ---------------------------------------------------------------- the personal mark
+   Adisa's mark sits left of the name in the header on every page: 40px tall (34 on a phone), 12px from
+   the name. On a small phone the header's button gives way to it; the open menu still carries the button. */
+.nav__logo { gap: var(--s-3); }
+.nav__logo img.nav__mark { height: 40px; width: auto; flex: none; }
+@media (max-width: 639px) { .nav__logo img.nav__mark { height: 34px; } }
+@media (max-width: 479px) {
+  .nav:not(.is-open) .nav__actions { display: none; }
+  .nav:not(.is-open) .nav__actions + .nav__toggle { margin-left: auto; }
+}

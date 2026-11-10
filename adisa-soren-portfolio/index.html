@@ -12,12 +12,6 @@
 <link rel="stylesheet" href="assets/site.css">
 <style>
   /* page CSS: only what the system lacks */
-  /* the personal mark beside the name in the header: 32px tall, 12px from the name (28px on a phone) */
-  .nav__logo { gap: var(--s-3); }
-  .nav__logo img.nav__mark { height: 32px; width: auto; }
-  @media (max-width: 639px) { .nav__logo img.nav__mark { height: 28px; } }
-  /* phones: the hero repeats the case study button, so the header drops it to make room for the mark */
-  @media (max-width: 479px) { .nav:not(.is-open) .nav__actions { display: none; } .nav:not(.is-open) .nav__actions + .nav__toggle { margin-left: auto; } }
   .work-card { display: grid; gap: var(--s-4); align-content: start; color: inherit; }
   .work-card:hover h3 { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; }
   .work-card .t-label { color: var(--muted); }
