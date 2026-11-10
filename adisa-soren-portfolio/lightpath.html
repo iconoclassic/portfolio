@@ -97,6 +97,17 @@
   .launch-quote figcaption { margin-top: var(--s-3); font-size: var(--t-small); color: var(--muted); }
   .tint { background: color-mix(in oklab, var(--accent) 7%, var(--bg)); border-color: color-mix(in oklab, var(--accent) 20%, var(--bg)); }
   @media (max-width: 1023px) { #launched .grid > .stack + .stack { margin-top: var(--s-6); } }
+
+  /* member view: three product shots, each phone cropped at the frame's foot */
+  .shots { align-items: stretch; }
+  .shot { margin: 0; display: grid; grid-template-rows: auto minmax(0, 1fr); gap: var(--s-4); }
+  .shot__frame { position: relative; overflow: hidden; border-radius: var(--r-lg); background: var(--surface); aspect-ratio: 1 / 1; max-height: 420px; width: 100%; }
+  .shot__frame img { position: absolute; left: 50%; bottom: 0; transform: translateX(-50%); height: 100%; width: auto; max-width: none; }
+  .shot figcaption { display: grid; gap: var(--s-1); }
+  .shot figcaption b { font-weight: 500; }
+  .shot figcaption span { color: var(--muted); font-size: var(--t-small); }
+  @media (min-width: 1024px) { .shot__frame { aspect-ratio: auto; max-height: none; height: clamp(200px, calc(100svh - 585px), 420px); } }
+  @media (max-width: 639px) { .shot__frame { max-height: 320px; } }
 </style>
 </head>
 <body>
@@ -231,6 +242,30 @@
           <p class="t-small muted">Pathways cover type 1 and type 2 diabetes, prediabetes, weight management, hypertension and hyperlipidemia.</p>
         </div>
       </div>
+    </div>
+  </section>
+
+  <section class="section" id="member-view" aria-labelledby="mv-h">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="t-label kicker">What launched · the member’s side</p>
+        <h2 id="mv-h">Every log and reading lands with the care team. <span class="muted">That’s why time to action mattered.</span></h2>
+      </div>
+      <div class="grid shots">
+        <figure class="shot span-4">
+          <div class="shot__frame"><img src="assets/img/lightpath-meal.webp" width="720" height="720" loading="lazy" alt="A breakfast meal log in Verily Me, with a tip for a higher-protein breakfast: swap pork sausage for chicken sausage or turkey bacon, and add a whole-wheat English muffin for fiber."></div>
+          <figcaption><b>AI-enabled meal logging</b><span>A photo becomes a meal log, with a tip tied to the member’s diet plan.</span></figcaption>
+        </figure>
+        <figure class="shot span-4">
+          <div class="shot__frame"><img src="assets/img/lightpath-glucose.webp" width="720" height="720" loading="lazy" alt="A week of blood glucose readings in Verily Me: an average of 109 mg/dL, 14 of 15 readings in range, and a latest reading of 150 mg/dL."></div>
+          <figcaption><b>Connected glucose data</b><span>Readings sync from a connected CGM and plot against the member’s target range.</span></figcaption>
+        </figure>
+        <figure class="shot span-4">
+          <div class="shot__frame"><img src="assets/img/lightpath-program.webp" width="720" height="720" loading="lazy" alt="The Verily Me metrics screen: blood glucose 150 mg/dL, resting heart rate 55 bpm and 3,741 steps, with Ask Vi and Log meal buttons at the top."></div>
+          <figcaption><b>One view of the member’s health</b><span>Glucose, heart rate, steps, medications and test results, with Vi a tap away.</span></figcaption>
+        </figure>
+      </div>
+      <p class="t-small muted" style="margin-top: var(--s-5)">Simulated product views, from <a class="link" href="https://verily.com/solutions/me+lightpath" target="_blank" rel="noopener">verily.com</a></p>
     </div>
   </section>
 
