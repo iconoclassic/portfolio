@@ -3,89 +3,117 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Violet Case Study</title>
-<meta name="description" content="Violet is an LLM-based agent that supports people with chronic conditions between visits, around the clock. I led the foundational research that set its character: how it sounds, what it never says, and when it hands off to a care team.">
+<title>Vi Case Study</title>
+<meta name="description" content="Foundational research that set the character framework for Vi, an LLM-based personal health agent in Verily Me for people managing type 2 diabetes.">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Giving a personal health agent a character people trust: a case study by Adisa Soren">
+<meta property="og:title" content="Giving an AI health agent a bedside manner: a case study by Adisa Soren">
+<meta property="og:description" content="A literature review, 20 patient interviews and usability testing set Vi's character. The MVP reached 86% CSAT within three months.">
 <meta name="theme-color" content="#f7f9fa">
 <link rel="stylesheet" href="assets/site.css">
 <style>
   /* page CSS: only what the system lacks */
   .kicker { color: var(--muted); }
   .stack { display: grid; gap: var(--s-4); align-content: start; }
-  .list { display: grid; gap: var(--s-3); }
-  .list li { padding-left: var(--s-5); position: relative; }
-  .list li::before { content: ""; position: absolute; left: 0; top: .78em; width: 10px; height: 1px; background: var(--ink); }
-  .figs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--gutter); padding-top: var(--s-5); border-top: 1px solid var(--line); margin-top: var(--s-7); }
-  .figs dt { font-size: var(--t-small); color: var(--muted); }
-  .figs dd { margin: var(--s-1) 0 0; }
   .card .t-label { color: var(--muted); }
-  .steps { counter-reset: step; }
   .step__n { font: 400 var(--t-h3)/1 var(--font-display); letter-spacing: var(--display-tracking); color: var(--accent); }
-  .q { font: 400 var(--t-lead)/1.45 var(--font-text); }
-  .q + .q { margin-top: var(--s-3); }
-  /* phase visuals: drawn stand-ins, not the real survey */
-  .mock { display: grid; gap: var(--s-2); padding: var(--s-4); border-radius: var(--r-md); background: var(--bg); border: 1px solid var(--line); margin-top: var(--s-2); }
-  .mock__row { display: grid; grid-template-columns: 52px minmax(0, 1fr) 52px; align-items: center; gap: var(--s-3); font-size: var(--t-small); }
-  .mock__head { color: var(--muted); font-size: var(--t-label); font-weight: 500; }
-  .mock__head span:last-child, .mock__head span:first-child { text-align: center; }
-  .mock__concept { padding: var(--s-2) var(--s-3); border-radius: var(--r-sm); background: var(--surface); }
-  .dot { width: 16px; height: 16px; border-radius: 999px; border: 1.5px solid var(--line-strong); justify-self: center; }
-  .dot.is-on { border-color: var(--accent); background: radial-gradient(circle, var(--accent) 0 4px, transparent 4.5px); }
-  .sort { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s-3); }
-  .sort__col { display: grid; gap: var(--s-2); align-content: start; }
-  .sort__col > span { font-size: var(--t-label); font-weight: 500; color: var(--muted); }
-  .sort__chip { height: 28px; border-radius: var(--r-sm); background: var(--surface); }
-  .sort__col:first-child .sort__chip { background: color-mix(in oklab, var(--accent) 16%, var(--bg)); }
-  .phase__meta { display: flex; flex-wrap: wrap; gap: var(--s-2) var(--s-5); font-size: var(--t-small); color: var(--muted); }
-  .phase__meta b { color: var(--ink); font-weight: 500; }
-  /* bar chart */
-  .chart { display: grid; gap: var(--s-3); }
-  .chart__title { font-weight: 500; }
-  .bars { display: grid; gap: var(--s-2); margin: 0; }
-  .bar { display: grid; grid-template-columns: 84px minmax(0, 1fr) 52px; align-items: center; gap: var(--s-3); position: relative; }
-  .bar dt { font-size: var(--t-small); color: var(--muted); }
-  .bar dd { margin: 0; }
-  .bar__track { height: 20px; }
-  .bar__fill { height: 100%; width: var(--v); background: var(--p-muted); border-radius: 0 4px 4px 0; }
-  .bar.is-hi .bar__fill { background: var(--accent); }
-  .bar__val { font-size: var(--t-small); text-align: right; font-variant-numeric: tabular-nums; }
-  .bar:hover .bar__fill, .bar:focus-within .bar__fill { filter: brightness(1.12); }
-  .chart__note { font-size: var(--t-small); color: var(--muted); }
-  .chart__note b { color: var(--ink); font-weight: 500; }
+  .tint { background: color-mix(in oklab, var(--accent) 9%, var(--bg)); border-color: color-mix(in oklab, var(--accent) 22%, var(--bg)); }
+  .note { margin-top: var(--s-6); color: var(--muted); max-width: 72ch; }
+  .note b { color: var(--ink); font-weight: 500; }
+  .back { margin-top: var(--s-6); }
+  .next { display: flex; flex-wrap: wrap; gap: var(--s-3) var(--s-6); align-items: baseline; }
+
+  /* hero: the words left, the Vi app on the right, the facts docked under both */
+  .hero-top { flex: 1 1 auto; min-height: 0; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); }
+  .hero-words { grid-column: 1 / span 6; align-self: start; }
+  .hero-shot { grid-column: 8 / -1; position: relative; margin: 0; min-height: 0; }
+  .hero-shot img { position: absolute; inset: 0 0 var(--s-5); width: 100%; height: calc(100% - var(--s-5)); max-width: none; object-fit: contain; object-position: 50% 100%; }
+  @media (max-width: 1023px) {
+    .hero-top { display: flex; flex-direction: column; gap: var(--s-6); }
+    .hero-shot { flex: 1 1 0; min-height: 260px; }
+    .hero-shot img { object-position: 0 50%; }
+  }
+  @media (max-width: 639px) {
+    .hero-shot { flex: none; min-height: 0; height: 320px; margin-bottom: var(--s-5); }
+  }
+
+  /* situation: the 48-hour figure beside the three complaints */
+  .bigfig { display: grid; align-content: end; gap: var(--s-3); min-height: 260px; }
+  .bigfig__n { font: 400 clamp(88px, 7vw, 128px)/.9 var(--font-display); letter-spacing: -0.04em; color: var(--accent); }
+  .bigfig p { max-width: 30ch; }
+
+  /* approach: each study ends in the artifact it produced */
+  .out { margin-top: auto; padding-top: var(--s-4); border-top: 1px solid var(--line); display: grid; gap: var(--s-1); }
+  .out b { font-weight: 500; color: var(--accent); }
+  .card.has-out { display: flex; flex-direction: column; gap: var(--s-3); }
+
   /* tables */
   .tbl-wrap { overflow-x: auto; }
   .tbl { width: 100%; border-collapse: collapse; font-size: var(--t-body); min-width: 640px; }
   .tbl th { text-align: left; font: 500 var(--t-small)/1.4 var(--font-text); color: var(--muted); padding: 0 var(--s-4) var(--s-3) 0; border-bottom: 1px solid var(--line-strong); vertical-align: bottom; }
   .tbl td { padding: var(--s-4) var(--s-4) var(--s-4) 0; border-bottom: 1px solid var(--line); vertical-align: top; }
   .tbl td:first-child { font-weight: 500; white-space: nowrap; }
-  .tbl .num { font: 400 var(--t-h3)/1 var(--font-display); letter-spacing: var(--display-tracking); white-space: nowrap; }
-  .tbl .num small { font: 400 var(--t-small)/1.4 var(--font-text); letter-spacing: 0; color: var(--muted); display: block; margin-top: var(--s-2); white-space: normal; max-width: 28ch; }
-  .tbl--compare td:nth-child(3) { color: var(--ink); }
-  .tbl--compare td:nth-child(2) { color: var(--muted); }
-  .quote blockquote { font-size: var(--t-h3); }
-  .split2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--gutter); }
-  .note-row { display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--gutter); }
-  .note-row h3 { font: 500 var(--t-card)/1.3 var(--font-text); letter-spacing: -0.01em; }
-  .note-row p { color: var(--ink); }
-  .impact h3 { font: 500 var(--t-card)/1.3 var(--font-text); letter-spacing: -0.01em; margin-bottom: var(--s-4); }
-  .back { margin-top: var(--s-6); }
-  .next { display: flex; flex-wrap: wrap; gap: var(--s-3) var(--s-6); align-items: baseline; }
-  @media (max-width: 1023px) {
-    .split2, .note-row { grid-template-columns: minmax(0, 1fr); }
-  }
-  @media (max-width: 639px) {
-    .figs { grid-template-columns: 1fr 1fr; }
-    .sort { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-    .bar { grid-template-columns: 72px minmax(0, 1fr) 48px; }
-  }
+  .tbl td:last-child { color: var(--muted); }
+  .tbl tr.is-key td:first-child { color: var(--accent); }
 
-  /* drafts: placeholder content to verify or replace before publishing */
-  .tbd { background: color-mix(in oklab, #f5c518 30%, transparent); box-shadow: inset 0 -1px 0 #9a7600; border-radius: 2px; padding: 0 2px; }
-  .draft-note { display: inline-flex; gap: var(--s-2); align-items: center; font: 500 var(--t-label)/1.4 var(--font-text); padding: var(--s-1) var(--s-3); border-radius: 999px; background: color-mix(in oklab, #f5c518 30%, transparent); color: var(--ink); }
-  .next { display: flex; flex-wrap: wrap; gap: var(--s-3) var(--s-6); align-items: baseline; margin-top: var(--s-6); }
-  .insights > li { grid-template-columns: minmax(0, 1fr); }
-  .insights > li > p { color: var(--ink); font-size: var(--t-body); }
+  /* interviews: the delegation map, three columns of task chips */
+  .deleg { display: flex; flex-direction: column; gap: var(--s-3); }
+  .deleg h3 { margin: 0; }
+  .deleg .t-label { margin-top: calc(var(--s-2) * -1); }
+  .chips { display: grid; gap: var(--s-2); margin-top: var(--s-2); }
+  .chips li { padding: var(--s-3) var(--s-4); border-radius: var(--r-sm); background: var(--bg); border: 1px solid var(--line); }
+  .deleg--mid { background: color-mix(in oklab, var(--accent) 7%, var(--bg)); }
+  .deleg--keep { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+  .deleg--keep .t-label { color: color-mix(in oklab, var(--bg) 70%, var(--ink)); }
+  .deleg--keep .chips li { background: color-mix(in oklab, var(--bg) 12%, var(--ink)); border-color: transparent; color: var(--bg); }
+
+  /* archetypes: one constant core, three modes */
+  .core { display: grid; align-content: center; justify-items: start; gap: var(--s-3); }
+  .core h3 { font: 400 var(--t-h3)/1.1 var(--font-display); letter-spacing: var(--display-tracking); }
+  .traits { display: flex; flex-wrap: wrap; gap: var(--s-2); }
+  .traits li { padding: var(--s-1) var(--s-3); border-radius: 999px; background: var(--bg); border: 1px solid var(--line); font-size: var(--t-small); }
+  .modes > li { grid-template-columns: minmax(0, 1fr); }
+  .modes .rows__name { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-3); font-size: var(--t-card); }
+  .mode-tag { font: 500 var(--t-label)/1 var(--font-text); padding: 6px var(--s-3); border-radius: 999px; background: color-mix(in oklab, var(--accent) 12%, var(--bg)); color: var(--accent); }
+
+  /* testing: findings and what changed */
+  .changed { margin-top: auto; padding-top: var(--s-4); border-top: 1px solid var(--line); display: grid; gap: var(--s-1); }
+  .changed b { font-weight: 500; color: var(--accent); }
+  .card.has-changed { display: flex; flex-direction: column; gap: var(--s-3); }
+  /* the findings row keeps its natural height rather than running to the screen's foot */
+  @media (min-width: 1024px) { #testing .group > .grid.findings-row { flex: 0 0 auto; align-self: start; } }
+
+  /* chat exchanges: representative, redrawn */
+  .chat { display: grid; gap: var(--s-3); align-content: start; }
+  .chat__label { font-size: var(--t-small); color: var(--muted); font-weight: 500; }
+  .bubble { max-width: 46ch; padding: var(--s-3) var(--s-4); border-radius: var(--r-md); font-size: var(--t-body); line-height: 1.5; }
+  .bubble--agent { background: color-mix(in oklab, var(--accent) 10%, var(--bg)); border-bottom-left-radius: 4px; }
+  .bubble--old { background: var(--surface); color: var(--muted); border: 1px dashed var(--line-strong); }
+  .bubble--me { justify-self: end; background: var(--bg); border: 1px solid var(--line-strong); border-bottom-right-radius: 4px; }
+  .shared { display: inline-flex; align-items: center; gap: var(--s-2); justify-self: start; font: 500 var(--t-small)/1 var(--font-text); padding: var(--s-2) var(--s-3); border-radius: 999px; border: 1px solid var(--line); color: var(--ink); }
+  .shared svg { color: var(--accent); }
+
+  /* alignment: function, artifact, what it did */
+  .own > li { grid-template-columns: 180px minmax(0, 1fr) minmax(0, 1.3fr); align-items: baseline; gap: var(--s-2) var(--s-5); }
+  .own > li > * { grid-row: 1; }
+  .own .who { grid-column: 1; color: var(--accent); font-weight: 500; }
+  .own .what { grid-column: 2; }
+  .own > li > p { grid-column: 3; }
+  .own .what { font: 400 var(--t-h3)/1.2 var(--font-display); letter-spacing: var(--display-tracking); }
+  .own p { color: var(--muted); }
+
+  /* result */
+  .result-n { font: 400 clamp(96px, 11vw, 176px)/.85 var(--font-display); letter-spacing: -0.045em; color: var(--accent); }
+  .impact h3 { font: 500 var(--t-card)/1.3 var(--font-text); letter-spacing: -0.01em; margin-bottom: var(--s-2); }
+  .impact-list { display: grid; gap: var(--s-5); }
+  .impact-list > li { padding-left: var(--s-4); border-left: 2px solid color-mix(in oklab, var(--accent) 45%, var(--bg)); }
+  .reflect h2 { max-width: 22ch; }
+  .reflect p.lead { font-size: var(--t-lead); max-width: 60ch; }
+
+  @media (max-width: 1023px) {
+    .own > li { grid-template-columns: minmax(0, 1fr); }
+    .own > li > :is(.who, .what, p) { grid-column: 1; grid-row: auto; }
+    .bigfig { min-height: 0; }
+  }
 </style>
 </head>
 <body>
@@ -95,7 +123,7 @@
     <a class="nav__logo" href="index.html">Adisa Soren</a>
     <nav class="nav__links" aria-label="Main">
       <div class="nav__item"><a class="nav__link" href="#situation">Situation</a></div>
-      <div class="nav__item"><a class="nav__link" href="#method">Method</a></div>
+      <div class="nav__item"><a class="nav__link" href="#method">Approach</a></div>
       <div class="nav__item"><a class="nav__link" href="#findings">Findings</a></div>
       <div class="nav__item"><a class="nav__link" href="#result">Result</a></div>
     </nav>
@@ -112,16 +140,26 @@
 <main id="top">
   <section class="hero hero--statement" aria-labelledby="hero-h">
     <div class="wrap"><div class="hero-text hero__in">
-      <div>
-        <p class="hero-notice">Case study · Violet · <span class="tbd">2023 to 2024</span> &nbsp; <span class="draft-note">Draft · highlighted text is placeholder</span></p>
-        <h1 id="hero-h">Giving a personal health agent a character people trust</h1>
-        <p class="hero__lead">Violet is an LLM-based agent that supports people with chronic conditions between visits, around the clock. I led the foundational research that set its character: how it sounds, what it never says, and when it hands off to a care team.</p>
+      <div class="hero-top">
+      <div class="hero-words">
+        <p class="hero-notice">Case study · Vi, LLM health agent in Verily Me</p>
+        <h1 id="hero-h">Giving an AI health agent a bedside manner</h1>
+        <p class="hero__lead">Patients said their care team sounded like a chatbot. Vi, an LLM-based personal health agent for people managing type 2 diabetes, had to be more human than that, without overstepping what an agent should do. I led the foundational research that set its character.</p>
         <div class="btn-row">
           <a class="btn btn--primary" href="#findings">Read the findings<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a>
           <a class="btn btn--secondary" href="index.html#work">Back to all work</a>
         </div>
       </div>
-      <dl class="hero__facts"><div><dt>Role</dt><dd>Staff UX researcher, research lead</dd></div><div><dt>Partners</dt><dd>UX design, content strategy, clinical</dd></div><div><dt>Timeline</dt><dd><span class="tbd">Six months</span></dd></div><div><dt>Methods</dt><dd><span class="tbd">Diary study, Wizard of Oz sessions, tone workshops</span></dd></div></dl>
+      <figure class="hero-shot">
+        <img src="assets/img/vi-app.webp" width="900" height="999" alt="Vi in the Verily Me app: the welcome screen reads “I’m Vi, your personal AI companion”, with options to explore health records or ask about a symptom, beside Vi’s round, smiling character.">
+      </figure>
+      </div>
+      <dl class="hero__facts">
+        <div><dt>Role</dt><dd>Research lead, from inception</dd></div>
+        <div><dt>Partners</dt><dd>UX design, content strategy, clinical</dd></div>
+        <div><dt>Methods</dt><dd>Literature review, 20 interviews with a card sort, usability testing</dd></div>
+        <div><dt>Outcome</dt><dd>Character framework behind an MVP at 86% CSAT within three months</dd></div>
+      </dl>
     </div></div>
   </section>
 
@@ -129,13 +167,19 @@
     <div class="wrap">
       <div class="section-head">
         <p class="t-label kicker">Situation</p>
-        <h2 id="sit-h">Care teams can't be there at 2 a.m. <span class="muted">An agent can, if people trust it.</span></h2>
+        <h2 id="sit-h">Patients waited up to two days <span class="muted">for replies that sounded robotic.</span></h2>
       </div>
-      <div class="split2">
-        <div class="stack"><h3 class="t-card">Context</h3><ul class="list"><li>Questions about symptoms, medication and daily routines come up between visits, when no one on the care team is available.</li><li>An LLM agent could answer around the clock, but how it should sound and behave was undecided.</li><li>Design, content strategy and clinical each held a different picture of the agent's personality.</li></ul></div>
-        <div class="stack"><h3 class="t-card">Constraints</h3><ul class="list"><li>The agent had to escalate to a clinician in time, every time a symptom called for it.</li><li><span class="tbd">The MVP was planned to launch within two quarters.</span></li><li><span class="tbd">Tone rules had to be specific enough for content designers to write prompts against.</span></li></ul></div>
+      <div class="grid grid--top">
+        <div class="card tint bigfig span-5">
+          <span class="bigfig__n">48h</span>
+          <p>The care team’s stated turnaround for a patient’s message</p>
+        </div>
+        <ul class="rows span-6 start-7">
+          <li><span class="rows__name">Top complaint</span><p>Response time was the pain point patients cited most in recurring CSAT surveys.</p></li>
+          <li><span class="rows__name">Robotic tone</span><p>When replies arrived, patients described them as stilted and mechanical, like a chatbot.</p></li>
+          <li><span class="rows__name">An opening in LLMs</span><p>The team planned Vi: grounded in each patient’s health data, and available 24/7 on their phone inside Verily Me.</p></li>
+        </ul>
       </div>
-      <dl class="figs"><div><dt>CSAT three months after launch</dt><dd class="t-stat">86%</dd></div><div><dt>Hours a day the agent answers</dt><dd class="t-stat">24</dd></div><div><dt>People in the foundational research</dt><dd class="t-stat"><span class="tbd">32</span></dd></div></dl>
     </div>
   </section>
 
@@ -143,62 +187,166 @@
     <div class="wrap">
       <div class="section-head">
         <p class="t-label kicker">Task</p>
-        <h2 id="task-h">Agree on who Violet is. <span class="muted">Before anyone wrote a prompt.</span></h2>
-        <p>Build one character framework that UX design, content strategy and clinical could all sign off on, covering personality, tone, boundaries and escalation.</p>
+        <h2 id="task-h">Everyone knew character mattered. <span class="muted">No one had a way to decide it.</span></h2>
       </div>
-      <div class="grid"><article class="card span-4"><p class="t-label">One character</p><h3>A shared personality</h3><p>A short description every team could test a response against.</p></article><article class="card span-4"><p class="t-label">Clear boundaries</p><h3>What it never does</h3><p>The topics and phrasings the agent avoids, and what it says instead.</p></article><article class="card span-4"><p class="t-label">Timely escalation</p><h3>When and how it hands off</h3><p>The moments that go to a person, and how the agent explains the handoff.</p></article></div>
+      <div class="grid">
+        <article class="card span-4"><p class="t-label">My mandate</p><h3>Evidence to decide with</h3><p>Decide which research mattered most, and give three functions an evidence-based way to define Vi’s character.</p></article>
+        <article class="card span-4"><p class="t-label">Decision rights</p><h3>Shared, not mine</h3><p>Content strategy and UX design led. My job was to make their calls well informed and defensible to clinical.</p></article>
+        <article class="card span-4"><p class="t-label">Open risks</p><h3>Misinformation and blind spots</h3><p>Misinformation, and keeping the care team aware of what Vi had told patients.</p></article>
+      </div>
     </div>
   </section>
 
   <section class="section" id="method" aria-labelledby="method-h">
     <div class="wrap">
       <div class="section-head">
-        <p class="t-label kicker">Action</p>
-        <h2 id="method-h">Three studies. <span class="muted">Listen, simulate, then agree.</span></h2>
+        <p class="t-label kicker">Approach</p>
+        <h2 id="method-h">Four studies, <span class="muted">each feeding the next.</span></h2>
       </div>
-      <div class="grid"><article class="card span-4"><p class="t-label">Study 1 · Diary study</p><h3>What do people need between visits?</h3><p>Participants managing chronic conditions logged the questions and worries that came up day to day.</p><p class="phase__meta"><span><b><span class="tbd">N = 32</span>, <span class="tbd">three weeks</span></b></span></p></article><article class="card span-4"><p class="t-label">Study 2 · Wizard of Oz</p><h3>How should the agent sound?</h3><p>A researcher played the agent in scripted conversations, switching tone and escalation styles between sessions.</p><p class="phase__meta"><span><b><span class="tbd">N = 16</span> participants</b></span></p></article><article class="card span-4"><p class="t-label">Study 3 · Tone workshops</p><h3>Can every team agree?</h3><p>UX design, content strategy and clinical sorted sample responses into on-character and off-character.</p><p class="phase__meta"><span><b><span class="tbd">Three</span> workshops</b></span></p></article></div>
+      <div class="grid">
+        <article class="card has-out span-3"><span class="step__n">01</span><h3>Evidence</h3><p>Literature review on what makes care relationships work.</p><div class="out"><span class="t-label">Output</span><b>Five qualities, as a behavioral spec</b></div></article>
+        <article class="card has-out span-3"><span class="step__n">02</span><h3>Interviews</h3><p>20 patients and a card sort of real care tasks, over two weeks.</p><div class="out"><span class="t-label">Output</span><b>A map of what to delegate and what to keep</b></div></article>
+        <article class="card has-out span-3"><span class="step__n">03</span><h3>Archetypes</h3><p>Synthesis of how patients described each job they’d give an agent.</p><div class="out"><span class="t-label">Output</span><b>One character, three modes</b></div></article>
+        <article class="card has-out span-3"><span class="step__n">04</span><h3>Testing</h3><p>An early Vi prototype, scored against the trait rubric.</p><div class="out"><span class="t-label">Output</span><b>Changes to tone, limits and handoffs</b></div></article>
+      </div>
+      <p class="note">Each study answered a question the one before it raised, and each produced an artifact a partner function could own.</p>
+    </div>
+  </section>
+
+  <section class="section" id="evidence" aria-labelledby="ev-h">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="t-label kicker">01 · Evidence</p>
+        <h2 id="ev-h">Bedside manner, <span class="muted">as a design spec.</span></h2>
+      </div>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr><th scope="col">Quality</th><th scope="col">Looks like</th><th scope="col">Not</th></tr></thead>
+          <tbody>
+            <tr><td>Warmth</td><td>Acknowledges effort before the task</td><td>Exclamation points and filler praise</td></tr>
+            <tr><td>Competence</td><td>Specific, grounded in the patient’s own data</td><td>Generic advice anyone could search for</td></tr>
+            <tr><td>Empathy</td><td>Names the daily burden of managing a condition</td><td>Scripted sympathy on routine tasks</td></tr>
+            <tr><td>Consistency</td><td>The same voice and boundaries every session</td><td>A personality that drifts with the prompt</td></tr>
+            <tr class="is-key"><td>Honesty about limits</td><td>Says what it can’t judge, then brings in the care team</td><td>Confident guesses on clinical questions</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note">Grounded in therapeutic-alliance research, which links bedside manner to satisfaction, trust and adherence. <b>The same anchors became the rubric for scoring Vi in testing.</b></p>
     </div>
   </section>
 
   <section class="section" id="findings" aria-labelledby="find-h">
     <div class="wrap">
       <div class="section-head">
-        <p class="t-label kicker">Findings</p>
-        <h2 id="find-h">Warm, brief and honest about its limits. <span class="muted">People trusted the agent more when it said what it couldn't do.</span></h2>
+        <p class="t-label kicker">02 · Interviews · 20 patients, card sort</p>
+        <h2 id="find-h">Patients drew the line <span class="muted">between information and judgment.</span></h2>
+      </div>
+      <div class="grid">
+        <article class="card deleg span-4"><h3>Outsource</h3><p class="t-label">Information</p><ul class="chips"><li>Log meals and glucose</li><li>Refill reminders</li><li>Explain a reading</li></ul></article>
+        <article class="card deleg deleg--mid span-4"><h3>It depends</h3><p class="t-label">Context decides</p><ul class="chips"><li>Suggest a meal swap</li><li>Flag a trend to my team</li><li>Missed-dose follow-up</li></ul></article>
+        <article class="card deleg deleg--keep span-4"><h3>Keep</h3><p class="t-label">Judgment</p><ul class="chips"><li>Change a medication</li><li>Triage a new symptom</li><li>Adjust a care plan</li></ul></article>
+      </div>
+      <p class="note"><b>What decided “it depends”:</b> the stakes, whether Vi had the patient’s data, and whether their care team would see the exchange. Tasks shown are illustrative.</p>
+    </div>
+  </section>
+
+  <section class="section" id="archetypes" aria-labelledby="arc-h">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="t-label kicker">03 · Archetypes</p>
+        <h2 id="arc-h">One character, <span class="muted">three modes.</span></h2>
       </div>
       <div class="grid grid--top">
-        <ul class="rows insights span-7"><li><span class="rows__name">A coach, not a cheerleader</span><p>Participants wanted plain encouragement tied to their own goals. Upbeat filler read as fake and lowered trust.</p></li><li><span class="rows__name">Explained handoffs build trust</span><p>An escalation that named who would follow up, and when, raised confidence in the agent rather than lowering it.</p></li><li><span class="rows__name">Consistency beats cleverness</span><p>Small shifts in tone between conversations made people doubt that the advice was reliable.</p></li></ul>
-        <figure class="quote span-4 start-9">
-          <blockquote>“<span class="tbd">When it told me it was passing this to my nurse and why, I trusted it more, not less.</span>”</blockquote>
-          <figcaption class="person"><span class="person__role muted">Participant managing a chronic condition</span></figcaption>
-        </figure>
+        <div class="card tint core span-5">
+          <p class="t-label">Constant core</p>
+          <h3>Five traits, in every mode</h3>
+          <ul class="traits"><li>Warm</li><li>Competent</li><li>Empathetic</li><li>Consistent</li><li>Honest about limits</li></ul>
+        </div>
+        <ul class="rows modes span-6 start-7">
+          <li><span class="rows__name">The Organizer <span class="mode-tag">Logistics</span></span><p>Refills, reminders, logging. Brief and reliable, with little ceremony.</p></li>
+          <li><span class="rows__name">The Coach <span class="mode-tag">Behavior change</span></span><p>Meals, activity, goals. Encourages without judging; persists without nagging.</p></li>
+          <li><span class="rows__name">The Translator <span class="mode-tag">Understanding</span></span><p>Labs, trends, visit prep. Precise, explicit about what it can’t judge, quick to bring in the care team.</p></li>
+        </ul>
       </div>
     </div>
   </section>
 
-  <section class="section" id="recommend" aria-labelledby="rec-h">
+  <section class="section g2" id="testing" aria-labelledby="test-h">
+    <div class="wrap">
+      <div class="group">
+        <div class="section-head">
+          <p class="t-label kicker">04 · Usability testing</p>
+          <h2 id="test-h">Testing the character, <span class="muted">not just the flows.</span></h2>
+        </div>
+        <div class="grid findings-row">
+          <article class="card has-changed span-4"><p class="t-label">Finding</p><h3>Too much warmth read as fake</h3><p>Effusive empathy on routine tasks felt performative. Patients wanted brief.</p><div class="changed"><span class="t-label">What changed</span><b>Tone recalibrated for each mode</b></div></article>
+          <article class="card has-changed span-4"><p class="t-label">Finding</p><h3>Admitting limits built trust</h3><p>Saying “I can’t answer that” and looping in the care team raised confidence.</p><div class="changed"><span class="t-label">What changed</span><b>Became the standard handoff pattern</b></div></article>
+          <article class="card has-changed span-4"><p class="t-label">Finding</p><h3>Handoffs had to be visible</h3><p>Patients wanted proof the care team would see it, and when they’d hear back.</p><div class="changed"><span class="t-label">What changed</span><b>Answered the team’s care-coordination concern</b></div></article>
+        </div>
+      </div>
+      <div class="group">
+        <h3 class="t-h3">What the changes sound like</h3>
+        <div class="grid" style="margin-top: var(--s-6)">
+          <article class="card chat span-6" aria-label="Routine task, Organizer mode: before and after">
+            <p class="t-label">Routine task · Organizer</p>
+            <span class="chat__label">Before</span>
+            <p class="bubble bubble--old">Amazing work staying on top of things! I’m so proud of you. Just a friendly reminder that your refill is due Friday!</p>
+            <span class="chat__label">After</span>
+            <p class="bubble bubble--agent">Your refill is due Friday. Want me to send the request to your pharmacy now?</p>
+          </article>
+          <article class="card chat span-6" aria-label="Clinical question, Translator mode">
+            <p class="t-label">Clinical question · Translator</p>
+            <p class="bubble bubble--me">My fasting reading was 182 this morning. Should I take an extra dose?</p>
+            <p class="bubble bubble--agent">Changing a dose is a call for your care team, so I won’t guess. I’ve shared this reading with them. They’ll see our conversation and reply here.</p>
+            <span class="shared"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><circle cx="7" cy="7" r="6" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M4.2 7.2 6.1 9l3.7-3.9" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Shared with your care team</span>
+          </article>
+        </div>
+        <p class="note">Representative exchanges, redrawn.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="alignment" aria-labelledby="al-h">
     <div class="wrap">
       <div class="section-head">
-        <p class="t-label kicker">Recommendations</p>
-        <h2 id="rec-h">What we built toward.</h2>
+        <p class="t-label kicker">Alignment</p>
+        <h2 id="al-h">Each function left <span class="muted">with an artifact it owned.</span></h2>
       </div>
-      <div class="tbl-wrap">
-        <table class="tbl">
-          <thead><tr><th scope="col">Recommendation</th><th scope="col">Why</th><th scope="col">What it looks like</th></tr></thead>
-          <tbody><tr><td>Personality</td><td>People want plain encouragement tied to their goals.</td><td>Warm and direct; never chirpy, never clinical jargon.</td></tr><tr><td>Boundaries</td><td>Overreach is what breaks trust fastest.</td><td>Never diagnoses; says what it can't help with and where to go instead.</td></tr><tr><td>Escalation</td><td>Explained handoffs raise confidence.</td><td>Names the person who will follow up and the time frame, every time.</td></tr></tbody>
-        </table>
-      </div>
+      <ul class="rows own">
+        <li><span class="who">UX design</span><span class="what">Character archetypes</span><p>Designed against one character with three modes</p></li>
+        <li><span class="who">Content strategy</span><span class="what">Trait rubric</span><p>Wrote and reviewed outputs against one shared standard</p></li>
+        <li><span class="who">Clinical</span><span class="what">Delegation map</span><p>Became Vi’s scope-of-support boundary for clinical sign-off</p></li>
+      </ul>
+      <p class="note">Synthesis ran jointly with all three functions, rather than arriving as finished findings.</p>
     </div>
   </section>
 
   <section class="section impact" id="result" aria-labelledby="res-h">
     <div class="wrap">
-      <div class="section-head">
-        <p class="t-label kicker">Result</p>
-        <h2 id="res-h">A character every team could build to. <span class="muted">And people liked talking to it.</span></h2>
+      <div class="grid grid--top">
+        <div class="span-5 stack">
+          <p class="t-label kicker">Result</p>
+          <span class="result-n" aria-hidden="true">86%</span>
+          <h2 id="res-h" class="t-h3">CSAT within three months of Vi’s MVP launch</h2>
+          <p class="muted">The same population had named slow, robotic responses as its top pain point.</p>
+        </div>
+        <ul class="impact-list span-6 start-7">
+          <li><h3>The framework outlasted my involvement</h3><p>The team carried the archetypes, rubric and delegation map into later iterations after I moved on.</p></li>
+          <li><h3>Clinical had a boundary it could sign off on</h3><p>The split between information and judgment put clinical’s review on evidence, not general caution.</p></li>
+          <li><h3>A repeatable method for the organization</h3><p>Character design became a process: evidence, behavioral spec, rubric, test.</p></li>
+        </ul>
       </div>
-      <div class="split2"><div><h3>Product</h3><ul class="list"><li>The character framework aligned UX design, content strategy and clinical on Violet's personality and tone.</li><li>The MVP reached 86% CSAT within three months of launch.</li></ul></div><div><h3>Practice</h3><ul class="list"><li><span class="tbd">The framework became the voice guide for later agent features.</span></li><li><span class="tbd">Escalation wording was reviewed and approved by clinical leadership before launch.</span></li></ul></div></div>
-      <p class="next"><a class="link" href="lightpath.html">Next case study: Verily Lightpath</a><a class="link" href="index.html#work">Back to all work</a></p>
+    </div>
+  </section>
+
+  <section class="section reflect" id="reflection" aria-labelledby="ref-h">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="t-label kicker">Reflection</p>
+        <h2 id="ref-h">CSAT shows patients liked Vi. <span class="muted">It doesn’t show that they changed what they did.</span></h2>
+        <p class="lead">Next time I’d tie the trait rubric to behavioral measures from day one: return rate, task completion and adherence signals. That matters most for the next segment, patients with uncontrolled diabetes who don’t respond to care-team outreach.</p>
+      </div>
+      <p class="back next"><a class="link" href="lightpath.html">Next case study: Verily Lightpath</a><a class="link" href="index.html#work">Back to all work</a></p>
     </div>
   </section>
 </main>
