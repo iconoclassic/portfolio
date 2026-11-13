@@ -12,6 +12,17 @@
 <link rel="stylesheet" href="assets/site.css">
 <style>
   /* page CSS: only what the system lacks */
+  /* the role line as a pill: Kitsune blue on a pale tint of itself */
+  .hero .hero-pill { display: inline-flex; align-items: center; width: fit-content; padding: 6px 14px; border-radius: 999px;
+    background: color-mix(in oklab, var(--brand-blue) 11%, var(--bg)); color: var(--brand-blue); font-weight: 500; line-height: 1.3; }
+  @media (max-width: 639px) { .hero .hero-pill { white-space: nowrap; font-size: clamp(11.5px, 3.3vw, 14px); padding: 5px 12px; } }
+  @media (max-width: 359px) { .hero .hero-pill { white-space: normal; border-radius: 14px; } }
+  /* a soft, semi-transparent disc behind the hero, rising from the lower left; purely decorative */
+  main > .hero { overflow: hidden; }
+  main > .hero::before { content: ""; position: absolute; z-index: 0; pointer-events: none; border-radius: 50%;
+    width: clamp(520px, 58vw, 1100px); aspect-ratio: 1; left: calc(clamp(520px, 58vw, 1100px) * -0.42); bottom: calc(clamp(520px, 58vw, 1100px) * -0.5);
+    background: radial-gradient(circle at 62% 38%, color-mix(in oklab, var(--brand-blue) 9%, transparent), color-mix(in oklab, var(--brand-blue) 5%, transparent) 70%); }
+  main > .hero > .wrap { position: relative; z-index: 1; }
   /* hero: the headline on the left, the longer introduction on the right; stacked below 1024 */
   .hero-cols { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); row-gap: var(--s-6); align-items: start; }
   .hero-cols__head { grid-column: 1 / span 5; }
@@ -109,7 +120,7 @@
     <div class="wrap"><div class="hero-text hero__in">
       <div class="hero-cols">
         <div class="hero-cols__head">
-          <p class="hero-notice">UX Research &amp; AI Deployment Strategy · New York</p>
+          <p class="hero-notice hero-pill">UX Research &amp; AI Deployment Strategy · New York</p>
           <h1 id="hero-h">Shaping consumer and enterprise experiences across healthcare and finance data platforms</h1>
         </div>
         <div class="hero-cols__body">
