@@ -1922,18 +1922,11 @@ h1.ly-locked { white-space: nowrap; text-wrap: nowrap; }
 }
 
 /* ---------------------------------------------------------------- the lockup
-   The header's home link is the mark and "Soren" as one lockup: the word sits on the A's baseline,
-   its letters about 46% of the A's height, set off from the A's right foot by the same gap as the
-   letters keep from one another (about 2px at desktop size). --A is the A's
-   drawn height. adisa-mark.png is trimmed to its ink, so its box is the A; the small right margin plus
-   the S's own side bearing make the gap the letters keep from one another.
-   The word is Urbanist, the display face: "S" spans 0.72em of ink, and at line-height 1 the baseline
-   sits 0.15em above the box's foot, hence the word's negative bottom margin. The link centres the lockup in its tap target. */
-.nav__logo { --A: 40px; display: inline-flex; align-items: center; gap: 0; line-height: 1; color: var(--ink); }
-.nav__lockup { display: inline-flex; align-items: flex-end; }
-.nav__logo img.nav__mark { height: var(--A); width: auto; flex: none; margin: 0 calc(var(--A) * 0.017) 0 0; }
-.nav__logo .nav__word { font: 500 calc(var(--A) * 0.634)/1 var(--font-display); letter-spacing: 0.002em; margin-bottom: -0.17em; white-space: nowrap; }
-@media (max-width: 639px) { .nav__logo { --A: 34px; gap: 0; } }
+   The header's home link is the Soren lockup (mark and word) as one vector, assets/logos/soren-lockup.svg,
+   in warm grey #494843. --A is its height: the mark's full height, with "Soren" on its baseline. */
+.nav__logo { --A: 46px; display: inline-flex; align-items: center; gap: 0; line-height: 1; }
+.nav__logo img.nav__lockup-img { height: var(--A); width: auto; max-width: none; display: block; flex: none; }
+@media (max-width: 639px) { .nav__logo { --A: 38px; } }
 /* on a small phone the header's button gives way to the lockup; the open menu still carries it */
 @media (max-width: 479px) {
   .nav:not(.is-open) .nav__actions { display: none; }
