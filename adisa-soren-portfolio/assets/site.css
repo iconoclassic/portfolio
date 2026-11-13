@@ -59,8 +59,8 @@
   --padb: 72px;
   --hgap: 48px;
   --hpadb: 64px;
-  --container: 1280px;
-  --gut: 80px;
+  --container: 1440px;   /* Kitsune: content up to 1440 wide (was 1280) */
+  --gut: 64px;           /* Kitsune: 64 at the sides on a laptop (was 80) */
   --gutter: 24px;
   --head-gap: 48px;
   --card-pad: 16px;
@@ -150,7 +150,7 @@ html[data-radius] .panel { --p-r: var(--r-md); }
   :root { --gut: 48px; --section: 48px; --section-band: 72px; --card-pad: 24px; }
 }
 @media (min-width: 1024px) {
-  :root { --gut: 80px; --section: 56px; --section-band: 96px; --card-gap: 24px;
+  :root { --gut: 64px; --section: 56px; --section-band: 96px; --card-gap: 24px;
           --t-lead: 20px; --t-card: 20px; --t-h3: 28px; }
   /* a place (and a local service): the 1200 column at x 120-1320 */
   html[data-type="place"] { --gut: 120px; --container: 1200px; }
