@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en" data-radius="soft" data-buttons="solid">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Adisa Soren</title>
+<meta name="description" content="Research leader in New York shaping consumer and enterprise experiences across healthcare and finance data platforms, at Verily, BlackRock and Google.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Adisa Soren: UX Research &amp; AI Deployment Strategy">
+<meta property="og:description" content="Case studies and experience from Verily, BlackRock and Google.">
+<meta name="theme-color" content="#f7f9fa">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+  /* page CSS: only what the system lacks */
+  /* the role line as a pill: Kitsune blue on a pale tint of itself */
+  .hero .hero-pill { display: inline-flex; align-items: center; width: fit-content; padding: 6px 14px; border-radius: 999px;
+    background: color-mix(in oklab, var(--brand-blue) 11%, var(--bg)); color: var(--brand-blue); font-weight: 500; line-height: 1.3; }
+  @media (max-width: 639px) { .hero .hero-pill { white-space: nowrap; font-size: clamp(11.5px, 3.3vw, 14px); padding: 5px 12px; } }
+  @media (max-width: 359px) { .hero .hero-pill { white-space: normal; border-radius: 14px; } }
+  /* a soft, semi-transparent disc behind the hero, rising from the lower left; purely decorative */
+  main > .hero { overflow: hidden; }
+  main > .hero::before { content: ""; position: absolute; z-index: 0; pointer-events: none; border-radius: 50%;
+    width: clamp(520px, 58vw, 1100px); aspect-ratio: 1; left: calc(clamp(520px, 58vw, 1100px) * -0.42); bottom: calc(clamp(520px, 58vw, 1100px) * -0.5);
+    background: radial-gradient(circle at 62% 38%, color-mix(in oklab, var(--brand-blue) 9%, transparent), color-mix(in oklab, var(--brand-blue) 5%, transparent) 70%); }
+  main > .hero > .wrap { position: relative; z-index: 1; }
+  /* hero: the headline on the left, the longer introduction on the right; stacked below 1024 */
+  .hero-cols { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); row-gap: var(--s-6); align-items: start; }
+  .hero-cols__head { grid-column: 1 / span 5; }
+  .hero-cols__head h1 { margin-top: var(--s-4); font-size: clamp(34px, 3vw + 12px, 56px); }
+  /* a short laptop screen keeps the words and buttons on the first screen; the facts repeat in Experience below */
+  @media (min-width: 1024px) and (max-height: 820px) { .hero .hero__facts { display: none; } }
+  @media (min-width: 1180px) and (max-width: 1279px) { .hero-cols__body { grid-column: 6 / -1; gap: var(--s-4); } .hero .hero__lead--long { gap: var(--s-2); } }
+  .hero-cols__body { grid-column: 7 / -1; display: grid; gap: var(--s-6); padding-top: var(--s-2); }
+  .hero .hero__lead--long { display: grid; gap: var(--s-3); max-width: 62ch; font-size: clamp(15px, 0.28vw + 12.6px, 17px); line-height: 1.55; }
+  .hero .hero__lead--long p { margin: 0; }
+  .hero-cols__body .btn-row { margin-top: 0; }
+  /* below 1180 the two columns stack, and the hero grows past the first screen rather than crowd it */
+  @media (max-width: 1179px) {
+    .hero-cols { row-gap: var(--s-5); }
+    .hero-cols__head, .hero-cols__body { grid-column: 1 / -1; }
+    .hero-cols__body { padding-top: 0; }
+    main > .hero { height: auto; min-height: 100svh; }
+  }
+  .work-card { display: grid; gap: var(--s-4); align-content: start; color: inherit; }
+  .work-card:hover h3 { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; }
+  .work-card .t-label { color: var(--muted); }
+  .work-card dl { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s-4); margin: var(--s-3) 0 0; padding-top: var(--s-4); border-top: 1px solid var(--line); }
+  .work-card dt { font-size: var(--t-small); color: var(--muted); }
+  .work-card dd { margin: 0; }
+  .work-card dd.t-stat { font-size: 32px; }
+  /* the case study grid: nine cards, so this section grows past one screen */
+  main > section#work { height: auto; min-height: 100vh; min-height: 100svh; }
+  .work-grid { --card-gap: var(--gutter); }
+  .work-grid .work-card { display: flex; flex-direction: column; }
+  .work-card { gap: var(--s-3); }
+  .work-card > p:not(.t-label):not(.work-card__metric) { color: var(--ink); }
+  .work-card__metric { display: grid; gap: var(--s-1); margin-top: auto; padding-top: var(--s-4); border-top: 1px solid var(--line); }
+  .draft-note { display: inline-block; margin-left: var(--s-2); font: 500 12px/1.4 var(--font-text); padding: 1px var(--s-2); border-radius: 999px; background: color-mix(in oklab, #f5c518 30%, transparent); color: var(--ink); }
+  .tbd { background: color-mix(in oklab, #f5c518 30%, transparent); box-shadow: inset 0 -1px 0 #9a7600; border-radius: 2px; padding: 0 2px; }
+  .rows__value { font-variant-numeric: tabular-nums; text-align: right; }
+  .rows > li > p { grid-column: 1; color: var(--muted); font-size: var(--t-small); }
+  .exp > li { grid-template-columns: 120px minmax(0, 1fr) auto; align-items: center; }
+  .exp .rows__when { grid-column: 1; grid-row: 1; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .exp .rows__name { grid-column: 2; grid-row: 1; }
+  .exp .rows__value { grid-column: 3; grid-row: 1; }
+  .exp > li > p { grid-column: 2; grid-row: 2; }
+  .exp-h { margin: 0 0 var(--s-4); }
+  .exp .role { font-weight: 600; }
+  .exp .rows__name i { font-weight: 400; }
+  /* each logo fills as much of one 148 x 32 box as its shape allows (BlackRock sets the width); Cornell's seal lockup stands 90 tall */
+  .exp .logo { display: block; width: var(--logo-w); height: auto; margin-left: auto; }
+  @media (max-width: 639px) { .exp .logo { width: calc(var(--logo-w) * .7); } }
+  .tm { color: var(--muted); }
+  /* on a short screen this section grows past one screen instead of running into the next */
+  main > section#experience { height: auto; min-height: 100vh; min-height: 100svh; }
+  .edu-h { margin: var(--s-7) 0 var(--s-4); }
+  .pub__link { color: var(--accent); text-decoration: underline; text-decoration-color: color-mix(in oklab, var(--accent) 40%, transparent); text-underline-offset: 3px; }
+  .pub__link:hover { text-decoration-color: currentColor; }
+  .pub { color: var(--muted); font-size: var(--t-small); max-width: 80ch; margin-top: var(--s-5); }
+  .approach .card { gap: var(--s-3); }
+  .approach .card ul { display: grid; gap: var(--s-2); color: var(--ink); }
+  .approach .card li { padding-left: var(--s-4); position: relative; }
+  .approach .card li::before { content: ""; position: absolute; left: 0; top: .7em; width: 6px; height: 1px; background: var(--ink); }
+  .domains { display: flex; flex-wrap: wrap; gap: var(--s-2); margin-top: var(--s-6); }
+  .domains li { font: 500 var(--t-label)/1 var(--font-text); padding: var(--s-2) var(--s-3); border: 1px solid var(--line-strong); border-radius: 999px; }
+  .contact-lines { display: grid; gap: var(--s-2); font-size: var(--t-lead); }
+  .contact-lines .sel { user-select: all; }
+  @media (max-width: 639px) {
+    .exp > li { grid-template-columns: minmax(0, 1fr) auto; }
+    .exp .rows__when { grid-column: 1 / -1; grid-row: 1; }
+    .exp .rows__name { grid-column: 1; grid-row: 2; }
+    .exp .rows__value { grid-column: 2; grid-row: 2; }
+    .exp > li > p { grid-column: 1 / -1; grid-row: 3; }
+    .work-card dl { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+<header class="nav">
+  <div class="wrap nav__bar">
+    <a class="skip-link" href="#top">Skip to content</a>
+    <a class="nav__logo" aria-label="Adisa Soren, home" href="#top"><span class="nav__lockup"><img class="nav__mark" src="assets/logos/adisa-mark.png" alt="" width="283" height="240"><span class="nav__word" aria-hidden="true">Soren</span></span></a>
+    <nav class="nav__links" aria-label="Main">
+      <div class="nav__item"><a class="nav__link" href="#work">Work</a></div>
+      <div class="nav__item"><a class="nav__link" href="#experience">Experience</a></div>
+      <div class="nav__item"><a class="nav__link" href="#approach">Approach</a></div>
+      <div class="nav__item"><a class="nav__link" href="#contact">Contact</a></div>
+    </nav>
+    <div class="nav__actions">
+      <a class="btn btn--primary" href="workbench.html">Read the case study</a>
+    </div>
+    <button class="nav__toggle" type="button" aria-expanded="false" aria-label="Menu">
+      <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M2 5h14M2 13h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero hero--statement" aria-labelledby="hero-h">
+    <div class="wrap"><div class="hero-text hero__in">
+      <div class="hero-cols">
+        <div class="hero-cols__head">
+          <p class="hero-notice hero-pill">UX Research &amp; AI Deployment Strategy · New York</p>
+          <h1 id="hero-h">Shaping consumer and enterprise experiences across healthcare and finance data platforms</h1>
+        </div>
+        <div class="hero-cols__body">
+        <div class="hero__lead hero__lead--long">
+          <p>Research leader with over a decade of guiding product strategy across enterprise AI, healthcare technology, and financial services. I de-risk product decisions from discovery through launch and align key partners around evidence, not opinion.</p>
+          <p>At Verily, that work led to the launch of Lightpath, a multi-sided platform that lets clinicians scale personalized care and patients receive timely, tailored care remotely. At BlackRock, it led to the redesign of Aladdin, the cloud-based platform unifying investment management, risk analytics, trading, and operations, improving efficiency across the portfolio management lifecycle. At Google, it led to credibility features that help news consumers tell reliable sources from misinformation.</p>
+          <p>I give leadership a clearer path to the right product: fast signal on early bets, firm evidence on major commitments.</p>
+        </div>
+        <div class="btn-row">
+          <a class="btn btn--primary" href="workbench.html">Read the Workbench case study<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a>
+          <a class="btn btn--secondary" href="#experience">See experience</a>
+        </div>
+        </div>
+      </div>
+      <dl class="hero__facts">
+        <div><dt>Most recent role</dt><dd>Staff UX researcher, Verily, 2020 to 2026</dd></div>
+        <div><dt>Focus</dt><dd>Enterprise AI, life sciences, finance</dd></div>
+        <div><dt>Methods</dt><dd>MaxDiff, concept tests, contextual inquiry</dd></div>
+        <div><dt>Education</dt><dd>M.S., Human Factors, Cornell</dd></div>
+      </dl>
+    </div></div>
+  </section>
+
+  <section class="section" id="work" aria-labelledby="work-h">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="work-h">Case studies. <span class="muted">An AI roadmap, a health agent and AI for care teams.</span></h2>
+      </div>
+      <div class="grid work-grid">
+        <a class="card work-card span-4" href="workbench.html">
+          <p class="t-label">Verily </p>
+          <h3>Breaking the deadlock on an AI roadmap</h3>
+          <p>30 AI feature ideas, an offsite eight weeks away. A two-phase study showed leadership what to build first.</p>
+          <p class="work-card__metric"><span class="t-stat">300</span><span class="t-small muted">researchers surveyed in eight weeks</span></p>
+        </a>
+        <a class="card work-card span-4" href="violet.html">
+          <p class="t-label">Verily</p>
+          <h3>Giving an AI health agent a bedside manner</h3>
+          <p>Foundational research set the character of Vi, an LLM health agent for people managing type 2 diabetes: how it sounds, and when it hands off to the care team.</p>
+          <p class="work-card__metric"><span class="t-stat">86%</span><span class="t-small muted">CSAT three months after launch</span></p>
+        </a>
+        <a class="card work-card span-4" href="lightpath.html">
+          <p class="t-label">Verily <span class="draft-note">Draft</span></p>
+          <h3>Care team capacity for chronic disease</h3>
+          <p>A three-year vision for a two-sided care platform, then an LLM record summary that helps clinicians act sooner.</p>
+          <p class="work-card__metric"><span class="t-stat">35%</span><span class="t-small muted">faster provider time to action</span></p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="experience" aria-labelledby="exp-h">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="exp-h">Experience and education</h2>
+      </div>
+      <h3 class="t-card exp-h" id="professional-experience">Professional experience</h3>
+      <ul class="rows exp">
+        <li><span class="rows__when">2020 to 2026</span><span class="rows__name"><b class="role">Staff UX Researcher</b>, <i>enterprise AI and precision health</i></span><span class="rows__value"><img class="logo" src="assets/logos/verily.png" alt="Verily" style="--logo-w: 117px" loading="lazy"></span></li>
+        <li><span class="rows__when">2018 to 2020</span><span class="rows__name"><b class="role">UX Research Lead</b>, <i>Aladdin portfolio management</i></span><span class="rows__value"><img class="logo" src="assets/logos/blackrock.png" alt="BlackRock" style="--logo-w: 148px" loading="lazy"></span></li>
+        <li><span class="rows__when">2017 to 2018</span><span class="rows__name"><b class="role">UX Researcher</b>, <i>Search and Google Assistant</i></span><span class="rows__value"><img class="logo" src="assets/logos/google.png" alt="Google" style="--logo-w: 97px" loading="lazy"></span></li>
+        <li><span class="rows__when">2016</span><span class="rows__name"><b class="role">User Research Intern</b>, <i>mobile investing for young adults</i></span><span class="rows__value"><img class="logo" src="assets/logos/fidelity.png" alt="Fidelity Investments" style="--logo-w: 146px" loading="lazy"></span></li>
+        <li><span class="rows__when">2013 to 2015</span><span class="rows__name"><b class="role">Usability Specialist</b>, <i>mHealth for depression and anxiety care</i></span><span class="rows__value"><img class="logo" src="assets/logos/northwestern-medicine.png" alt="Northwestern Medicine" style="--logo-w: 148px" loading="lazy"></span></li>
+      </ul>
+      <h3 class="t-card edu-h" id="education">Education</h3>
+      <ul class="rows exp">
+        <li><span class="rows__when">2017</span><span class="rows__name">M.S., Human Factors Engineering and Human-Computer Interaction</span><span class="rows__value"><img class="logo" src="assets/logos/cornell.png" alt="Cornell University" style="--logo-w: 92px" loading="lazy"></span></li>
+      </ul>
+      <p class="pub">Published: Corden, M.E., Koucky, E.M., Brenner, C., Palac, H.L., Soren, A.D., et al. (2016). <a class="pub__link" href="https://pubmed.ncbi.nlm.nih.gov/29942564/" target="_blank" rel="noopener">MedLink: A mobile intervention to improve medication adherence and processes of care for treatment of depression in general medicine</a>. <i>Digital Health</i>, 2.</p>
+    </div>
+  </section>
+
+  <section class="section approach" id="approach" aria-labelledby="approach-h">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="approach-h">Insight to influence. <span class="muted">Evidence is half the job. Getting it acted on is the other half.</span></h2>
+      </div>
+      <div class="grid">
+        <article class="card span-4">
+          <h3>Methods sized to the decision</h3>
+          <ul>
+            <li>MaxDiff and survey design at scale</li>
+            <li>Concept testing and card sorts</li>
+            <li>Contextual inquiry and diary studies</li>
+            <li>RITE usability testing</li>
+          </ul>
+        </article>
+        <article class="card span-4">
+          <h3>Decision makers in the room early</h3>
+          <ul>
+            <li>An executive sponsor before fieldwork</li>
+            <li>Alignment sessions that score desirability, feasibility and fit</li>
+            <li>Vision workshops with product, clinical and commercial leads</li>
+          </ul>
+        </article>
+        <article class="card span-4">
+          <h3>Evaluation for LLM products</h3>
+          <ul>
+            <li>Evaluation harnesses for model builders</li>
+            <li>LLM-as-a-judge with human review</li>
+            <li>Synthetic data for test cases</li>
+            <li>Agent tone and character frameworks</li>
+          </ul>
+        </article>
+      </div>
+      <ul class="domains" aria-label="Domains">
+        <li>Healthcare and life sciences</li><li>Financial services</li><li>Enterprise SaaS</li><li>LLM evaluation</li><li>Stakeholder alignment</li>
+      </ul>
+    </div>
+  </section>
+</main>
+
+<footer class="footer closing" id="contact" aria-labelledby="close-h">
+  <div class="wrap">
+    <div class="closing__cta close--type">
+      <div class="section-head">
+        <h2 id="close-h">Contact Adisa</h2>
+        <div class="contact-lines">
+          <p><span class="sel">brc83@cornell.edu</span></p>
+          <p><a class="link" href="https://www.linkedin.com/in/adsoren/" target="_blank" rel="noopener">linkedin.com/in/adsoren</a></p>
+        </div>
+      </div>
+      <a class="btn btn--primary btn--xl btn--wide" href="mailto:brc83@cornell.edu">Email Adisa<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a>
+    </div>
+    <div class="closing__links">
+      <div class="footer__legal">
+        <span>&copy; 2026 Adisa Soren · New York <span class="tm">· Logos are trademarks of their owners.</span></span>
+        <span><a href="#work">Work</a> &nbsp; <a href="#experience">Experience</a> &nbsp; <a href="workbench.html">Case study</a></span>
+      </div>
+    </div>
+  </div>
+</footer>
+<script src="assets/site.js"></script>
+</body>
+</html>
