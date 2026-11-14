@@ -1956,6 +1956,6 @@ a.nav__icon:hover, a.nav__icon:focus-visible { color: var(--brand-blue, #3239f2)
 }
 @media (prefers-reduced-motion: reduce) { .nav__icon { transition: none; } }
 
-/* the header's fill: a warm off-white, #F6E7CE, on every page; the open menu sheet on tablets and phones shares it */
-.nav { background: #f6e7ce; }
-@media (max-width: 1023px) { .nav.is-open .nav__links { background: #f6e7ce; } }
+/* the header's fill: a warm off-white, #F7F5F0, on every page; the open menu sheet on tablets and phones shares it */
+.nav { background: #f7f5f0; }
+@media (max-width: 1023px) { .nav.is-open .nav__links { background: #f7f5f0; } }
