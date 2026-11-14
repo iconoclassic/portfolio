@@ -1937,19 +1937,21 @@ h1.ly-locked { white-space: nowrap; text-wrap: nowrap; }
 .nav__link::before, .nav__link[aria-current="page"]::after { background: var(--brand-blue, #3239f2); height: 3px; border-radius: 3px; }
 
 /* header icon links (LinkedIn, résumé, X): one size, the lockup's warm grey, a 44px tap area, and they stay in the bar
-   at every width instead of moving into the menu sheet */
+   at every width instead of moving into the menu sheet. The icons are inline SVG in currentColor, so on hover and
+   keyboard focus they turn Kitsune blue over a very faint blue tint. */
 .nav__actions--icons { gap: var(--s-1); }
 .nav__icon { display: inline-grid; place-items: center; width: 44px; height: 44px; border-radius: var(--r-btn); flex: none;
-  transition: background-color var(--dur, .2s) var(--ease, ease); }
-.nav__icon img { width: 24px; height: 24px; display: block; position: relative; top: .5px; }
+  color: #494843; transition: color 150ms ease, background-color 150ms ease; }
+.nav__icon .nav__icon-svg { width: 24px; height: 24px; display: block; position: relative; top: .5px; }
 /* 24px exactly, as the icons are drawn on a 24px grid; centred in the header's odd-height bar the icon would
    sit on a half pixel (and blur), so it drops half a pixel onto the grid */
-.nav__icon:hover { background: color-mix(in oklab, #494843 9%, transparent); }
-.nav__icon--off, .nav__icon--off:hover { background: none; cursor: default; }   /* X: shown, not linked yet */
-.nav__icon:focus-visible { outline: 2px solid var(--brand-blue, #3239f2); outline-offset: 2px; }   /* the focus ring stays blue, like every other focus ring */
+a.nav__icon:hover, a.nav__icon:focus-visible { color: var(--brand-blue, #3239f2); background: color-mix(in oklab, var(--brand-blue, #3239f2) 6%, transparent); }
+.nav__icon:focus-visible { outline: 2px solid var(--brand-blue, #3239f2); outline-offset: 2px; }
+.nav__icon--off { cursor: default; }   /* X: shown, not linked yet, so no hover */
 @media (max-width: 1023px) {
   .nav:not(.is-open) .nav__actions.nav__actions--icons, .nav.is-open .nav__actions.nav__actions--icons {
     display: flex; position: static; margin-left: auto; padding: 0; border: 0; background: none; gap: 2px; }
   .nav:not(.is-open) .nav__actions--icons > .nav__icon, .nav.is-open .nav__actions--icons > .nav__icon { display: inline-grid; }
   .nav:not(.is-open) .nav__actions--icons + .nav__toggle, .nav.is-open .nav__actions--icons + .nav__toggle { margin-left: var(--s-2); }
 }
+@media (prefers-reduced-motion: reduce) { .nav__icon { transition: none; } }
