@@ -1935,3 +1935,20 @@ h1.ly-locked { white-space: nowrap; text-wrap: nowrap; }
 
 /* the header links' underline (hover, focus and current page) is Kitsune blue, not the ink, and 3px thick */
 .nav__link::before, .nav__link[aria-current="page"]::after { background: var(--brand-blue, #3239f2); height: 3px; border-radius: 3px; }
+
+/* header icon links (LinkedIn, résumé, X): one size, the lockup's warm grey, a 44px tap area, and they stay in the bar
+   at every width instead of moving into the menu sheet */
+.nav__actions--icons { gap: var(--s-1); }
+.nav__icon { display: inline-grid; place-items: center; width: 44px; height: 44px; border-radius: var(--r-btn); flex: none;
+  transition: background-color var(--dur, .2s) var(--ease, ease); }
+.nav__icon img { width: 26px; height: 26px; display: block; }
+.nav__icon:hover { background: color-mix(in oklab, #494843 9%, transparent); }
+.nav__icon--off, .nav__icon--off:hover { background: none; cursor: default; }   /* X: shown, not linked yet */
+.nav__icon:focus-visible { outline: 2px solid var(--brand-blue, #3239f2); outline-offset: 2px; }   /* the focus ring stays blue, like every other focus ring */
+@media (max-width: 1023px) {
+  .nav:not(.is-open) .nav__actions.nav__actions--icons, .nav.is-open .nav__actions.nav__actions--icons {
+    display: flex; position: static; margin-left: auto; padding: 0; border: 0; background: none; gap: 2px; }
+  .nav:not(.is-open) .nav__actions--icons > .nav__icon, .nav.is-open .nav__actions--icons > .nav__icon { display: inline-grid; }
+  .nav:not(.is-open) .nav__actions--icons + .nav__toggle, .nav.is-open .nav__actions--icons + .nav__toggle { margin-left: var(--s-2); }
+  .nav__icon img { width: 24px; height: 24px; }
+}
