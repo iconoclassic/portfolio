@@ -1941,7 +1941,9 @@ h1.ly-locked { white-space: nowrap; text-wrap: nowrap; }
 .nav__actions--icons { gap: var(--s-1); }
 .nav__icon { display: inline-grid; place-items: center; width: 44px; height: 44px; border-radius: var(--r-btn); flex: none;
   transition: background-color var(--dur, .2s) var(--ease, ease); }
-.nav__icon img { width: 26px; height: 26px; display: block; }
+.nav__icon img { width: 24px; height: 24px; display: block; position: relative; top: .5px; }
+/* 24px exactly, as the icons are drawn on a 24px grid; centred in the header's odd-height bar the icon would
+   sit on a half pixel (and blur), so it drops half a pixel onto the grid */
 .nav__icon:hover { background: color-mix(in oklab, #494843 9%, transparent); }
 .nav__icon--off, .nav__icon--off:hover { background: none; cursor: default; }   /* X: shown, not linked yet */
 .nav__icon:focus-visible { outline: 2px solid var(--brand-blue, #3239f2); outline-offset: 2px; }   /* the focus ring stays blue, like every other focus ring */
@@ -1950,5 +1952,4 @@ h1.ly-locked { white-space: nowrap; text-wrap: nowrap; }
     display: flex; position: static; margin-left: auto; padding: 0; border: 0; background: none; gap: 2px; }
   .nav:not(.is-open) .nav__actions--icons > .nav__icon, .nav.is-open .nav__actions--icons > .nav__icon { display: inline-grid; }
   .nav:not(.is-open) .nav__actions--icons + .nav__toggle, .nav.is-open .nav__actions--icons + .nav__toggle { margin-left: var(--s-2); }
-  .nav__icon img { width: 24px; height: 24px; }
 }
