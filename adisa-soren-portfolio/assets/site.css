@@ -1955,3 +1955,7 @@ a.nav__icon:hover, a.nav__icon:focus-visible { color: var(--brand-blue, #3239f2)
   .nav:not(.is-open) .nav__actions--icons + .nav__toggle, .nav.is-open .nav__actions--icons + .nav__toggle { margin-left: var(--s-2); }
 }
 @media (prefers-reduced-motion: reduce) { .nav__icon { transition: none; } }
+
+/* the header's fill: a warm off-white, #F7F6EE, on every page; the open menu sheet on tablets and phones shares it */
+.nav { background: #f7f6ee; }
+@media (max-width: 1023px) { .nav.is-open .nav__links { background: #f7f6ee; } }
