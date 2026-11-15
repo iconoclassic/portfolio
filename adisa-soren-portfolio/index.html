@@ -64,15 +64,14 @@
   .oct-copy h1 > span { display: block; }
   .oct-copy h1 .oct-accent { color: var(--brand-blue); }
   @media (min-width: 1180px) { .oct-copy h1 > span { white-space: nowrap; } }
-  .hero .oct-lead { margin: 0; max-width: 560px; font-size: clamp(16px, 0.3vw + 13px, 18px); line-height: 1.55; color: var(--ink); }
+  .hero .oct-lead { margin: var(--s-3) 0 0; max-width: 560px; font-size: clamp(16px, 0.3vw + 13px, 18px); line-height: 1.55; color: var(--ink); }
   .oct-copy .btn-row { margin-top: var(--s-1); }
 
   .oct-art { grid-column: 2; margin: 0; position: relative; align-self: stretch; display: grid; place-items: center; min-height: 0; }
   .oct-art img { width: 112%; max-width: none; height: auto; max-height: 100%; object-fit: contain; margin-left: -4%;
     filter: drop-shadow(0 0 28px rgba(70, 90, 255, .45)) drop-shadow(0 18px 40px rgba(0, 0, 0, .35)); }
 
-  .oct-panel { grid-column: 3; align-self: center; display: grid; gap: var(--s-5); padding-left: var(--s-5);
-    border-left: 1px solid rgba(255, 255, 255, .28); color: #fff; }
+  .oct-panel { grid-column: 3; align-self: center; display: grid; gap: var(--s-5); color: #fff; }
   .oct-panel__h { margin: 0 0 var(--s-2); font: 600 12px/1.3 var(--font-text); letter-spacing: .08em; text-transform: uppercase; color: #b9b2ff; }
   .oct-panel ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; }
   .oct-panel li { font: 500 15px/1.35 var(--font-text); color: #fff; white-space: nowrap; }
@@ -114,9 +113,9 @@
   /* exploring: the photo emerging from the background. No frame: its edges dissolve through a soft oval mask, so the
      sky and street fade into the sea instead of stopping at a border. */
   .oct-art img.oct-photo { display: block; margin: 0; filter: none; box-shadow: none; border-radius: 0;
-    width: min(100%, 60svh, 560px); height: auto; max-height: none; aspect-ratio: 3 / 4; object-fit: cover; object-position: 45% 40%;
-    -webkit-mask-image: radial-gradient(closest-side ellipse at 50% 48%, #000 52%, rgba(0, 0, 0, .55) 74%, transparent 100%);
-            mask-image: radial-gradient(closest-side ellipse at 50% 48%, #000 52%, rgba(0, 0, 0, .55) 74%, transparent 100%); }
+    width: min(88%, 53svh, 490px); height: auto; max-height: none; aspect-ratio: 3 / 4; object-fit: cover; object-position: 45% 40%;
+    -webkit-mask-image: radial-gradient(closest-side ellipse at 50% 50%, #000 52%, rgba(0, 0, 0, .55) 74%, transparent 100%);
+            mask-image: radial-gradient(closest-side ellipse at 50% 50%, #000 52%, rgba(0, 0, 0, .55) 74%, transparent 100%); }
   @media (max-width: 1179px) { .oct-art img.oct-photo { width: min(100%, 440px); } }
   /* the background has bright glowing orbs: a soft dark halo keeps the white text readable wherever one sits behind it */
   .oct-panel li, .oct-panel__h { text-shadow: 0 0 10px rgba(6, 8, 40, .85), 0 0 3px rgba(6, 8, 40, .7); }
@@ -210,17 +209,16 @@
           <h1 id="hero-h"><span>Research leader</span> <span>shaping product strategy</span> <span class="oct-accent">across enterprise AI,</span> <span class="oct-accent">with domain expertise</span> <span class="oct-accent">in healthcare</span> <span class="oct-accent">&amp; financial services</span></h1>
           <p class="hero__lead oct-lead">I de-risk product decisions from discovery to launch. Fast signal on early bets, firm evidence on major commitments, and a team aligned on evidence, not opinion.</p>
           <div class="btn-row">
-            <a class="btn btn--primary" href="workbench.html">Read the Workbench case study<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a>
-            <a class="btn btn--secondary" href="#experience">See experience</a>
+            <a class="btn btn--primary" href="workbench.html">Read the Workbench AI case study<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a>
           </div>
         </div>
         <figure class="oct-art" aria-hidden="true">
           <img class="oct-photo" src="assets/img/paris.webp" srcset="assets/img/paris-640.webp 640w, assets/img/paris.webp 1000w" sizes="(min-width: 1180px) 30vw, 80vw" width="1000" height="1334" alt="" fetchpriority="high">
         </figure>
         <aside class="oct-panel" aria-label="Capabilities">
-          <div class="oct-panel__group"><h2 class="oct-panel__h">Core Competencies</h2><ul><li>AI product strategy</li><li>LLM evaluation</li><li>Stakeholder alignment</li></ul></div>
-          <div class="oct-panel__group"><h2 class="oct-panel__h">Key Methods</h2><ul><li>MaxDiff analysis</li><li>Concept testing</li><li>Contextual inquiry</li></ul></div>
-          <div class="oct-panel__group"><h2 class="oct-panel__h">Research Tools</h2><ul><li>Claude Code &amp; Cowork</li><li>Gemini Gems</li><li>NotebookLM</li></ul></div>
+          <div class="oct-panel__group"><h2 class="oct-panel__h">Core Competencies</h2><ul><li>Stakeholder alignment</li><li>Storytelling</li><li>LLM evaluation</li></ul></div>
+          <div class="oct-panel__group"><h2 class="oct-panel__h">Key Methods</h2><ul><li>Contextual inquiry</li><li>Concept testing</li><li>MaxDiff analysis</li></ul></div>
+          <div class="oct-panel__group"><h2 class="oct-panel__h">Research Tools</h2><ul><li>Claude Code</li><li>Codex</li><li>Gemini</li></ul></div>
         </aside>
       </div>
       <dl class="hero__facts oct-facts">
