@@ -62,10 +62,13 @@
   .oct-copy h1 { margin: 0; hyphens: manual; -webkit-hyphens: manual; max-width: none; line-height: 1.04;
     font-size: clamp(30px, min(calc(100cqi / 10.6), 5.5svh), 60px); }
   .oct-copy h1 > span { display: block; }
-  .oct-copy h1 .oct-accent { color: var(--brand-blue); }
   @media (min-width: 1180px) { .oct-copy h1 > span { white-space: nowrap; } }
-  .hero .oct-lead { margin: var(--s-3) 0 0; max-width: 560px; font-size: clamp(16px, 0.3vw + 13px, 18px); line-height: 1.55; color: var(--ink); }
-  .oct-copy .btn-row { margin-top: var(--s-1); }
+  /* the intro: Kitsune blue, bold, in three set lines (each line starts on its own; on narrow screens a line may wrap) */
+  .hero .oct-lead { margin: var(--s-3) 0 0; max-width: none; font-size: clamp(16px, 0.3vw + 13px, 18px); line-height: 1.55;
+    color: var(--brand-blue, #3239f2); font-weight: 600; }
+  .hero .oct-lead > span { display: block; }
+  @media (min-width: 1180px) { .hero .oct-lead > span { white-space: nowrap; } }
+  .oct-copy .btn-row { margin-top: var(--s-5); }
 
   .oct-art { grid-column: 2; margin: 0; position: relative; align-self: stretch; display: grid; place-items: center; min-height: 0; }
   .oct-art img { width: 112%; max-width: none; height: auto; max-height: 100%; object-fit: contain; margin-left: -4%;
@@ -86,7 +89,10 @@
   .hero--oct .oct-facts dd { font-size: 14px; font-weight: 400; color: var(--ink); }
 
   /* a short laptop screen keeps the words, the octopus and the buttons on the first screen; the facts repeat in Employment History */
-  @media (min-width: 1180px) and (max-height: 840px) { .hero--oct .oct-facts { display: none; } .oct-grid { padding-bottom: 0; } }
+  /* centre the words, photo and lists on the midpoint between the header and the facts card (or the screen's foot when
+     the card is hidden): the gap under them matches the 48px gap above them */
+  @media (min-width: 1180px) { .hero--oct .oct-grid { padding-bottom: 48px; } }
+  @media (min-width: 1180px) and (max-height: 840px) { .hero--oct .oct-facts { display: none; } .hero--oct .oct-grid { padding-top: 16px; padding-bottom: 0; } }
 
   /* below 1180: the words, then the sea as a rounded panel holding the octopus and the three lists, then the facts */
   @media (max-width: 1179px) {
@@ -205,9 +211,8 @@
     <div class="wrap"><div class="hero-text hero__in">
       <div class="oct-grid">
         <div class="oct-copy">
-          <p class="hero-notice hero-pill">UX Research &amp; AI Deployment Strategy · New York</p>
-          <h1 id="hero-h"><span>Research leader</span> <span>shaping product strategy</span> <span class="oct-accent">across enterprise AI,</span> <span class="oct-accent">with domain expertise</span> <span class="oct-accent">in healthcare</span> <span class="oct-accent">&amp; financial services</span></h1>
-          <p class="hero__lead oct-lead">I de-risk product decisions from discovery to launch. Fast signal on early bets, firm evidence on major commitments, and a team aligned on evidence, not opinion.</p>
+          <h1 id="hero-h"><span>Research leader</span> <span>shaping product strategy</span> <span>across enterprise AI,</span> <span>with domain expertise</span> <span>in healthcare</span> <span>&amp; financial services</span></h1>
+          <p class="hero__lead oct-lead"><span>I de-risk product decisions from discovery through launch.</span> <span>Fast signal on early bets, firm evidence on major commitments,</span> <span>and a team aligned on evidence, not opinion.</span></p>
           <div class="btn-row">
             <a class="btn btn--primary" href="workbench.html">Read the Workbench AI case study<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a>
           </div>
