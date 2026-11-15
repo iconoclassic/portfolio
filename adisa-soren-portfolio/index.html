@@ -129,6 +129,18 @@
     .nav--home.is-top .nav__item:nth-child(n+3) .nav__link { text-shadow: 0 0 10px rgba(6, 8, 40, .7), 0 0 2px rgba(6, 8, 40, .6); }
     .nav--home.is-top .nav__item:nth-child(-n+2) .nav__link { text-shadow: 0 0 10px rgba(255, 255, 255, .8); }
   }
+  /* the facts as a hairline with the four facts under it (no card), keeping the icons. The row runs from the light side of
+     the background into the dark: a small script reads how light the background is under each fact and switches that
+     fact to white text (and light-violet icon) where it sits on dark. The hairline fades from grey to white the same way. */
+  @media (min-width: 1180px) {
+    .hero--oct .oct-facts { background: transparent; box-shadow: none; border-radius: 0; padding: var(--s-5) 0 0; border-top: 1px solid transparent;
+      border-image: linear-gradient(90deg, rgba(73, 72, 67, .3) 0 var(--facts-split, 50%), rgba(255, 255, 255, .45) calc(var(--facts-split, 50%) + 12%)) 1; }
+    .hero--oct .oct-facts > div + div { border-left: 0; padding-left: 0; }
+    .hero--oct .oct-facts > div { align-content: start; }
+    .hero--oct .oct-facts .oct-facts__icon { align-self: start; margin-top: 2px; }
+    .hero--oct .oct-facts > div.is-dark dt, .hero--oct .oct-facts > div.is-dark dd { color: #fff; text-shadow: 0 0 10px rgba(6, 8, 40, .7); }
+    .hero--oct .oct-facts > div.is-dark .oct-facts__icon { color: #b9b2ff; }
+  }
   .work-card { display: grid; gap: var(--s-4); align-content: start; color: inherit; }
   .work-card:hover h3 { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; }
   .work-card .t-label { color: var(--muted); }
@@ -352,6 +364,36 @@
   if (!nav || !document.querySelector('.hero--oct')) return;
   function top() { nav.classList.toggle('is-top', window.scrollY < 8); }
   top(); window.addEventListener('scroll', top, { passive: true });
+})();
+</script>
+<script>
+/* facts row: mark each fact that sits on the dark part of the background, so its text turns white */
+(function () {
+  var hero = document.querySelector('.hero--oct'), bg = hero && hero.querySelector('.oct-bg'), facts = hero && hero.querySelector('.oct-facts');
+  if (!bg || !facts || !window.matchMedia) return;
+  var mq = window.matchMedia('(min-width: 1180px)'), img = new Image(), cv = document.createElement('canvas'), ctx = cv.getContext('2d', { willReadFrequently: true });
+  function url() { var m = /url\(["']?([^"')]+)["']?\)/.exec(getComputedStyle(bg).backgroundImage); return m && m[1]; }
+  function lum(r, g, b) { return (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255; }
+  function mark() {
+    var items = facts.children, i;
+    if (!mq.matches || !img.naturalWidth) { for (i = 0; i < items.length; i++) items[i].classList.remove('is-dark'); return; }
+    var b = bg.getBoundingClientRect(), k = Math.max(b.width / img.naturalWidth, b.height / img.naturalHeight),
+        ox = (b.width - img.naturalWidth * k) / 2, row = facts.getBoundingClientRect(), split = null;
+    cv.width = Math.round(b.width); cv.height = Math.round(b.height);
+    ctx.drawImage(img, ox, 0, img.naturalWidth * k, img.naturalHeight * k);
+    for (i = 0; i < items.length; i++) {
+      var r = items[i].getBoundingClientRect(), d;
+      try { d = ctx.getImageData(Math.max(0, r.left - b.left), Math.max(0, r.top - b.top), Math.max(1, r.width), Math.max(1, r.height)).data; } catch (e) { return; }
+      var sum = 0, n = 0;
+      for (var p = 0; p < d.length; p += 16) { sum += lum(d[p], d[p + 1], d[p + 2]); n++; }
+      var dark = sum / n < 0.45;
+      items[i].classList.toggle('is-dark', dark);
+      if (dark && split === null) split = Math.max(0, (r.left - row.left - 40) / row.width * 100);
+    }
+    facts.style.setProperty('--facts-split', (split === null ? 100 : Math.round(split)) + '%');
+  }
+  img.onload = mark; img.src = url() || '';
+  window.addEventListener('resize', function () { var u = url(); if (u && img.src.indexOf(u.split('/').pop()) < 0) img.src = u; else mark(); });
 })();
 </script>
 </body>
