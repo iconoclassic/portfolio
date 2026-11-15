@@ -110,6 +110,19 @@
     .oct-panel { grid-template-columns: minmax(0, 1fr); }
     .oct-art { padding: var(--s-5) var(--s-3) 0; }
   }
+  /* exploring: the photo emerging from the background. No frame: its edges dissolve through a soft oval mask, so the
+     sky and street fade into the sea instead of stopping at a border. */
+  .oct-art img.oct-photo { display: block; margin: 0; filter: none; box-shadow: none; border-radius: 0;
+    width: min(100%, 60svh, 560px); height: auto; max-height: none; aspect-ratio: 3 / 4; object-fit: cover; object-position: 45% 40%;
+    -webkit-mask-image: radial-gradient(closest-side ellipse at 50% 48%, #000 52%, rgba(0, 0, 0, .55) 74%, transparent 100%);
+            mask-image: radial-gradient(closest-side ellipse at 50% 48%, #000 52%, rgba(0, 0, 0, .55) 74%, transparent 100%); }
+  @media (max-width: 1179px) { .oct-art img.oct-photo { width: min(100%, 440px); } }
+  /* the background has bright glowing orbs: a soft dark halo keeps the white text readable wherever one sits behind it */
+  .oct-panel li, .oct-panel__h { text-shadow: 0 0 10px rgba(6, 8, 40, .85), 0 0 3px rgba(6, 8, 40, .7); }
+  @media (min-width: 1180px) {
+    .nav--home.is-top .nav__item:nth-child(n+3) .nav__link { text-shadow: 0 0 10px rgba(6, 8, 40, .7), 0 0 2px rgba(6, 8, 40, .6); }
+    .nav--home.is-top .nav__item:nth-child(-n+2) .nav__link { text-shadow: 0 0 10px rgba(255, 255, 255, .8); }
+  }
   .work-card { display: grid; gap: var(--s-4); align-content: start; color: inherit; }
   .work-card:hover h3 { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; }
   .work-card .t-label { color: var(--muted); }
@@ -201,7 +214,7 @@
           </div>
         </div>
         <figure class="oct-art" aria-hidden="true">
-          <img src="assets/img/octopus.webp" srcset="assets/img/octopus-900.webp 900w, assets/img/octopus.webp 1367w" sizes="(min-width: 1180px) 46vw, 92vw" width="1367" height="1022" alt="" fetchpriority="high">
+          <img class="oct-photo" src="assets/img/paris.webp" srcset="assets/img/paris-640.webp 640w, assets/img/paris.webp 1000w" sizes="(min-width: 1180px) 30vw, 80vw" width="1000" height="1334" alt="" fetchpriority="high">
         </figure>
         <aside class="oct-panel" aria-label="Capabilities">
           <div class="oct-panel__group"><h2 class="oct-panel__h">Core Competencies</h2><ul><li>AI product strategy</li><li>LLM evaluation</li><li>Stakeholder alignment</li></ul></div>
