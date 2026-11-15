@@ -27,41 +27,88 @@
     .nav--home .nav__link { font-size: 15.5px; }
   }
   @media (min-width: 1440px) { .nav--home .nav__link { font-size: 18px; } .nav--home .nav__links { gap: var(--s-7); } }
+  /* at the top of the home page (wide screens, where the sea runs up behind the header) the header is see-through:
+     the lockup, Case Studies and Research Strategy sit on the light side in grey; Employment History, Contact and the
+     icons sit on the sea in white. Once the page scrolls, the solid fill and grey return. */
+  @media (min-width: 1180px) {
+    .nav--home { transition: background-color .25s ease, border-color .25s ease; }
+    .nav--home .nav__links { gap: max(var(--s-6), 40px); }
+    .nav--home.is-top { background: transparent; border-bottom-color: transparent; }
+    .nav--home.is-top .nav__item:nth-child(n+3) .nav__link { color: #fff; }
+    .nav--home.is-top .nav__icon { color: #fff; }
+    .nav--home.is-top a.nav__icon:hover, .nav--home.is-top a.nav__icon:focus-visible { color: #fff; background: rgba(255, 255, 255, .14); }
+  }
+  @media (min-width: 1440px) { .nav--home .nav__links { gap: var(--s-7); } }
   /* the role line as a pill: Kitsune blue on a pale tint of itself */
   .hero .hero-pill { display: inline-flex; align-items: center; width: fit-content; padding: 6px 14px; border-radius: 999px;
     background: color-mix(in oklab, var(--brand-blue) 11%, var(--bg)); color: var(--brand-blue); font-weight: 500; line-height: 1.3; }
   @media (max-width: 639px) { .hero .hero-pill { white-space: nowrap; font-size: clamp(11.5px, 3.3vw, 14px); padding: 5px 12px; } }
   @media (max-width: 359px) { .hero .hero-pill { white-space: normal; border-radius: 14px; } }
-  /* a soft, semi-transparent disc behind the hero's words, drawn inside the content box: it starts on the
-     page's side margin and stops at the hairline above the facts (half the disc shows, centred on that line) */
-  .hero-cols { --D: clamp(520px, 58vw, 1100px); position: relative; isolation: isolate; flex: 1 1 auto; align-content: start; padding-bottom: var(--s-8); }
-  .hero--statement .hero__facts { margin-top: 0; }   /* the space above the hairline now sits inside .hero-cols, so the disc reaches the line */
-  .hero-cols::before { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
-    background: radial-gradient(circle calc(var(--D) / 2) at calc(var(--D) * 0.08) 100%,
-      color-mix(in oklab, var(--brand-blue) 8%, transparent) 0,
-      color-mix(in oklab, var(--brand-blue) 5%, transparent) calc(var(--D) / 2 - 1px),
-      transparent calc(var(--D) / 2)); }
-  /* hero: the headline on the left, the longer introduction on the right; stacked below 1024 */
-  .hero-cols { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); row-gap: var(--s-6); align-items: start; }
-  .hero-cols__head { grid-column: 1 / span 6; container-type: inline-size; }
-  .hero-cols__head h1 { margin-top: var(--s-4); hyphens: manual; -webkit-hyphens: manual; text-wrap: wrap;
-    font-size: clamp(30px, calc(100cqi / 10.6), 58px); max-width: none; }
-  /* the headline is set as six deliberate lines; each holds together where the column allows, and wraps on a phone */
-  .hero-cols__head h1 > span { display: block; }
-  @media (min-width: 1180px) { .hero-cols__head h1 > span { white-space: nowrap; } }
-  /* a short laptop screen keeps the words and buttons on the first screen; the facts repeat in Experience below */
-  @media (min-width: 1024px) and (max-height: 840px) { .hero .hero__facts { display: none; } .hero-cols { padding-bottom: 0; } }
-  @media (min-width: 1180px) and (max-width: 1279px) { .hero-cols__body { gap: var(--s-4); } .hero .hero__lead--long { gap: var(--s-2); } }
-  .hero-cols__body { grid-column: 8 / -1; display: grid; gap: var(--s-6); padding-top: var(--s-2); }
-  .hero .hero__lead--long { display: grid; gap: var(--s-3); max-width: 62ch; font-size: clamp(15px, 0.28vw + 12.6px, 17px); line-height: 1.55; }
-  .hero .hero__lead--long p { margin: 0; }
-  .hero-cols__body .btn-row { margin-top: 0; }
-  /* below 1180 the two columns stack, and the hero grows past the first screen rather than crowd it */
+
+  /* ---- the octopus hero: light words on the left, the deep-sea panel on the right, the facts on a floating card */
+  .hero--oct { --sea-0: #2b2c96; --sea-1: #171a63; --sea-2: #0b0e33; --sea-3: #070920; overflow: hidden; isolation: isolate;
+    background: radial-gradient(60% 70% at 18% 40%, color-mix(in oklab, var(--brand-blue) 6%, var(--bg)), var(--bg) 70%); }
+  .hero--oct > .wrap { position: relative; z-index: 1; }
+  /* the hero background, used as supplied: it covers the hero from the top, centred */
+  .oct-bg { position: absolute; z-index: 0; inset: 0; pointer-events: none;
+    background: url(assets/img/hero-bg-1600.webp) no-repeat center top / cover; }
+  @media (min-width: 1600px), (min-resolution: 1.5dppx) and (min-width: 1180px) {
+    .oct-bg { background-image: url(assets/img/hero-bg.webp); }
+  }
+
+  .oct-grid { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 4.4fr) max-content; column-gap: var(--s-5); align-items: center; flex: 1 1 auto; min-height: 0; padding-bottom: var(--s-6); }
+  .oct-copy { grid-column: 1; container-type: inline-size; display: grid; gap: var(--s-4); align-content: center; }
+  .oct-copy h1 { margin: 0; hyphens: manual; -webkit-hyphens: manual; max-width: none; line-height: 1.04;
+    font-size: clamp(30px, min(calc(100cqi / 10.6), 5.5svh), 60px); }
+  .oct-copy h1 > span { display: block; }
+  .oct-copy h1 .oct-accent { color: var(--brand-blue); }
+  @media (min-width: 1180px) { .oct-copy h1 > span { white-space: nowrap; } }
+  .hero .oct-lead { margin: 0; max-width: 560px; font-size: clamp(16px, 0.3vw + 13px, 18px); line-height: 1.55; color: var(--ink); }
+  .oct-copy .btn-row { margin-top: var(--s-1); }
+
+  .oct-art { grid-column: 2; margin: 0; position: relative; align-self: stretch; display: grid; place-items: center; min-height: 0; }
+  .oct-art img { width: 112%; max-width: none; height: auto; max-height: 100%; object-fit: contain; margin-left: -4%;
+    filter: drop-shadow(0 0 28px rgba(70, 90, 255, .45)) drop-shadow(0 18px 40px rgba(0, 0, 0, .35)); }
+
+  .oct-panel { grid-column: 3; align-self: center; display: grid; gap: var(--s-5); padding-left: var(--s-5);
+    border-left: 1px solid rgba(255, 255, 255, .28); color: #fff; }
+  .oct-panel__h { margin: 0 0 var(--s-2); font: 600 12px/1.3 var(--font-text); letter-spacing: .08em; text-transform: uppercase; color: #b9b2ff; }
+  .oct-panel ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; }
+  .oct-panel li { font: 500 15px/1.35 var(--font-text); color: #fff; white-space: nowrap; }
+
+  /* the facts on a floating white card that overlaps the sea */
+  .hero--oct .oct-facts { margin: 0; padding: var(--s-5) var(--s-6); border: 0; border-radius: 20px; background: #fff;
+    box-shadow: 0 18px 50px rgba(18, 22, 70, .16), 0 2px 6px rgba(18, 22, 70, .06); position: relative; z-index: 2; }
+  .hero--oct .oct-facts > div { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: var(--s-4); row-gap: 2px; align-content: center; }
+  .hero--oct .oct-facts > div + div { border-left: 1px solid var(--line); padding-left: var(--s-5); }
+  .oct-facts__icon { grid-row: 1 / span 2; color: var(--brand-blue); align-self: center; }
+  .hero--oct .oct-facts dt { color: var(--ink); font-weight: 600; font-size: 15px; }
+  .hero--oct .oct-facts dd { font-size: 14px; font-weight: 400; color: var(--ink); }
+
+  /* a short laptop screen keeps the words, the octopus and the buttons on the first screen; the facts repeat in Employment History */
+  @media (min-width: 1180px) and (max-height: 840px) { .hero--oct .oct-facts { display: none; } .oct-grid { padding-bottom: 0; } }
+
+  /* below 1180: the words, then the sea as a rounded panel holding the octopus and the three lists, then the facts */
   @media (max-width: 1179px) {
-    .hero-cols { row-gap: var(--s-5); }
-    .hero-cols__head, .hero-cols__body { grid-column: 1 / -1; }
-    .hero-cols__body { padding-top: 0; }
-    main > .hero { height: auto; min-height: 100svh; }
+    main > .hero--oct { height: auto; min-height: 100svh; }
+    .oct-bg { display: none; }
+    .oct-grid { row-gap: var(--s-6); padding-bottom: var(--s-6); }
+    .oct-copy { grid-column: 1 / -1; }
+    .oct-art, .oct-panel { grid-column: 1 / -1; }
+    .oct-art { border-radius: 24px 24px 0 0; padding: var(--s-6) var(--s-5) var(--s-2); margin-bottom: calc(var(--s-6) * -1);
+      background: radial-gradient(60% 70% at 50% 55%, color-mix(in oklab, #2b2c96 85%, #6b4bd6), #171a63 55%, #0b0e33); }
+    .oct-art img { width: min(100%, 560px); margin: 0; max-height: none; }
+    .oct-panel li { white-space: normal; }
+    .oct-grid { grid-template-columns: minmax(0, 1fr); }
+    .oct-panel { border-left: 0; border-radius: 0 0 24px 24px; padding: var(--s-5) var(--s-6) var(--s-6); background: #0b0e33;
+      grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s-5); }
+    .hero--oct .oct-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: var(--s-5); }
+    .hero--oct .oct-facts > div { grid-column: auto; }
+    .hero--oct .oct-facts > div:nth-child(3) { border-left: 0; padding-left: 0; }
+  }
+  @media (max-width: 639px) {
+    .oct-panel { grid-template-columns: minmax(0, 1fr); }
+    .oct-art { padding: var(--s-5) var(--s-3) 0; }
   }
   .work-card { display: grid; gap: var(--s-4); align-content: start; color: inherit; }
   .work-card:hover h3 { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; }
@@ -140,30 +187,33 @@
 </header>
 
 <main id="top">
-  <section class="hero hero--statement" aria-labelledby="hero-h">
+  <section class="hero hero--statement hero--oct" aria-labelledby="hero-h">
+    <div class="oct-bg" aria-hidden="true"></div>
     <div class="wrap"><div class="hero-text hero__in">
-      <div class="hero-cols">
-        <div class="hero-cols__head">
+      <div class="oct-grid">
+        <div class="oct-copy">
           <p class="hero-notice hero-pill">UX Research &amp; AI Deployment Strategy · New York</p>
-          <h1 id="hero-h"><span>Research leader</span> <span>shaping product strategy</span> <span>across enterprise AI,</span> <span>with domain expertise</span> <span>in healthcare</span> <span>&amp; financial services</span></h1>
+          <h1 id="hero-h"><span>Research leader</span> <span>shaping product strategy</span> <span class="oct-accent">across enterprise AI,</span> <span class="oct-accent">with domain expertise</span> <span class="oct-accent">in healthcare</span> <span class="oct-accent">&amp; financial services</span></h1>
+          <p class="hero__lead oct-lead">I de-risk product decisions from discovery to launch. Fast signal on early bets, firm evidence on major commitments, and a team aligned on evidence, not opinion.</p>
+          <div class="btn-row">
+            <a class="btn btn--primary" href="workbench.html">Read the Workbench case study<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a>
+            <a class="btn btn--secondary" href="#experience">See experience</a>
+          </div>
         </div>
-        <div class="hero-cols__body">
-        <div class="hero__lead hero__lead--long">
-          <p>I de-risk product decisions from discovery through launch and align key partners around evidence, not opinion.</p>
-          <p>At Verily, that work led to the launch of Lightpath, a multi-sided platform that lets clinicians scale personalized care and patients receive timely, tailored care remotely. At BlackRock, it led to the redesign of Aladdin, the cloud-based platform unifying investment management, risk analytics, trading, and operations, improving efficiency across the portfolio management lifecycle. At Google, it led to credibility features that help news consumers tell reliable sources from misinformation.</p>
-          <p>I give leadership a clearer path to the right product: fast signal on early bets, firm evidence on major commitments.</p>
-        </div>
-        <div class="btn-row">
-          <a class="btn btn--primary" href="workbench.html">Read the Workbench case study<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a>
-          <a class="btn btn--secondary" href="#experience">See experience</a>
-        </div>
-        </div>
+        <figure class="oct-art" aria-hidden="true">
+          <img src="assets/img/octopus.webp" srcset="assets/img/octopus-900.webp 900w, assets/img/octopus.webp 1367w" sizes="(min-width: 1180px) 46vw, 92vw" width="1367" height="1022" alt="" fetchpriority="high">
+        </figure>
+        <aside class="oct-panel" aria-label="Capabilities">
+          <div class="oct-panel__group"><h2 class="oct-panel__h">Core Competencies</h2><ul><li>AI product strategy</li><li>LLM evaluation</li><li>Stakeholder alignment</li></ul></div>
+          <div class="oct-panel__group"><h2 class="oct-panel__h">Key Methods</h2><ul><li>MaxDiff analysis</li><li>Concept testing</li><li>Contextual inquiry</li></ul></div>
+          <div class="oct-panel__group"><h2 class="oct-panel__h">Research Tools</h2><ul><li>Claude Code &amp; Cowork</li><li>Gemini Gems</li><li>NotebookLM</li></ul></div>
+        </aside>
       </div>
-      <dl class="hero__facts">
-        <div><dt>Most recent role</dt><dd>Staff UX researcher, Verily, 2020 to 2026</dd></div>
-        <div><dt>Focus</dt><dd>Enterprise AI, life sciences, finance</dd></div>
-        <div><dt>Methods</dt><dd>MaxDiff, concept tests, contextual inquiry</dd></div>
-        <div><dt>Education</dt><dd>M.S., Human Factors, Cornell</dd></div>
+      <dl class="hero__facts oct-facts">
+        <div><svg class="oct-facts__icon" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 19v-1.5a3.5 3.5 0 0 0-3.5-3.5h-5A3.5 3.5 0 0 0 3 17.5V19"/><circle cx="9" cy="7.5" r="3.5"/><path d="M19 8v6M16 11h6"/></svg><dt>Most recent role</dt><dd>Staff UX researcher, Verily, 2020 to 2026</dd></div>
+        <div><svg class="oct-facts__icon" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/><path d="M18.5 5.5 13 11M18.5 5.5V3M18.5 5.5H21"/></svg><dt>Focus</dt><dd>Enterprise AI, life sciences, finance</dd></div>
+        <div><svg class="oct-facts__icon" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 20 7.5v9L12 21l-8-4.5v-9Z"/><path d="M4 7.5 12 12l8-4.5M12 12v9"/></svg><dt>Methods</dt><dd>MaxDiff, concept tests, contextual inquiry</dd></div>
+        <div><svg class="oct-facts__icon" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 9 12 4.5 21.5 9 12 13.5Z"/><path d="M6.5 11v5c1.5 1.5 3.5 2.2 5.5 2.2s4-.7 5.5-2.2v-5"/><path d="M21.5 9v5.5"/></svg><dt>Education</dt><dd>M.S., Human Factors, Cornell</dd></div>
       </dl>
     </div></div>
   </section>
@@ -278,5 +328,14 @@
   </div>
 </footer>
 <script src="assets/site.js"></script>
+<script>
+/* home header: see-through while the page is at the top, solid once scrolled */
+(function () {
+  var nav = document.querySelector('.nav--home');
+  if (!nav || !document.querySelector('.hero--oct')) return;
+  function top() { nav.classList.toggle('is-top', window.scrollY < 8); }
+  top(); window.addEventListener('scroll', top, { passive: true });
+})();
+</script>
 </body>
 </html>
