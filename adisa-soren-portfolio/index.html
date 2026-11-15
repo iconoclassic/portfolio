@@ -116,13 +116,17 @@
     .oct-panel { grid-template-columns: minmax(0, 1fr); }
     .oct-art { padding: var(--s-5) var(--s-3) 0; }
   }
-  /* exploring: the photo emerging from the background. No frame: its edges dissolve through a soft oval mask, so the
-     sky and street fade into the sea instead of stopping at a border. */
+  /* the photo, cropped to the oval marked on the reference slide: across the photo's full width, from its top edge down to
+     96% of its height (centre 49.8% / 48%, radii 49.7% / 48.1%). The outer quarter dissolves into the background (the middle stays fully opaque, so nothing from the background shows through the scene); the photo is nudged down 2%
+     so the oval's own centre lines up with the words. */
   .oct-art img.oct-photo { display: block; margin: 0; filter: none; box-shadow: none; border-radius: 0;
-    width: min(88%, 28.5vw, 46svh, 460px); height: auto; max-height: none; aspect-ratio: 3 / 4; object-fit: cover; object-position: 45% 40%;
-    -webkit-mask-image: radial-gradient(closest-side ellipse at 50% 50%, #000 52%, rgba(0, 0, 0, .55) 74%, transparent 100%);
-            mask-image: radial-gradient(closest-side ellipse at 50% 50%, #000 52%, rgba(0, 0, 0, .55) 74%, transparent 100%); }
+    width: min(88%, 28.5vw, 46svh, 460px); height: auto; max-height: none; aspect-ratio: 1108 / 1478; object-fit: cover; object-position: 50% 50%;
+    -webkit-mask-image: radial-gradient(49.7% 48.1% at 49.8% 48%, #000 74%, rgba(0, 0, 0, .55) 88%, transparent 100%);
+            mask-image: radial-gradient(49.7% 48.1% at 49.8% 48%, #000 74%, rgba(0, 0, 0, .55) 88%, transparent 100%); }
+  @media (min-width: 1180px) { .oct-art img.oct-photo { transform: translateY(2%); } }
   @media (max-width: 1179px) { .oct-art img.oct-photo { width: min(100%, 440px); } }
+  /* below 1180 the photo sits in its own rounded navy panel (the lists that used to close it off underneath are gone) */
+  @media (max-width: 1179px) { .oct-art { border-radius: 24px; margin-bottom: 0; padding-bottom: var(--s-5); } }
   /* the background has bright glowing orbs: a soft dark halo keeps the white text readable wherever one sits behind it */
   .oct-panel li, .oct-panel__h { text-shadow: 0 0 10px rgba(6, 8, 40, .85), 0 0 3px rgba(6, 8, 40, .7); }
   @media (min-width: 1180px) {
@@ -230,7 +234,7 @@
           </div>
         </div>
         <figure class="oct-art" aria-hidden="true">
-          <img class="oct-photo" src="assets/img/paris.webp" srcset="assets/img/paris-640.webp 640w, assets/img/paris.webp 1000w" sizes="(min-width: 1180px) 30vw, 80vw" width="1000" height="1334" alt="" fetchpriority="high">
+          <img class="oct-photo" src="assets/img/paris-hq.webp" width="1108" height="1478" alt="" fetchpriority="high">
         </figure>
       </div>
       <dl class="hero__facts oct-facts">
