@@ -36,7 +36,8 @@
     .nav--home.is-top { background: transparent; border-bottom-color: transparent; }
     .nav--home.is-top .nav__item:nth-child(n+3) .nav__link { color: #fff; }
     .nav--home.is-top .nav__icon { color: #fff; }
-    .nav--home.is-top a.nav__icon:hover, .nav--home.is-top a.nav__icon:focus-visible { color: #fff; background: rgba(255, 255, 255, .14); }
+    /* hover keeps the site-wide treatment: Kitsune blue with a faint blue tint */
+    .nav--home.is-top a.nav__icon:hover, .nav--home.is-top a.nav__icon:focus-visible { color: var(--brand-blue, #3239f2); }
   }
   @media (min-width: 1440px) { .nav--home .nav__links { gap: var(--s-7); } }
   /* the role line as a pill: Kitsune blue on a pale tint of itself */
