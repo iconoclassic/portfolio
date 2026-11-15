@@ -57,7 +57,7 @@
     .oct-bg { background-image: url(assets/img/hero-bg.webp); }
   }
 
-  .oct-grid { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 4.4fr) max-content; column-gap: var(--s-5); align-items: center; flex: 1 1 auto; min-height: 0; padding-bottom: var(--s-6); }
+  .oct-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: var(--s-5); align-items: center; flex: 1 1 auto; min-height: 0; padding-bottom: var(--s-6); }
   .oct-copy { grid-column: 1; container-type: inline-size; display: grid; gap: var(--s-4); align-content: center; }
   .oct-copy h1 { margin: 0; hyphens: manual; -webkit-hyphens: manual; max-width: none; line-height: 1.04;
     font-size: clamp(30px, min(calc(100cqi / 10.6), 5.5svh), 60px); }
@@ -119,7 +119,7 @@
   /* exploring: the photo emerging from the background. No frame: its edges dissolve through a soft oval mask, so the
      sky and street fade into the sea instead of stopping at a border. */
   .oct-art img.oct-photo { display: block; margin: 0; filter: none; box-shadow: none; border-radius: 0;
-    width: min(88%, 53svh, 490px); height: auto; max-height: none; aspect-ratio: 3 / 4; object-fit: cover; object-position: 45% 40%;
+    width: min(88%, 28.5vw, 46svh, 460px); height: auto; max-height: none; aspect-ratio: 3 / 4; object-fit: cover; object-position: 45% 40%;
     -webkit-mask-image: radial-gradient(closest-side ellipse at 50% 50%, #000 52%, rgba(0, 0, 0, .55) 74%, transparent 100%);
             mask-image: radial-gradient(closest-side ellipse at 50% 50%, #000 52%, rgba(0, 0, 0, .55) 74%, transparent 100%); }
   @media (max-width: 1179px) { .oct-art img.oct-photo { width: min(100%, 440px); } }
@@ -232,11 +232,6 @@
         <figure class="oct-art" aria-hidden="true">
           <img class="oct-photo" src="assets/img/paris.webp" srcset="assets/img/paris-640.webp 640w, assets/img/paris.webp 1000w" sizes="(min-width: 1180px) 30vw, 80vw" width="1000" height="1334" alt="" fetchpriority="high">
         </figure>
-        <aside class="oct-panel" aria-label="Capabilities">
-          <div class="oct-panel__group"><h2 class="oct-panel__h">Core Competencies</h2><ul><li>Stakeholder alignment</li><li>Storytelling</li><li>LLM evaluation</li></ul></div>
-          <div class="oct-panel__group"><h2 class="oct-panel__h">Key Methods</h2><ul><li>Contextual inquiry</li><li>Concept testing</li><li>MaxDiff analysis</li></ul></div>
-          <div class="oct-panel__group"><h2 class="oct-panel__h">Research Tools</h2><ul><li>Claude Code</li><li>Codex</li><li>Gemini</li></ul></div>
-        </aside>
       </div>
       <dl class="hero__facts oct-facts">
         <div><svg class="oct-facts__icon" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 19v-1.5a3.5 3.5 0 0 0-3.5-3.5h-5A3.5 3.5 0 0 0 3 17.5V19"/><circle cx="9" cy="7.5" r="3.5"/><path d="M19 8v6M16 11h6"/></svg><dt>Most recent role</dt><dd>Staff UX researcher, Verily, 2020 to 2026</dd></div>
