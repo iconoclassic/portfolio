@@ -150,6 +150,10 @@
     .nav--home.is-top .nav__link.is-split { color: transparent; -webkit-background-clip: text; background-clip: text; text-shadow: none; }
     .hero--oct .oct-facts > div.is-dark .oct-facts__icon { color: #fff; }
   }
+  /* the white Soren mark on the right, sized to the space the photo used (the photo's height at each width) */
+  .oct-art.oct-mark img { display: block; width: auto; max-width: 100%; height: min(38vw, 61.3svh, 613px); max-height: none; margin: 0;
+    aspect-ratio: 3855 / 3273; object-fit: contain; filter: none; box-shadow: none; -webkit-mask-image: none; mask-image: none; transform: none; }
+  @media (max-width: 1179px) { .oct-art.oct-mark { padding: var(--s-7) var(--s-6); } .oct-art.oct-mark img { height: auto; width: min(70%, 360px); margin: 0 auto; } }
   .work-card { display: grid; gap: var(--s-4); align-content: start; color: inherit; }
   .work-card:hover h3 { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; }
   .work-card .t-label { color: var(--muted); }
@@ -238,6 +242,9 @@
             <a class="btn btn--primary" href="workbench.html">Read the Workbench AI case study<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a>
           </div>
         </div>
+        <figure class="oct-art oct-mark" aria-hidden="true">
+          <img src="assets/logos/soren-mark-white.svg" width="3855" height="3273" alt="">
+        </figure>
       </div>
       <dl class="hero__facts oct-facts">
         <div><svg class="oct-facts__icon" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 19v-1.5a3.5 3.5 0 0 0-3.5-3.5h-5A3.5 3.5 0 0 0 3 17.5V19"/><circle cx="9" cy="7.5" r="3.5"/><path d="M19 8v6M16 11h6"/></svg><dt>Most recent role</dt><dd>Staff UX researcher, Verily, 2020 to 2026</dd></div>
