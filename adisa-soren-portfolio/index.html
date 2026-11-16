@@ -242,8 +242,8 @@
       <dl class="hero__facts oct-facts">
         <div><svg class="oct-facts__icon" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 19v-1.5a3.5 3.5 0 0 0-3.5-3.5h-5A3.5 3.5 0 0 0 3 17.5V19"/><circle cx="9" cy="7.5" r="3.5"/><path d="M19 8v6M16 11h6"/></svg><dt>Most recent role</dt><dd>Staff UX researcher, Verily, 2020 to 2026</dd></div>
         <div><svg class="oct-facts__icon" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/><path d="M18.5 5.5 13 11M18.5 5.5V3M18.5 5.5H21"/></svg><dt>Focus</dt><dd>Enterprise AI, life sciences, finance</dd></div>
-        <div><svg class="oct-facts__icon" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 20 7.5v9L12 21l-8-4.5v-9Z"/><path d="M4 7.5 12 12l8-4.5M12 12v9"/></svg><dt>Methods</dt><dd>MaxDiff, concept tests, contextual inquiry</dd></div>
-        <div><svg class="oct-facts__icon" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 9 12 4.5 21.5 9 12 13.5Z"/><path d="M6.5 11v5c1.5 1.5 3.5 2.2 5.5 2.2s4-.7 5.5-2.2v-5"/><path d="M21.5 9v5.5"/></svg><dt>Education</dt><dd>M.S., Human Factors, Cornell</dd></div>
+        <div><svg class="oct-facts__icon" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 20 7.5v9L12 21l-8-4.5v-9Z"/><path d="M4 7.5 12 12l8-4.5M12 12v9"/></svg><dt>Methods</dt><dd>MaxDiff, concept tests</dd></div>
+        <div><svg class="oct-facts__icon" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 9 12 4.5 21.5 9 12 13.5Z"/><path d="M6.5 11v5c1.5 1.5 3.5 2.2 5.5 2.2s4-.7 5.5-2.2v-5"/><path d="M21.5 9v5.5"/></svg><dt>Education</dt><dd>M.S. Human Factors Engineering, Cornell University</dd></div>
       </dl>
     </div></div>
   </section>
@@ -368,9 +368,9 @@
 })();
 </script>
 <script>
-/* text over the hero background: every header link, icon and fact reads the background behind it. Wholly on light → grey;
-   wholly on dark → white; straddling the light-to-dark edge → its letters shift from grey to white exactly where the
-   background does. */
+/* text over the hero background: every header link, icon and fact reads the background behind it. Each header link and icon takes one
+   colour (whichever of white or grey reads better across the whole word); each footer fact takes one colour (white only when all of
+   it sits on dark). */
 (function () {
   var hero = document.querySelector('.hero--oct'), bg = hero && hero.querySelector('.oct-bg'), facts = hero && hero.querySelector('.oct-facts');
   if (!bg || !window.matchMedia) return;
@@ -386,16 +386,14 @@
     var d = ctx.getImageData(x0, Math.max(0, y - 2), w, 5).data, dark = [], nd = 0;
     for (var x = 0; x < w; x++) { var s = 0; for (var k = 0; k < 5; k++) s += lum(d, (k * w + x) * 4); dark.push(s / 5 < CUT); if (dark[x]) nd++; }
     reset(el);
-    if (nd === 0) return;
-    if (nd === w || !textOnly) { el.classList.toggle('is-dark', nd / w > 0.5); return; }
-    var stops = [], prev = dark[0];
-    stops.push((prev ? '#fff' : LIGHT) + ' 0');
-    for (x = 1; x < w; x++) if (dark[x] !== prev) { var c0 = prev ? '#fff' : LIGHT, c1 = dark[x] ? '#fff' : LIGHT;
-      stops.push(c0 + ' ' + Math.max(0, x - 6) + 'px', c1 + ' ' + (x + 6) + 'px'); prev = dark[x]; }
-    stops.push((prev ? '#fff' : LIGHT) + ' 100%');
-    el.classList.add('is-split');
-    el.style.backgroundImage = 'linear-gradient(90deg, ' + stops.join(', ') + ')';
+    /* one colour per link or icon: whichever of white or grey (#494843) reads better across the whole word, judged by the
+       contrast each would have against every pixel of background behind it */
+    var cw = 0, cg = 0;
+    for (x = 0; x < w; x++) { var L = 0; for (k = 0; k < 5; k++) { var p = (k * w + x) * 4; L += 0.2126 * LIN(d[p]) + 0.7152 * LIN(d[p + 1]) + 0.0722 * LIN(d[p + 2]); } L /= 5;
+      cw += Math.log(1.05 / (L + 0.05)); cg += Math.log(Math.max(L + 0.05, 0.1149) / Math.min(L + 0.05, 0.1149)); }
+    el.classList.toggle('is-dark', cw > cg);
   }
+  function LIN(v) { var c = v / 255; return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4); }
   function targets() {
     var t = [];
     document.querySelectorAll('.nav--home .nav__links .nav__link').forEach(function (e) { t.push([e, true]); });
