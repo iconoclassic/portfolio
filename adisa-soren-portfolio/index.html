@@ -54,6 +54,9 @@
     background: url(assets/img/hero-blue-1600.webp) no-repeat right top / cover; }
   /* the blue fades to pure white by the hero's vertical midpoint */
   .oct-bg::before { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, #fff 0 46%, rgba(255, 255, 255, .85) 52%, rgba(255, 255, 255, 0) 66%); }
+  /* the fade lands on off-white #F7F9FA (the page background) rather than pure white: a multiply layer turns every white in the background
+     to #F7F9FA and leaves the blues all but unchanged */
+  .oct-bg::after { content: ""; position: absolute; inset: 0; background: #f7f9fa; mix-blend-mode: multiply; }
   @media (min-width: 1600px), (min-resolution: 1.5dppx) and (min-width: 1180px) {
     .oct-bg { background-image: url(assets/img/hero-blue.webp); }
   }
@@ -426,6 +429,7 @@
     var g = ctx.createLinearGradient(0, 0, b.width, 0);
     g.addColorStop(0, '#fff'); g.addColorStop(0.46, '#fff'); g.addColorStop(0.52, 'rgba(255,255,255,.85)'); g.addColorStop(0.66, 'rgba(255,255,255,0)');
     ctx.fillStyle = g; ctx.fillRect(0, 0, b.width, b.height);
+    ctx.globalCompositeOperation = 'multiply'; ctx.fillStyle = '#f7f9fa'; ctx.fillRect(0, 0, b.width, b.height); ctx.globalCompositeOperation = 'source-over';
     try {
       for (i = 0; i < t.length; i++) {
         var el = t[i][0];
