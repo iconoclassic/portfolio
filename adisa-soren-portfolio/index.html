@@ -143,10 +143,9 @@
     .hero--oct .oct-facts > div + div { border-left: 0; padding-left: 0; }
     .hero--oct .oct-facts > div { align-content: start; }
     .hero--oct .oct-facts .oct-facts__icon { align-self: start; margin-top: 2px; }
-    .hero--oct .oct-facts dt.is-dark, .hero--oct .oct-facts dd.is-dark { color: #fff; text-shadow: 0 0 10px rgba(6, 8, 40, .7); }
-    .hero--oct .oct-facts dt.is-split, .hero--oct .oct-facts dd.is-split,
+    .hero--oct .oct-facts > div.is-dark dt, .hero--oct .oct-facts > div.is-dark dd { color: #fff; text-shadow: 0 0 10px rgba(6, 8, 40, .7); }
     .nav--home.is-top .nav__link.is-split { color: transparent; -webkit-background-clip: text; background-clip: text; text-shadow: none; }
-    .hero--oct .oct-facts > div.is-dark .oct-facts__icon { color: #b9b2ff; }
+    .hero--oct .oct-facts > div.is-dark .oct-facts__icon { color: #fff; }
   }
   .work-card { display: grid; gap: var(--s-4); align-content: start; color: inherit; }
   .work-card:hover h3 { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; }
@@ -401,15 +400,29 @@
     var t = [];
     document.querySelectorAll('.nav--home .nav__links .nav__link').forEach(function (e) { t.push([e, true]); });
     document.querySelectorAll('.nav--home .nav__icon').forEach(function (e) { t.push([e, false]); });
-    if (facts) facts.querySelectorAll('dt, dd').forEach(function (e) { t.push([e, true]); });
-    if (facts) facts.querySelectorAll(':scope > div').forEach(function (e) { t.push([e, false]); });
     return t;
+  }
+  /* footer: each fact (icon, label and text) takes one colour. It turns white only when all of its words sit on the dark
+     part of the background; if any of it is on the light side, the whole fact stays grey. */
+  function toneFact(div, b) {
+    var parts = div.querySelectorAll('dt, dd'), dark = 0, total = 0;
+    div.classList.remove('is-dark');
+    parts.forEach(function (el) {
+      rg.selectNodeContents(el);
+      [].slice.call(rg.getClientRects()).forEach(function (q) {
+        if (q.width < 2) return;
+        var x0 = Math.max(0, Math.round(q.left - b.left)), w = Math.max(1, Math.round(q.width)), y = Math.round(q.top - b.top + q.height / 2);
+        var d = ctx.getImageData(x0, Math.max(0, y - 2), w, 5).data;
+        for (var x = 0; x < w; x++) { var s = 0; for (var k = 0; k < 5; k++) s += lum(d, (k * w + x) * 4); if (s / 5 < CUT) dark++; total++; }
+      });
+    });
+    div.classList.toggle('is-dark', total > 0 && dark / total > 0.97);
   }
   function mark() {
     var t = targets(), i;
     if (!mq.matches || !img.naturalWidth || !document.querySelector('.nav--home.is-top')) {
       for (i = 0; i < t.length; i++) reset(t[i][0]);
-      if (facts) facts.style.removeProperty('--facts-split');
+      if (facts) { facts.style.removeProperty('--facts-split'); facts.querySelectorAll(':scope > div').forEach(function (dv) { dv.classList.remove('is-dark'); }); }
       if (!mq.matches || !img.naturalWidth) return;
     }
     var b = bg.getBoundingClientRect(), k = Math.max(b.width / img.naturalWidth, b.height / img.naturalHeight);
@@ -424,12 +437,14 @@
         if (el.closest('.nav') && !document.querySelector('.nav--home.is-top')) { reset(el); continue; }
         tone(el, b, t[i][1]);
       }
+      if (facts) facts.querySelectorAll(':scope > div').forEach(function (dv) { toneFact(dv, b); });
     } catch (e) { return; }
     if (facts) { var row = facts.getBoundingClientRect(), d = ctx.getImageData(Math.max(0, Math.round(row.left - b.left)), Math.max(0, Math.round(row.top - b.top)), Math.max(1, Math.round(row.width)), 1).data, sp = 100;
       for (var x = 0; x < row.width; x++) if (lum(d, x * 4) < CUT) { sp = Math.max(0, (x - 40) / row.width * 100); break; }
       facts.style.setProperty('--facts-split', Math.round(sp) + '%'); }
   }
   img.onload = mark; img.src = url() || '';
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(mark);
   window.addEventListener('resize', function () { var u = url(); if (u && img.src.indexOf(u.split('/').pop()) < 0) img.src = u; else mark(); });
   window.addEventListener('scroll', function () { mark(); }, { passive: true });
 })();
