@@ -237,7 +237,9 @@
     .mega__more:hover::after, .mega__more:focus-visible::after { transform: translateX(4px); }
     .mega__list { list-style: none; margin: 0; padding: 0; border-top: 1px solid rgba(255, 255, 255, .28); }
     .mega__list > li { border-bottom: 1px solid rgba(255, 255, 255, .28); padding: clamp(14px, 2.4svh, 26px) 0; }
-    .mega__h { display: inline-block; font: 500 clamp(30px, 1.6vw + 14px, 46px)/1.08 var(--font-display); letter-spacing: -0.015em; color: #fff;
+    /* a six-row list (Employment History with the résumé) runs a little tighter so it still fits a short laptop screen */
+    .mega__list:has(> li:nth-child(6)) > li { padding-block: clamp(10px, 1.8svh, 22px); }
+    .mega__h { display: inline-block; font: 500 min(clamp(30px, 1.6vw + 14px, 46px), 4.8svh)/1.08 var(--font-display); letter-spacing: -0.015em; color: #fff;
       background: linear-gradient(currentColor, currentColor) 0 100% / 0 1.5px no-repeat; padding-bottom: 3px; transition: background-size .35s var(--mx); }
     a.mega__h:hover, a.mega__h:focus-visible { background-size: 100% 1.5px; }
     .mega__sub { display: flex; flex-wrap: wrap; gap: 6px 22px; margin: 10px 0 0; padding: 0; list-style: none;
@@ -251,6 +253,7 @@
     .mega.is-open .is-active .mega__list > li:nth-child(3) { transition-delay: .26s; }
     .mega.is-open .is-active .mega__list > li:nth-child(4) { transition-delay: .31s; }
     .mega.is-open .is-active .mega__list > li:nth-child(5) { transition-delay: .36s; }
+    .mega.is-open .is-active .mega__list > li:nth-child(6) { transition-delay: .41s; }
     /* the thin rail on the right: its bright segment slides to the open tab */
     .mega__rail { position: absolute; right: clamp(20px, 2.2vw, 40px); top: 50%; width: 2px; height: 168px; margin-top: -84px; border-radius: 2px; background: rgba(255, 255, 255, .22); }
     .mega__rail::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 25%; border-radius: 2px; background: #fff;
@@ -352,6 +355,7 @@
           <li><a class="mega__h" href="#experience">Google</a><ul class="mega__sub"><li>UX Researcher</li><li>2017 to 2018</li></ul></li>
           <li><a class="mega__h" href="#experience">Fidelity Investments</a><ul class="mega__sub"><li>User Research Intern</li><li>2016</li></ul></li>
           <li><a class="mega__h" href="#experience">Northwestern Medicine</a><ul class="mega__sub"><li>Usability Specialist</li><li>2013 to 2015</li></ul></li>
+          <li><a class="mega__h" href="assets/docs/adisa-soren-resume.pdf" target="_blank" rel="noopener">Résumé</a><ul class="mega__sub"><li>PDF</li></ul></li>
         </ul>
       </section>
       <section class="mega__panel" data-for="contact" aria-label="Contact">
@@ -359,7 +363,6 @@
         <ul class="mega__list">
           <li><a class="mega__h" href="mailto:brc83@cornell.edu">Email</a><ul class="mega__sub"><li>brc83@cornell.edu</li></ul></li>
           <li><a class="mega__h" href="https://www.linkedin.com/in/adsoren/" target="_blank" rel="noopener">LinkedIn</a><ul class="mega__sub"><li>linkedin.com/in/adsoren</li></ul></li>
-          <li><a class="mega__h" href="assets/docs/adisa-soren-resume.pdf" target="_blank" rel="noopener">Résumé</a><ul class="mega__sub"><li>PDF</li></ul></li>
         </ul>
       </section>
     </div></div>
