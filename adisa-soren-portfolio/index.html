@@ -270,6 +270,40 @@
     .mega.is-open { opacity: 1; transition: opacity .2s linear, visibility 0s; }
     .mega__panel, .mega__list > li, .mega.is-open .mega__panel.is-active { transform: none; transition-property: opacity, visibility; }
   }
+  /* ---- professional experience: each row opens to show more about the role. The row itself is the button; the chevron on the
+     right turns as the details slide open underneath, aligned with the role. */
+  .exp > li.exp-item { display: block; padding-block: 0; }
+  .exp__row { display: grid; grid-template-columns: 120px minmax(0, 1fr) auto 20px; align-items: center; gap: var(--s-1) var(--s-5); width: 100%;
+    padding: var(--s-4) 0; margin: 0; border: 0; background: none; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+  .exp > li.exp-item:first-child .exp__row { padding-top: 0; }
+  .exp__row .rows__when, .exp__row .rows__name, .exp__row .rows__value { grid-row: 1; }
+  .exp__row .rows__when { grid-column: 1; } .exp__row .rows__name { grid-column: 2; } .exp__row .rows__value { grid-column: 3; }
+  /* the signifier: a thin chevron at the end of the row in the dates' grey, no frame; it turns up while the row is open */
+  .exp__chev { grid-column: 4; grid-row: 1; justify-self: end; display: grid; place-items: center; width: 20px; height: 20px; color: var(--muted); }
+  .exp__chev svg { width: 18px; height: 18px; transition: transform .35s cubic-bezier(.645, .045, .355, 1); }
+  .exp-item.is-open .exp__chev svg { transform: rotate(180deg); }
+  .exp__row:hover .role { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; }
+  .exp__row:focus-visible { outline: 2px solid var(--brand-blue, #3239f2); outline-offset: 4px; border-radius: 4px; }
+  .exp__more { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .4s cubic-bezier(.645, .045, .355, 1); }
+  .exp-item.is-open .exp__more { grid-template-rows: 1fr; }
+  .exp__inner { min-height: 0; overflow: hidden; visibility: hidden; transition: visibility 0s linear .4s; }
+  .exp-item.is-open .exp__inner { visibility: visible; transition-delay: 0s; }
+  .exp__body { display: grid; gap: var(--s-3); max-width: 72ch; padding: 0 0 var(--s-5) calc(120px + var(--s-5)); opacity: 0; transform: translateY(-6px);
+    transition: opacity .3s var(--ease), transform .4s cubic-bezier(.645, .045, .355, 1); }
+  .exp-item.is-open .exp__body { opacity: 1; transform: none; transition-delay: .08s; }
+  .exp__body p { margin: 0; color: var(--ink); }
+  .exp__body ul { display: grid; gap: var(--s-2); margin: 0; padding: 0; list-style: none; }
+  .exp__body li { position: relative; padding-left: var(--s-4); }
+  .exp__body li::before { content: ""; position: absolute; left: 0; top: .7em; width: 6px; height: 1px; background: var(--ink); }
+  @media (max-width: 639px) {
+    .exp__row { grid-template-columns: minmax(0, 1fr) auto 20px; }
+    .exp__row .rows__when { grid-column: 1 / 3; grid-row: 1; }
+    .exp__row .rows__name { grid-column: 1; grid-row: 2; }
+    .exp__row .rows__value { grid-column: 2; grid-row: 2; }
+    .exp__chev { grid-column: 3; grid-row: 1 / 3; }
+    .exp__body { padding-left: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) { .exp__more, .exp__body, .exp__chev svg { transition: none; } }
 </style>
 </head>
 <body>
@@ -432,11 +466,11 @@
       </div>
       <h3 class="t-card exp-h" id="professional-experience">Professional experience</h3>
       <ul class="rows exp">
-        <li><span class="rows__when">2020 to 2026</span><span class="rows__name"><b class="role">Staff UX Researcher</b>, <i>enterprise AI and precision health</i></span><span class="rows__value"><img class="logo" src="assets/logos/verily.png" alt="Verily" style="--logo-w: 117px" loading="lazy"></span></li>
-        <li><span class="rows__when">2018 to 2020</span><span class="rows__name"><b class="role">UX Research Lead</b>, <i>Aladdin portfolio management</i></span><span class="rows__value"><img class="logo" src="assets/logos/blackrock.png" alt="BlackRock" style="--logo-w: 148px" loading="lazy"></span></li>
-        <li><span class="rows__when">2017 to 2018</span><span class="rows__name"><b class="role">UX Researcher</b>, <i>Search and Google Assistant</i></span><span class="rows__value"><img class="logo" src="assets/logos/google.png" alt="Google" style="--logo-w: 97px" loading="lazy"></span></li>
-        <li><span class="rows__when">2016</span><span class="rows__name"><b class="role">User Research Intern</b>, <i>mobile investing for young adults</i></span><span class="rows__value"><img class="logo" src="assets/logos/fidelity.png" alt="Fidelity Investments" style="--logo-w: 146px" loading="lazy"></span></li>
-        <li><span class="rows__when">2013 to 2015</span><span class="rows__name"><b class="role">Usability Specialist</b>, <i>mHealth for depression and anxiety care</i></span><span class="rows__value"><img class="logo" src="assets/logos/northwestern-medicine.png" alt="Northwestern Medicine" style="--logo-w: 148px" loading="lazy"></span></li>
+        <li class="exp-item"><button class="exp__row" type="button" aria-expanded="false" aria-controls="exp-verily"><span class="rows__when">2020 to 2026</span><span class="rows__name"><b class="role">Staff UX Researcher</b>, <i>enterprise AI and precision health</i></span><span class="rows__value"><img class="logo" src="assets/logos/verily.png" alt="Verily" style="--logo-w: 117px" loading="lazy"></span><span class="exp__chev" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 6 8 10.5 12.5 6"/></svg></span></button><div class="exp__more" id="exp-verily"><div class="exp__inner"><div class="exp__body"><p><span class="tbd">Summary of the role to come.</span></p><ul><li><span class="tbd">Highlight to come</span></li><li><span class="tbd">Highlight to come</span></li><li><span class="tbd">Highlight to come</span></li></ul></div></div></div></li>
+        <li class="exp-item"><button class="exp__row" type="button" aria-expanded="false" aria-controls="exp-blackrock"><span class="rows__when">2018 to 2020</span><span class="rows__name"><b class="role">UX Research Lead</b>, <i>Aladdin portfolio management</i></span><span class="rows__value"><img class="logo" src="assets/logos/blackrock.png" alt="BlackRock" style="--logo-w: 148px" loading="lazy"></span><span class="exp__chev" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 6 8 10.5 12.5 6"/></svg></span></button><div class="exp__more" id="exp-blackrock"><div class="exp__inner"><div class="exp__body"><p><span class="tbd">Summary of the role to come.</span></p><ul><li><span class="tbd">Highlight to come</span></li><li><span class="tbd">Highlight to come</span></li><li><span class="tbd">Highlight to come</span></li></ul></div></div></div></li>
+        <li class="exp-item"><button class="exp__row" type="button" aria-expanded="false" aria-controls="exp-google"><span class="rows__when">2017 to 2018</span><span class="rows__name"><b class="role">UX Researcher</b>, <i>Search and Google Assistant</i></span><span class="rows__value"><img class="logo" src="assets/logos/google.png" alt="Google" style="--logo-w: 97px" loading="lazy"></span><span class="exp__chev" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 6 8 10.5 12.5 6"/></svg></span></button><div class="exp__more" id="exp-google"><div class="exp__inner"><div class="exp__body"><p><span class="tbd">Summary of the role to come.</span></p><ul><li><span class="tbd">Highlight to come</span></li><li><span class="tbd">Highlight to come</span></li><li><span class="tbd">Highlight to come</span></li></ul></div></div></div></li>
+        <li class="exp-item"><button class="exp__row" type="button" aria-expanded="false" aria-controls="exp-fidelity"><span class="rows__when">2016</span><span class="rows__name"><b class="role">User Research Intern</b>, <i>mobile investing for young adults</i></span><span class="rows__value"><img class="logo" src="assets/logos/fidelity.png" alt="Fidelity Investments" style="--logo-w: 146px" loading="lazy"></span><span class="exp__chev" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 6 8 10.5 12.5 6"/></svg></span></button><div class="exp__more" id="exp-fidelity"><div class="exp__inner"><div class="exp__body"><p><span class="tbd">Summary of the role to come.</span></p><ul><li><span class="tbd">Highlight to come</span></li><li><span class="tbd">Highlight to come</span></li><li><span class="tbd">Highlight to come</span></li></ul></div></div></div></li>
+        <li class="exp-item"><button class="exp__row" type="button" aria-expanded="false" aria-controls="exp-northwestern"><span class="rows__when">2013 to 2015</span><span class="rows__name"><b class="role">Usability Specialist</b>, <i>mHealth for depression and anxiety care</i></span><span class="rows__value"><img class="logo" src="assets/logos/northwestern-medicine.png" alt="Northwestern Medicine" style="--logo-w: 148px" loading="lazy"></span><span class="exp__chev" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 6 8 10.5 12.5 6"/></svg></span></button><div class="exp__more" id="exp-northwestern"><div class="exp__inner"><div class="exp__body"><p><span class="tbd">Summary of the role to come.</span></p><ul><li><span class="tbd">Highlight to come</span></li><li><span class="tbd">Highlight to come</span></li><li><span class="tbd">Highlight to come</span></li></ul></div></div></div></li>
       </ul>
       <h3 class="t-card edu-h" id="education">Education</h3>
       <ul class="rows exp">
@@ -603,6 +637,15 @@
   window.addEventListener('scroll', function () { if (cur) hide(); }, { passive: true });
   mq.addEventListener('change', hide);
 })();
+</script>
+<script>
+/* professional experience: each row opens and closes its details; rows open independently */
+document.querySelectorAll('.exp__row').forEach(function (b) {
+  b.addEventListener('click', function () {
+    var li = b.closest('.exp-item'), open = !li.classList.contains('is-open');
+    li.classList.toggle('is-open', open); b.setAttribute('aria-expanded', String(open));
+  });
+});
 </script>
 </body>
 </html>
