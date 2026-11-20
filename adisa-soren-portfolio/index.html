@@ -791,102 +791,117 @@ document.querySelectorAll('.exp__row').forEach(function (b) {
 });
 </script>
 <script>
-/* the tour: one section at a time. While the tour holds the screen, each scroll gesture (a wheel notch or flick, a swipe, an arrow,
-   Page Down or space) turns the wheel exactly one stop; input is held until the turn finishes and the gesture has ended, so a long
-   trackpad flick never skips a section. At the first and last stops the page scrolls on as usual. The stops and every link to a
-   section (header, drawer, footer) go straight to that section. */
+/* the tour: one section per scroll. Scrolling down from the hero always lands on the first stop. While the tour holds the screen the
+   page is locked to the open stop: each new scroll gesture (a wheel notch or flick, a swipe, an arrow, Page Down or space) turns the
+   wheel exactly one stop, and nothing more happens until that gesture has fully ended (a trackpad's glide included) and the turn has
+   finished. At the first and last stops a new gesture scrolls the page on as usual. The stops and every link to a section (header,
+   drawer, footer) go straight to that section. */
 (function () {
   var tour = document.getElementById('tour'); if (!tour || !window.matchMedia) return;
   var mq = window.matchMedia('(min-width: 1024px)'), still = window.matchMedia('(prefers-reduced-motion: reduce)');
   var wheel = tour.querySelector('.tour__wheel'), link = tour.querySelector('.tour__link');
   var panels = [].slice.call(tour.querySelectorAll('.tour__panel')), nodes = [].slice.call(tour.querySelectorAll('.tour__node'));
-  var ids = panels.map(function (p) { return p.id; }), n = panels.length, cur = -1, live = false;
-  var HOLD = 1050, GAP = 180, holdUntil = 0, lastInput = 0, lastY = null, jumping = false;
+  var ids = panels.map(function (p) { return p.id; }), n = panels.length, cur = 0, live = false;
+  var HOLD = 1000, GAP = 220, TOL = 3, holdUntil = 0, lastInput = 0, lastY = null, jumpUntil = 0;
   function step() { return (tour.offsetHeight - window.innerHeight) / Math.max(1, n - 1); }
   function top() { return tour.getBoundingClientRect().top + window.scrollY; }
   function y() { return -tour.getBoundingClientRect().top; }
   function end() { return (n - 1) * step(); }
-  function inside(v) { return v >= -2 && v <= end() + 2; }
+  function inside(v) { return v >= -TOL && v <= end() + TOL; }
   function set(i) {
-    if (i === cur) return; cur = i;
+    if (i === cur && tour.dataset.stop === String(i)) return; cur = i; tour.dataset.stop = String(i);
     wheel.style.setProperty('--a', i);
     panels.forEach(function (p, k) { var on = k === i; p.classList.toggle('is-active', on); if (live) p.inert = !on; });
     nodes.forEach(function (b, k) { b.classList.toggle('is-active', k === i); if (k === i) b.setAttribute('aria-current', 'step'); else b.removeAttribute('aria-current'); });
     link.classList.add('is-redraw'); void link.offsetWidth; link.classList.remove('is-redraw');
   }
-  /* move the page to stop i: instantly while the tour holds the screen (nothing visible moves but the wheel), smoothly from outside */
+  /* put the page on stop i: instantly while the tour holds the screen (only the wheel and the panel change), smoothly from outside */
   function to(i, smooth) {
-    var target = top() + i * step() + 1;
-    jumping = true; set(i);
-    window.scrollTo({ top: target, behavior: smooth && !still.matches ? 'smooth' : 'auto' });
-    setTimeout(function () { jumping = false; lastY = y(); }, smooth ? 900 : 60);
+    set(i);
+    var go = smooth && !still.matches;
+    jumpUntil = Date.now() + (go ? 1200 : 80);
+    window.scrollTo({ top: top() + i * step(), behavior: go ? 'smooth' : 'auto' });
   }
   function hold() { holdUntil = Date.now() + HOLD; }
-  function ready(now) { return now >= holdUntil && now - lastInput > GAP; }
-  /* one gesture, one stop: returns true when the tour took the input */
-  function nudge(dir, now, ev) {
-    var v = y();
-    if (!inside(v)) return false;
-    if ((dir > 0 && cur >= n - 1) || (dir < 0 && cur <= 0)) return false;   /* the ends: let the page scroll on */
+  /* a gesture is new once the last one has been still for GAP ms and the last turn has finished */
+  function fresh(now, gap) { return now >= holdUntil && now - lastInput > gap; }
+  /* one gesture: turn one stop, or at an end let a new gesture scroll the page on; returns nothing */
+  function gesture(dir, isNew, ev) {
+    var v = y(); if (!inside(v)) return;
+    var atEnd = (dir > 0 && cur >= n - 1) || (dir < 0 && cur <= 0);
+    if (atEnd && isNew) return;                          /* let the page scroll on, out of the tour */
     if (ev && ev.cancelable) ev.preventDefault();
-    var ok = ready(now); lastInput = now;
-    if (!ok) return true;
-    hold(); to(cur + dir, false);
-    return true;
+    if (!atEnd && isNew) { hold(); to(cur + dir, false); }
   }
   function onWheel(e) {
-    if (!live || e.ctrlKey || Math.abs(e.deltaY) < Math.abs(e.deltaX) || Math.abs(e.deltaY) < 1) return;
-    var now = Date.now(), dir = e.deltaY > 0 ? 1 : -1;
+    var now = Date.now(), isNew = fresh(now, GAP); lastInput = now;   /* every event, even a faint one, keeps the gesture alive */
+    if (!live || e.ctrlKey) return;
+    var v = y(); if (!inside(v)) return;
+    if (Math.abs(e.deltaY) < 1 || Math.abs(e.deltaY) < Math.abs(e.deltaX)) { if (e.cancelable) e.preventDefault(); return; }
+    var dir = e.deltaY > 0 ? 1 : -1;
     /* a list that scrolls inside its panel (the experience rows, opened) scrolls first */
     var box = e.target.closest && e.target.closest('.tour__panel > .wrap');
     if (box && box.scrollHeight > box.clientHeight + 1 && (dir > 0 ? box.scrollTop + box.clientHeight < box.scrollHeight - 1 : box.scrollTop > 0)) return;
-    if (!nudge(dir, now, e) && inside(y())) lastInput = now;
+    gesture(dir, isNew, e);
   }
   function onKey(e) {
     if (!live || e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey) return;
     var t = e.target; if (t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT|BUTTON)$/.test(t.tagName) && e.key === ' ')) return;
+    /* Home and End leap the whole page: let them, and start the wheel on the stop they will pass back through */
+    if (e.key === 'Home' || e.key === 'End') { set(e.key === 'End' ? n - 1 : 0); jumpUntil = Date.now() + 1500; return; }
     var dir = (e.key === 'ArrowDown' || e.key === 'PageDown' || (e.key === ' ' && !e.shiftKey)) ? 1 : (e.key === 'ArrowUp' || e.key === 'PageUp' || (e.key === ' ' && e.shiftKey)) ? -1 : 0;
     if (!dir) return;
-    nudge(dir, Date.now() + GAP + 1, e);
+    var now = Date.now(), isNew = now >= holdUntil; lastInput = now;
+    gesture(dir, isNew, e);
   }
-  var touchY = null, touchUsed = false;
-  function onTouchStart(e) { touchY = e.touches[0].clientY; touchUsed = false; }
+  var touchY = null, touchNew = false, touchDone = false;
+  function onTouchStart(e) { touchY = e.touches[0].clientY; touchNew = Date.now() >= holdUntil; touchDone = false; }
   function onTouchMove(e) {
     if (!live || touchY === null) return;
-    var d = touchY - e.touches[0].clientY, dir = d > 0 ? 1 : -1, v = y();
-    if (!inside(v) || (dir > 0 && cur >= n - 1) || (dir < 0 && cur <= 0)) return;
+    var d = touchY - e.touches[0].clientY; if (Math.abs(d) < 8) return;
+    var v = y(); if (!inside(v)) return;
+    var dir = d > 0 ? 1 : -1, atEnd = (dir > 0 && cur >= n - 1) || (dir < 0 && cur <= 0);
+    if (atEnd && touchNew) return;
     if (e.cancelable) e.preventDefault();
-    if (!touchUsed && Math.abs(d) > 36 && Date.now() >= holdUntil) { touchUsed = true; hold(); to(cur + dir, false); }
+    if (!atEnd && touchNew && !touchDone && Math.abs(d) > 36) { touchDone = true; hold(); to(cur + dir, false); }
   }
-  /* scrolling that is not a gesture (the scroll bar, the page arriving from above or below): entering the tour lands on its first
-     or last stop; inside, the stop follows the position */
+  /* any scroll that was not one of the tour's own moves: arriving from the hero lands on the first stop, arriving from below on the
+     last, and inside the tour the page is held on the open stop (a glide or a scroll animation can never carry it on to the next) */
+  var settleT = 0;
+  function settle() { if (live && Date.now() >= jumpUntil && inside(y()) && Math.abs(y() - cur * step()) > TOL) to(cur, false); }
   function onScroll() {
     if (!live) return;
-    var v = y();
-    if (!jumping) {
-      if (lastY !== null && lastY < -2 && v > 2 && v <= end() + 2) { hold(); lastInput = Date.now(); to(0, false); return; }
-      if (lastY !== null && lastY > end() + 2 && v >= -2 && v < end() - 2) { hold(); lastInput = Date.now(); to(n - 1, false); return; }
-      set(Math.max(0, Math.min(n - 1, Math.round(v / step()))));
-    }
+    var v = y(), now = Date.now();
+    clearTimeout(settleT); settleT = setTimeout(settle, 160);   /* once the page comes to rest, it rests exactly on the open stop */
+    if (now < jumpUntil) { lastY = v; return; }
+    if (v > end() + TOL && cur !== n - 1) set(n - 1);           /* past the tour or before it, the wheel shows the stop nearest */
+    if (v < -TOL && cur !== 0) set(0);
+    var s = step(), e = end();
+    var scrolling = now - lastInput < 400;   /* a jump that leaps the whole tour (End, the scroll bar) is let through unless it came from a scroll gesture */
+    if (lastY !== null && lastY < -TOL && v > -TOL && (v <= e + TOL || scrolling)) { lastY = v; hold(); lastInput = now; to(0, false); return; }
+    if (lastY !== null && lastY > e + TOL && v < e + TOL && (v >= -TOL || scrolling)) { lastY = v; hold(); lastInput = now; to(n - 1, false); return; }
+    if (inside(v) && Math.abs(v - cur * s) > TOL) { lastY = v; to(cur, false); return; }
     lastY = v;
   }
   function mode() {
     live = mq.matches; tour.classList.toggle('is-live', live);
     if (!live) { panels.forEach(function (p) { p.inert = false; }); return; }
-    cur = -1; lastY = y(); set(Math.max(0, Math.min(n - 1, Math.round(Math.max(0, lastY) / step()))));
+    var v = y(); lastY = v;
+    tour.dataset.stop = ''; set(v > end() ? n - 1 : Math.max(0, Math.min(n - 1, Math.round(Math.max(0, v) / step()))));
+    if (inside(v)) to(cur, false);
   }
-  nodes.forEach(function (b, k) { b.addEventListener('click', function () { hold(); to(k, !inside(y())); }); });
+  nodes.forEach(function (b, k) { b.addEventListener('click', function () { hold(); lastInput = Date.now(); to(k, !inside(y())); }); });
   document.addEventListener('click', function (e) {
     var a = e.target.closest && e.target.closest('a[href^="#"]'); if (!a || !live) return;
     var i = ids.indexOf(a.getAttribute('href').slice(1)); if (i < 0) return;
-    e.preventDefault(); hold(); to(i, !inside(y())); if (history.replaceState) history.replaceState(null, '', '#' + ids[i]);
+    e.preventDefault(); hold(); lastInput = Date.now(); to(i, !inside(y())); if (history.replaceState) history.replaceState(null, '', '#' + ids[i]);
   });
   window.addEventListener('wheel', onWheel, { passive: false });
   window.addEventListener('keydown', onKey);
   window.addEventListener('touchstart', onTouchStart, { passive: true });
   window.addEventListener('touchmove', onTouchMove, { passive: false });
   window.addEventListener('scroll', onScroll, { passive: true });
-  window.addEventListener('resize', function () { if (live && inside(y())) window.scrollTo(0, top() + Math.max(cur, 0) * step() + 1); });
+  window.addEventListener('resize', function () { if (live && inside(y())) to(cur, false); });
   mq.addEventListener('change', mode);
   mode();
   var h = location.hash.slice(1), hi = ids.indexOf(h);
