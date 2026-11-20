@@ -366,8 +366,14 @@
       background: conic-gradient(from 200deg, #3239f2, #6a4dff, #b06cff, #7d5bff, #3a7bff, #3239f2);
       -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
               mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
-      filter: drop-shadow(0 0 3px rgba(120, 90, 255, .7)); }
+      filter: drop-shadow(0 0 3px rgba(120, 90, 255, .7)); animation: tourCurrent 8s linear infinite; }
     @keyframes tourGlow { 0%, 100% { opacity: .15; } 50% { opacity: 1; } }
+    @keyframes tourCurrent { to { transform: rotate(360deg); } }
+    /* the cyclone: a canvas over the inner ring where thin streaks of the blue-to-violet spectrum swirl round the ring at different
+       speeds and sparks and small stars orbit it, leaving short fading trails */
+    .tour__wheel { z-index: 2; }   /* the stops stay above the cyclone */
+    .tour__swirl { position: absolute; z-index: 1; pointer-events: none; max-width: none; max-height: none;
+      --sw: calc(var(--R) - 58px + 90px); left: calc(-1 * var(--sw)); top: calc(50% - var(--sw)); width: calc(2 * var(--sw)); height: calc(2 * var(--sw)); }
     .tour__wheel { position: absolute; left: 0; top: 50%; width: 0; height: 0; transform: rotate(calc(var(--a) * -40deg)); transition: transform 1.1s var(--tx); }
     .tour__node { position: absolute; left: 0; top: 0; width: 0; height: 0; padding: 0; border: 0; background: none; cursor: pointer; pointer-events: auto;
       transform: rotate(calc(var(--i) * 40deg)) translateX(var(--R)); }
@@ -410,6 +416,7 @@
   @media (min-width: 1024px) and (prefers-reduced-motion: reduce) {
     .tour__wheel, .tour__node-in, .tour__pill, .tour__icon, #tour.is-live .tour__panel, #tour.is-live .tour__panel > .wrap > * { transition-duration: 0s !important; transition-delay: 0s !important; }
     .tour__link, .tour__rings::before, .tour__rings::after { animation: none; }
+    .tour__swirl { opacity: .85; }
   }
   /* the footer after the tour: the small print alone */
   .footer--slim { padding-block: var(--s-6); }
@@ -506,6 +513,7 @@
     <div class="tour__pin">
       <div class="tour__wheel-space">
         <span class="tour__rings" aria-hidden="true"></span>
+        <canvas class="tour__swirl" aria-hidden="true"></canvas>
         <nav class="tour__wheel" aria-label="Sections" style="--a: 0">
           <button class="tour__node is-active" type="button" style="--i: 0" data-go="work" aria-label="Case Studies"><span class="tour__node-in"><span class="tour__pill">Case Studies</span><span class="tour__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="7" width="13.5" height="13" rx="2.2"/><path d="M7.5 3.5h9.3A3.7 3.7 0 0 1 20.5 7.2v9.3"/></svg></span></span></button>
           <button class="tour__node" type="button" style="--i: 1" data-go="approach" aria-label="Research Strategy"><span class="tour__node-in"><span class="tour__pill">Research Strategy</span><span class="tour__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.6"/><circle cx="12" cy="12" r="1.1" fill="currentColor" stroke="none"/></svg></span></span></button>
@@ -897,6 +905,72 @@ document.querySelectorAll('.exp__row').forEach(function (b) {
   mode();
   var h = location.hash.slice(1), hi = ids.indexOf(h);
   if (live && hi > -1) window.addEventListener('load', function () { to(hi, false); });
+})();
+</script>
+<script>
+/* the cyclone over the inner ring: swirling streaks in the spectrum (blue, violet, purple, electric blue) that drifts round the ring,
+   and sparks and four-point stars orbiting it with short trails. It runs only while the tour is on screen, and holds a single still
+   frame for anyone who prefers reduced motion. */
+(function () {
+  var cv = document.querySelector('.tour__swirl'), tour = document.getElementById('tour');
+  if (!cv || !cv.getContext || !tour) return;
+  var ctx = cv.getContext('2d'), still = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var PAL = [[50, 57, 242], [106, 77, 255], [176, 108, 255], [125, 91, 255], [58, 123, 255], [51, 194, 255]];
+  var W = 0, H = 0, cx = 0, cy = 0, r0 = 0, dpr = 1, run = false, raf = 0, last = 0, t = 0, parts = [], arcs = [], sprites = [], stars = [];
+  function mix(f) { f = ((f % 1) + 1) % 1 * PAL.length; var i = Math.floor(f), k = f - i, a = PAL[i], b = PAL[(i + 1) % PAL.length];
+    return [a[0] + (b[0] - a[0]) * k, a[1] + (b[1] - a[1]) * k, a[2] + (b[2] - a[2]) * k]; }
+  function rgba(c, a) { return 'rgba(' + (c[0] | 0) + ',' + (c[1] | 0) + ',' + (c[2] | 0) + ',' + a + ')'; }
+  /* a glowing spark: a pale core in a halo of its colour */
+  function spark(c) { var s = document.createElement('canvas'), g; s.width = s.height = 64; g = s.getContext('2d').createRadialGradient(32, 32, 0, 32, 32, 32);
+    g.addColorStop(0, 'rgba(255,255,255,1)'); g.addColorStop(.12, rgba(c, 1)); g.addColorStop(.35, rgba(c, .45)); g.addColorStop(1, rgba(c, 0));
+    var x = s.getContext('2d'); x.fillStyle = g; x.fillRect(0, 0, 64, 64); return s; }
+  /* a four-point star with a soft glow */
+  function star(c) { var s = document.createElement('canvas'), x = s.getContext('2d'); s.width = s.height = 96;
+    var g = x.createRadialGradient(48, 48, 0, 48, 48, 30); g.addColorStop(0, rgba(c, .55)); g.addColorStop(1, rgba(c, 0)); x.fillStyle = g; x.fillRect(0, 0, 96, 96);
+    x.translate(48, 48); x.beginPath(); for (var i = 0; i < 8; i++) { var r = i % 2 ? 7 : 44, a = i * Math.PI / 4; x.lineTo(Math.cos(a) * r, Math.sin(a) * r); } x.closePath();
+    var f = x.createRadialGradient(0, 0, 0, 0, 0, 44); f.addColorStop(0, '#fff'); f.addColorStop(.25, rgba(c, 1)); f.addColorStop(1, rgba(c, .1)); x.fillStyle = f; x.fill(); return s; }
+  function seed() {
+    sprites = PAL.map(spark); stars = PAL.map(star); parts = []; arcs = [];
+    for (var i = 0; i < 74; i++) { var big = i < 9;
+      parts.push({ a: Math.random() * 6.283, w: (0.22 + Math.random() * 0.55) * (Math.random() < .12 ? 1.6 : 1), off: (Math.random() * 2 - .8) * 26 * (big ? 1.3 : 1),
+        wob: 2 + Math.random() * 7, wf: .4 + Math.random() * 1.2, ph: Math.random() * 6.283, tw: 1.5 + Math.random() * 3, s: big ? 9 + Math.random() * 7 : 2.4 + Math.random() * 4.2,
+        c: Math.floor(Math.random() * PAL.length), big: big }); }
+    for (i = 0; i < 7; i++) arcs.push({ a: Math.random() * 6.283, w: 0.35 + Math.random() * 0.75, len: 0.9 + Math.random() * 2.2, off: -10 + i * 5 + Math.random() * 4,
+      lw: 0.8 + Math.random() * 1.8, ecc: 0.015 + Math.random() * 0.03, rot: Math.random() * 6.283 });
+  }
+  function size() { var b = cv.getBoundingClientRect(); if (!b.width) return false; dpr = Math.min(2, window.devicePixelRatio || 1);
+    W = cv.width = Math.round(b.width * dpr); H = cv.height = Math.round(b.height * dpr); cx = W / 2; cy = H / 2; r0 = (b.width / 2 - 90) * dpr; return true; }
+  function frame(dt) {
+    t += dt;
+    /* the trails: fade what was drawn a moment ago instead of clearing it */
+    ctx.globalCompositeOperation = 'destination-out'; ctx.fillStyle = 'rgba(0,0,0,' + (still.matches ? 1 : .2) + ')'; ctx.fillRect(0, 0, W, H);
+    ctx.globalCompositeOperation = 'source-over';
+    var flow = t * 0.05;   /* the spectrum drifts slowly round the ring */
+    /* the cyclone streaks: arcs just off the ring, slightly oval, each fading from bright head to clear tail */
+    arcs.forEach(function (q) {
+      q.a += q.w * dt; var N = 30;
+      for (var k = 0; k < N; k++) {
+        var a0 = q.a - q.len * (1 - k / N), a1 = q.a - q.len * (1 - (k + 1) / N), am = (a0 + a1) / 2;
+        var rr = r0 + q.off * dpr, e = 1 + q.ecc * Math.cos(2 * (am - q.rot - t * .2));
+        ctx.beginPath(); ctx.ellipse(cx, cy, rr * e, rr / e, 0, a0, a1);
+        ctx.strokeStyle = rgba(mix(am / 6.283 + flow), Math.pow((k + 1) / N, 1.7) * .85); ctx.lineWidth = q.lw * dpr; ctx.lineCap = 'round'; ctx.stroke();
+      }
+    });
+    /* the sparks and stars, orbiting with a gentle in-and-out drift and a twinkle */
+    parts.forEach(function (p) {
+      p.a += p.w * dt; var r = r0 + (p.off + Math.sin(t * p.wf + p.ph) * p.wob) * dpr;
+      var x = cx + Math.cos(p.a) * r, y = cy + Math.sin(p.a) * r, tw = .45 + .55 * Math.abs(Math.sin(t * p.tw + p.ph));
+      var ci = Math.floor(((p.a / 6.283 + flow) % 1 + 1) % 1 * PAL.length) % PAL.length, s = p.s * dpr * (p.big ? .7 + .3 * tw : 1);
+      ctx.globalAlpha = tw; ctx.drawImage(p.big ? stars[ci] : sprites[ci], x - s, y - s, s * 2, s * 2);
+    });
+    ctx.globalAlpha = 1;
+  }
+  function loop(now) { if (!run) return; var dt = Math.min(.05, (now - (last || now)) / 1000); last = now; frame(dt); raf = requestAnimationFrame(loop); }
+  function start() { if (!size()) return; if (still.matches) { run = false; t = 2; ctx.clearRect(0, 0, W, H); frame(0); return; } if (!run) { run = true; last = 0; raf = requestAnimationFrame(loop); } }
+  function stop() { run = false; cancelAnimationFrame(raf); }
+  seed();
+  if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { es[0].isIntersecting ? start() : stop(); }).observe(tour); else start();
+  window.addEventListener('resize', function () { if (run || still.matches) { size(); } });
 })();
 </script>
 </body>
