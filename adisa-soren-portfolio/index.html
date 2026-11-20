@@ -341,6 +341,74 @@
   .work-grid .wc:hover .wc__go { transform: translateX(3px); }
   .work-grid .wc:hover h3 { text-decoration: none; }
   @media (prefers-reduced-motion: reduce) { .work-grid .wc, .wc__go { transition: none; } .work-grid .wc:hover { transform: none; } }
+  /* ---- the tour (after langchain.com/deep-agent): everything after the hero in one pinned screen. A wheel on the left edge carries a
+     stop for each section; as the page scrolls, the wheel turns the next stop to three o'clock and that section fades in on the
+     right, so the reader moves through the sections without the page itself moving. Without the script, and below 1024px, the
+     sections simply stack, one screen each. */
+  main > section#tour { height: auto; padding: 0; }
+  .tour__wheel-space { display: none; }
+  .tour__panel { position: relative; box-sizing: border-box; min-height: 100vh; min-height: 100svh; padding: var(--padt) 0 calc(var(--padb) + var(--bar)); }
+  @media (min-width: 1024px) {
+    #tour.is-live { --R: clamp(200px, 27svh, 262px); --step: 70svh; --tx: cubic-bezier(.6, 0, .15, 1);
+      height: calc(100vh + (var(--n) - 1) * 70vh); height: calc(100svh + (var(--n) - 1) * var(--step)); }
+    #tour.is-live .tour__pin { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; }
+    /* the wheel: its centre sits on the left edge of the screen, halfway down the space under the header */
+    #tour.is-live .tour__wheel-space { display: block; position: absolute; z-index: 2; left: 0; top: var(--nav); bottom: 0; width: calc(var(--R) + 120px); pointer-events: none; }
+    .tour__rings { position: absolute; left: calc(-1 * var(--R)); top: calc(50% - var(--R)); width: calc(2 * var(--R)); height: calc(2 * var(--R)); border-radius: 50%;
+      border: 1px solid color-mix(in oklab, var(--brand-blue, #3239f2) 42%, transparent); }
+    /* the inner ring glows in Kitsune blue and breathes: a slow pulse in its brightness and the reach of its glow */
+    .tour__rings::before { content: ""; position: absolute; inset: 58px; border-radius: 50%; border: 1px solid color-mix(in oklab, var(--brand-blue, #3239f2) 70%, transparent);
+      box-shadow: 0 0 10px 1px rgba(50, 57, 242, .32), inset 0 0 10px 1px rgba(50, 57, 242, .22); animation: tourGlow 3.6s ease-in-out infinite; }
+    @keyframes tourGlow {
+      0%, 100% { opacity: .55; box-shadow: 0 0 6px 0 rgba(50, 57, 242, .22), inset 0 0 6px 0 rgba(50, 57, 242, .14); }
+      50% { opacity: 1; box-shadow: 0 0 16px 2px rgba(50, 57, 242, .42), inset 0 0 14px 1px rgba(50, 57, 242, .28); }
+    }
+    .tour__wheel { position: absolute; left: 0; top: 50%; width: 0; height: 0; transform: rotate(calc(var(--a) * -40deg)); transition: transform 1.1s var(--tx); }
+    .tour__node { position: absolute; left: 0; top: 0; width: 0; height: 0; padding: 0; border: 0; background: none; cursor: pointer; pointer-events: auto;
+      transform: rotate(calc(var(--i) * 40deg)) translateX(var(--R)); }
+    /* each stop turns back as the wheel turns, so its label always reads upright */
+    .tour__node-in { position: absolute; left: 0; top: 0; display: grid; place-items: center; transform: translate(-50%, -50%) rotate(calc((var(--a) - var(--i)) * 40deg));
+      transition: transform 1.1s var(--tx); }
+    .tour__pill, .tour__icon { grid-area: 1 / 1; transition: opacity .35s ease, transform .45s var(--tx), background-color .2s ease, color .2s ease, border-color .2s ease; }
+    .tour__pill { display: inline-flex; align-items: center; height: 32px; padding: 0 14px; border-radius: 999px; white-space: nowrap; font: 600 13px/1 var(--font-text); letter-spacing: .01em;
+      color: #4a4e86; background: #fff; border: 1px solid color-mix(in oklab, var(--brand-blue, #3239f2) 26%, transparent); box-shadow: 0 4px 12px -6px rgba(50, 57, 242, .25); }
+    .tour__node:hover .tour__pill, .tour__node:focus-visible .tour__pill { color: var(--brand-blue, #3239f2); border-color: var(--brand-blue, #3239f2); }
+    .tour__node:focus-visible { outline: none; }
+    .tour__node:focus-visible .tour__node-in { outline: 2px solid var(--brand-blue, #3239f2); outline-offset: 4px; border-radius: 999px; }
+    /* the stop at three o'clock: its label gives way to a blue disc with the section's icon, ringed by a soft halo */
+    .tour__icon { display: grid; place-items: center; width: 54px; height: 54px; border-radius: 50%; color: #fff; background: var(--brand-blue, #3239f2);
+      box-shadow: 0 0 0 9px color-mix(in oklab, var(--brand-blue, #3239f2) 12%, transparent), 0 10px 24px -8px rgba(50, 57, 242, .6); opacity: 0; transform: scale(.6); }
+    .tour__icon svg { width: 24px; height: 24px; }
+    .tour__node.is-active .tour__pill { opacity: 0; transform: scale(.85); }
+    .tour__node.is-active .tour__icon { opacity: 1; transform: none; transition-delay: .35s; }
+    /* a fine line runs from the disc toward the open section, drawn again each time the wheel turns */
+    .tour__link { position: absolute; left: calc(var(--R) + 40px); top: 50%; width: 64px; height: 1px; transform-origin: left center;
+      background: linear-gradient(90deg, var(--brand-blue, #3239f2), color-mix(in oklab, var(--brand-blue, #3239f2) 0%, transparent)); animation: tourLink .7s var(--tx) .55s both; }
+    .tour__link.is-redraw { animation: none; }
+    @keyframes tourLink { from { transform: scaleX(0); opacity: 0; } to { transform: none; opacity: 1; } }
+    /* the sections: stacked in one place, the open one fading up into view; the words start clear of the wheel */
+    #tour.is-live .tour__panel { position: absolute; inset: var(--nav) 0 0; min-height: 0; padding: 0; display: flex; align-items: safe center;
+      opacity: 0; visibility: hidden; transition: opacity .25s ease, visibility 0s linear .25s; }
+    #tour.is-live .tour__panel.is-active { opacity: 1; visibility: visible; transition: opacity .4s ease .12s, visibility 0s; }
+    #tour.is-live .tour__panel > .wrap { box-sizing: border-box; max-height: 100%; padding-block: 24px 40px;
+      padding-left: max(0px, calc(var(--R) + 132px - (100% - min(100% - 2 * var(--gut), var(--container))) / 2)); }
+    /* the experience list can grow as rows open: only it scrolls inside the screen (the cards keep their glow unclipped) */
+    #tour.is-live .tour__panel--exp > .wrap { overflow-y: auto; scrollbar-width: thin; }
+    #tour.is-live .tour__panel > .wrap > * { opacity: 0; transform: translateY(18px); transition: opacity .25s ease, transform .25s ease; }
+    #tour.is-live .tour__panel.is-active > .wrap > * { opacity: 1; transform: none; transition: opacity .55s ease, transform .7s var(--tx); }
+    #tour.is-live .tour__panel.is-active > .wrap > :nth-child(1) { transition-delay: .2s; }
+    #tour.is-live .tour__panel.is-active > .wrap > :nth-child(2) { transition-delay: .3s; }
+    #tour.is-live .tour__panel.is-active > .wrap > :nth-child(3) { transition-delay: .4s; }
+    #tour.is-live .tour__panel.is-active > .wrap > :nth-child(n+4) { transition-delay: .48s; }
+    #tour.is-live .section-head h2 { font-size: min(var(--t-h2), 5.4svh); }
+  }
+  @media (min-width: 1024px) and (prefers-reduced-motion: reduce) {
+    .tour__wheel, .tour__node-in, .tour__pill, .tour__icon, #tour.is-live .tour__panel, #tour.is-live .tour__panel > .wrap > * { transition-duration: 0s !important; transition-delay: 0s !important; }
+    .tour__link, .tour__rings::before { animation: none; }
+  }
+  /* the footer after the tour: the small print alone */
+  .footer--slim { padding-block: var(--s-6); }
+  .footer--slim .footer__legal { margin: 0; padding: 0; border: 0; }
 </style>
 </head>
 <body>
@@ -429,104 +497,117 @@
     </div></div>
   </section>
 
-  <section class="section" id="work" aria-labelledby="work-h">
-    <div class="wrap">
-      <div class="section-head">
-        <h2 id="work-h">Case studies. <span class="muted">An AI roadmap, a health agent and AI for care teams.</span></h2>
+  <section class="tour" id="tour" aria-label="Case studies, research strategy, employment history, education and contact" style="--n: 5">
+    <div class="tour__pin">
+      <div class="tour__wheel-space">
+        <span class="tour__rings" aria-hidden="true"></span>
+        <nav class="tour__wheel" aria-label="Sections" style="--a: 0">
+          <button class="tour__node is-active" type="button" style="--i: 0" data-go="work" aria-label="Case Studies"><span class="tour__node-in"><span class="tour__pill">Case Studies</span><span class="tour__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="7" width="13.5" height="13" rx="2.2"/><path d="M7.5 3.5h9.3A3.7 3.7 0 0 1 20.5 7.2v9.3"/></svg></span></span></button>
+          <button class="tour__node" type="button" style="--i: 1" data-go="approach" aria-label="Research Strategy"><span class="tour__node-in"><span class="tour__pill">Research Strategy</span><span class="tour__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.6"/><circle cx="12" cy="12" r="1.1" fill="currentColor" stroke="none"/></svg></span></span></button>
+          <button class="tour__node" type="button" style="--i: 2" data-go="experience" aria-label="Employment History"><span class="tour__node-in"><span class="tour__pill">Employment History</span><span class="tour__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7.5" width="18" height="12.5" rx="2.2"/><path d="M9 7.5V5.6A1.6 1.6 0 0 1 10.6 4h2.8A1.6 1.6 0 0 1 15 5.6v1.9M3 12.6h18"/></svg></span></span></button>
+          <button class="tour__node" type="button" style="--i: 3" data-go="education" aria-label="Education"><span class="tour__node-in"><span class="tour__pill">Education</span><span class="tour__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 9.2 12 4.5l9.5 4.7L12 13.9z"/><path d="M6.5 11.3v4.6c3.1 2.6 7.9 2.6 11 0v-4.6M21.5 9.2v5.3"/></svg></span></span></button>
+          <button class="tour__node" type="button" style="--i: 4" data-go="contact" aria-label="Contact"><span class="tour__node-in"><span class="tour__pill">Contact</span><span class="tour__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2.2"/><path d="m3.6 7.2 8.4 6 8.4-6"/></svg></span></span></button>
+        </nav>
+        <span class="tour__link" aria-hidden="true"></span>
       </div>
-      <div class="grid work-grid">
-        <a class="card work-card wc span-4" href="workbench.html">
-          <div class="wc__band"><span class="wc__pill">Verily</span></div>
-          <div class="wc__body">
-            <h3>Breaking the deadlock on an AI roadmap</h3>
-            <p>30 AI feature ideas, an offsite eight weeks away. A two-phase study showed leadership what to build first.</p>
-            <p class="wc__foot"><span class="wc__stat">300</span><span class="wc__cap">researchers surveyed in eight weeks</span><span class="wc__go" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></p>
-          </div>
-        </a>
-        <a class="card work-card wc span-4" href="violet.html">
-          <div class="wc__band"><span class="wc__pill">Verily</span></div>
-          <div class="wc__body">
-            <h3>Giving an AI health agent a bedside manner</h3>
-            <p>Foundational research set the character of Vi, an LLM health agent for people managing type 2 diabetes: how it sounds, and when it hands off to the care team.</p>
-            <p class="wc__foot"><span class="wc__stat">86%</span><span class="wc__cap">CSAT three months after launch</span><span class="wc__go" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></p>
-          </div>
-        </a>
-        <a class="card work-card wc span-4" href="lightpath.html">
-          <div class="wc__band"><span class="wc__pill">Verily</span><span class="wc__pill">Draft</span></div>
-          <div class="wc__body">
-            <h3>Care team capacity for chronic disease</h3>
-            <p>A three-year vision for a two-sided care platform, then an LLM record summary that helps clinicians act sooner.</p>
-            <p class="wc__foot"><span class="wc__stat">35%</span><span class="wc__cap">faster provider time to action</span><span class="wc__go" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></p>
-          </div>
-        </a>
+      <div class="tour__panel is-active" id="work" role="region" aria-labelledby="work-h">
+        <div class="wrap">
+        <div class="section-head">
+          <h2 id="work-h">Case studies. <span class="muted">An AI roadmap, a health agent and AI for care teams.</span></h2>
+        </div>
+        <div class="grid work-grid">
+          <a class="card work-card wc span-4" href="workbench.html">
+            <div class="wc__band"><span class="wc__pill">Verily</span></div>
+            <div class="wc__body">
+              <h3>Breaking the deadlock on an AI roadmap</h3>
+              <p>30 AI feature ideas, an offsite eight weeks away. A two-phase study showed leadership what to build first.</p>
+              <p class="wc__foot"><span class="wc__stat">300</span><span class="wc__cap">researchers surveyed in eight weeks</span><span class="wc__go" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></p>
+            </div>
+          </a>
+          <a class="card work-card wc span-4" href="violet.html">
+            <div class="wc__band"><span class="wc__pill">Verily</span></div>
+            <div class="wc__body">
+              <h3>Giving an AI health agent a bedside manner</h3>
+              <p>Foundational research set the character of Vi, an LLM health agent for people managing type 2 diabetes: how it sounds, and when it hands off to the care team.</p>
+              <p class="wc__foot"><span class="wc__stat">86%</span><span class="wc__cap">CSAT three months after launch</span><span class="wc__go" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></p>
+            </div>
+          </a>
+          <a class="card work-card wc span-4" href="lightpath.html">
+            <div class="wc__band"><span class="wc__pill">Verily</span><span class="wc__pill">Draft</span></div>
+            <div class="wc__body">
+              <h3>Care team capacity for chronic disease</h3>
+              <p>A three-year vision for a two-sided care platform, then an LLM record summary that helps clinicians act sooner.</p>
+              <p class="wc__foot"><span class="wc__stat">35%</span><span class="wc__cap">faster provider time to action</span><span class="wc__go" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></p>
+            </div>
+          </a>
+        </div>
+        </div>
       </div>
-    </div>
-  </section>
-
-  <section class="section approach" id="approach" aria-labelledby="approach-h">
-    <div class="wrap">
-      <div class="section-head">
-        <h2 id="approach-h">Insight to influence. <span class="muted">Evidence is half the job. Getting it acted on is the other half.</span></h2>
+      <div class="tour__panel approach" id="approach" role="region" aria-labelledby="approach-h">
+        <div class="wrap">
+        <div class="section-head">
+          <h2 id="approach-h">Insight to influence. <span class="muted">Evidence is half the job. Getting it acted on is the other half.</span></h2>
+        </div>
+        <div class="grid">
+          <article class="card span-4">
+            <h3>Methods sized to the decision</h3>
+            <ul>
+              <li>MaxDiff and survey design at scale</li>
+              <li>Concept testing and card sorts</li>
+              <li>Contextual inquiry and diary studies</li>
+              <li>RITE usability testing</li>
+            </ul>
+          </article>
+          <article class="card span-4">
+            <h3>Decision makers in the room early</h3>
+            <ul>
+              <li>An executive sponsor before fieldwork</li>
+              <li>Alignment sessions that score desirability, feasibility and fit</li>
+              <li>Vision workshops with product, clinical and commercial leads</li>
+            </ul>
+          </article>
+          <article class="card span-4">
+            <h3>Evaluation for LLM products</h3>
+            <ul>
+              <li>Evaluation harnesses for model builders</li>
+              <li>LLM-as-a-judge with human review</li>
+              <li>Synthetic data for test cases</li>
+              <li>Agent tone and character frameworks</li>
+            </ul>
+          </article>
+        </div>
+        <ul class="domains" aria-label="Domains">
+          <li>Healthcare and life sciences</li><li>Financial services</li><li>Enterprise SaaS</li><li>LLM evaluation</li><li>Stakeholder alignment</li>
+        </ul>
+        </div>
       </div>
-      <div class="grid">
-        <article class="card span-4">
-          <h3>Methods sized to the decision</h3>
-          <ul>
-            <li>MaxDiff and survey design at scale</li>
-            <li>Concept testing and card sorts</li>
-            <li>Contextual inquiry and diary studies</li>
-            <li>RITE usability testing</li>
-          </ul>
-        </article>
-        <article class="card span-4">
-          <h3>Decision makers in the room early</h3>
-          <ul>
-            <li>An executive sponsor before fieldwork</li>
-            <li>Alignment sessions that score desirability, feasibility and fit</li>
-            <li>Vision workshops with product, clinical and commercial leads</li>
-          </ul>
-        </article>
-        <article class="card span-4">
-          <h3>Evaluation for LLM products</h3>
-          <ul>
-            <li>Evaluation harnesses for model builders</li>
-            <li>LLM-as-a-judge with human review</li>
-            <li>Synthetic data for test cases</li>
-            <li>Agent tone and character frameworks</li>
-          </ul>
-        </article>
+      <div class="tour__panel tour__panel--exp" id="experience" role="region" aria-labelledby="exp-h">
+        <div class="wrap">
+        <div class="section-head">
+          <h2 id="exp-h">Professional experience</h2>
+        </div>
+        <ul class="rows exp">
+          <li class="exp-item"><button class="exp__row" type="button" aria-expanded="false" aria-controls="exp-verily"><span class="rows__when">2020 to 2026</span><span class="rows__name"><b class="role">Staff UX Researcher</b>, <i>enterprise AI and precision health</i></span><span class="rows__value"><img class="logo" src="assets/logos/verily.png" alt="Verily" style="--logo-w: 117px" loading="lazy"></span><span class="exp__chev" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 6 8 10.5 12.5 6"/></svg></span></button><div class="exp__more" id="exp-verily"><div class="exp__inner"><div class="exp__body"><p><span class="tbd">Summary of the role to come.</span></p><ul><li><span class="tbd">Highlight to come</span></li><li><span class="tbd">Highlight to come</span></li><li><span class="tbd">Highlight to come</span></li></ul></div></div></div></li>
+          <li class="exp-item"><button class="exp__row" type="button" aria-expanded="false" aria-controls="exp-blackrock"><span class="rows__when">2018 to 2020</span><span class="rows__name"><b class="role">UX Research Lead</b>, <i>Aladdin portfolio management</i></span><span class="rows__value"><img class="logo" src="assets/logos/blackrock.png" alt="BlackRock" style="--logo-w: 148px" loading="lazy"></span><span class="exp__chev" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 6 8 10.5 12.5 6"/></svg></span></button><div class="exp__more" id="exp-blackrock"><div class="exp__inner"><div class="exp__body"><p><span class="tbd">Summary of the role to come.</span></p><ul><li><span class="tbd">Highlight to come</span></li><li><span class="tbd">Highlight to come</span></li><li><span class="tbd">Highlight to come</span></li></ul></div></div></div></li>
+          <li class="exp-item"><button class="exp__row" type="button" aria-expanded="false" aria-controls="exp-google"><span class="rows__when">2017 to 2018</span><span class="rows__name"><b class="role">UX Researcher</b>, <i>Search and Google Assistant</i></span><span class="rows__value"><img class="logo" src="assets/logos/google.png" alt="Google" style="--logo-w: 97px" loading="lazy"></span><span class="exp__chev" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 6 8 10.5 12.5 6"/></svg></span></button><div class="exp__more" id="exp-google"><div class="exp__inner"><div class="exp__body"><p><span class="tbd">Summary of the role to come.</span></p><ul><li><span class="tbd">Highlight to come</span></li><li><span class="tbd">Highlight to come</span></li><li><span class="tbd">Highlight to come</span></li></ul></div></div></div></li>
+          <li class="exp-item"><button class="exp__row" type="button" aria-expanded="false" aria-controls="exp-fidelity"><span class="rows__when">2016</span><span class="rows__name"><b class="role">User Research Intern</b>, <i>mobile investing for young adults</i></span><span class="rows__value"><img class="logo" src="assets/logos/fidelity.png" alt="Fidelity Investments" style="--logo-w: 146px" loading="lazy"></span><span class="exp__chev" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 6 8 10.5 12.5 6"/></svg></span></button><div class="exp__more" id="exp-fidelity"><div class="exp__inner"><div class="exp__body"><p><span class="tbd">Summary of the role to come.</span></p><ul><li><span class="tbd">Highlight to come</span></li><li><span class="tbd">Highlight to come</span></li><li><span class="tbd">Highlight to come</span></li></ul></div></div></div></li>
+          <li class="exp-item"><button class="exp__row" type="button" aria-expanded="false" aria-controls="exp-northwestern"><span class="rows__when">2013 to 2015</span><span class="rows__name"><b class="role">Usability Specialist</b>, <i>mHealth for depression and anxiety care</i></span><span class="rows__value"><img class="logo" src="assets/logos/northwestern-medicine.png" alt="Northwestern Medicine" style="--logo-w: 148px" loading="lazy"></span><span class="exp__chev" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 6 8 10.5 12.5 6"/></svg></span></button><div class="exp__more" id="exp-northwestern"><div class="exp__inner"><div class="exp__body"><p><span class="tbd">Summary of the role to come.</span></p><ul><li><span class="tbd">Highlight to come</span></li><li><span class="tbd">Highlight to come</span></li><li><span class="tbd">Highlight to come</span></li></ul></div></div></div></li>
+        </ul>
+        </div>
       </div>
-      <ul class="domains" aria-label="Domains">
-        <li>Healthcare and life sciences</li><li>Financial services</li><li>Enterprise SaaS</li><li>LLM evaluation</li><li>Stakeholder alignment</li>
-      </ul>
-    </div>
-  </section>
-
-  <section class="section" id="experience" aria-labelledby="exp-h">
-    <div class="wrap">
-      <div class="section-head">
-        <h2 id="exp-h">Experience and education</h2>
+      <div class="tour__panel" id="education" role="region" aria-labelledby="edu-h">
+        <div class="wrap">
+        <div class="section-head">
+          <h2 id="edu-h">Education</h2>
+        </div>
+        <ul class="rows exp">
+          <li><span class="rows__when">2017</span><span class="rows__name">M.S., Human Factors Engineering and Human-Computer Interaction</span><span class="rows__value"><img class="logo" src="assets/logos/cornell.png" alt="Cornell University" style="--logo-w: 92px" loading="lazy"></span></li>
+        </ul>
+        <p class="pub">Published: Corden, M.E., Koucky, E.M., Brenner, C., Palac, H.L., Soren, A.D., et al. (2016). <a class="pub__link" href="https://pubmed.ncbi.nlm.nih.gov/29942564/" target="_blank" rel="noopener">MedLink: A mobile intervention to improve medication adherence and processes of care for treatment of depression in general medicine</a>. <i>Digital Health</i>, 2.</p>
+        </div>
       </div>
-      <h3 class="t-card exp-h" id="professional-experience">Professional experience</h3>
-      <ul class="rows exp">
-        <li class="exp-item"><button class="exp__row" type="button" aria-expanded="false" aria-controls="exp-verily"><span class="rows__when">2020 to 2026</span><span class="rows__name"><b class="role">Staff UX Researcher</b>, <i>enterprise AI and precision health</i></span><span class="rows__value"><img class="logo" src="assets/logos/verily.png" alt="Verily" style="--logo-w: 117px" loading="lazy"></span><span class="exp__chev" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 6 8 10.5 12.5 6"/></svg></span></button><div class="exp__more" id="exp-verily"><div class="exp__inner"><div class="exp__body"><p><span class="tbd">Summary of the role to come.</span></p><ul><li><span class="tbd">Highlight to come</span></li><li><span class="tbd">Highlight to come</span></li><li><span class="tbd">Highlight to come</span></li></ul></div></div></div></li>
-        <li class="exp-item"><button class="exp__row" type="button" aria-expanded="false" aria-controls="exp-blackrock"><span class="rows__when">2018 to 2020</span><span class="rows__name"><b class="role">UX Research Lead</b>, <i>Aladdin portfolio management</i></span><span class="rows__value"><img class="logo" src="assets/logos/blackrock.png" alt="BlackRock" style="--logo-w: 148px" loading="lazy"></span><span class="exp__chev" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 6 8 10.5 12.5 6"/></svg></span></button><div class="exp__more" id="exp-blackrock"><div class="exp__inner"><div class="exp__body"><p><span class="tbd">Summary of the role to come.</span></p><ul><li><span class="tbd">Highlight to come</span></li><li><span class="tbd">Highlight to come</span></li><li><span class="tbd">Highlight to come</span></li></ul></div></div></div></li>
-        <li class="exp-item"><button class="exp__row" type="button" aria-expanded="false" aria-controls="exp-google"><span class="rows__when">2017 to 2018</span><span class="rows__name"><b class="role">UX Researcher</b>, <i>Search and Google Assistant</i></span><span class="rows__value"><img class="logo" src="assets/logos/google.png" alt="Google" style="--logo-w: 97px" loading="lazy"></span><span class="exp__chev" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 6 8 10.5 12.5 6"/></svg></span></button><div class="exp__more" id="exp-google"><div class="exp__inner"><div class="exp__body"><p><span class="tbd">Summary of the role to come.</span></p><ul><li><span class="tbd">Highlight to come</span></li><li><span class="tbd">Highlight to come</span></li><li><span class="tbd">Highlight to come</span></li></ul></div></div></div></li>
-        <li class="exp-item"><button class="exp__row" type="button" aria-expanded="false" aria-controls="exp-fidelity"><span class="rows__when">2016</span><span class="rows__name"><b class="role">User Research Intern</b>, <i>mobile investing for young adults</i></span><span class="rows__value"><img class="logo" src="assets/logos/fidelity.png" alt="Fidelity Investments" style="--logo-w: 146px" loading="lazy"></span><span class="exp__chev" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 6 8 10.5 12.5 6"/></svg></span></button><div class="exp__more" id="exp-fidelity"><div class="exp__inner"><div class="exp__body"><p><span class="tbd">Summary of the role to come.</span></p><ul><li><span class="tbd">Highlight to come</span></li><li><span class="tbd">Highlight to come</span></li><li><span class="tbd">Highlight to come</span></li></ul></div></div></div></li>
-        <li class="exp-item"><button class="exp__row" type="button" aria-expanded="false" aria-controls="exp-northwestern"><span class="rows__when">2013 to 2015</span><span class="rows__name"><b class="role">Usability Specialist</b>, <i>mHealth for depression and anxiety care</i></span><span class="rows__value"><img class="logo" src="assets/logos/northwestern-medicine.png" alt="Northwestern Medicine" style="--logo-w: 148px" loading="lazy"></span><span class="exp__chev" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 6 8 10.5 12.5 6"/></svg></span></button><div class="exp__more" id="exp-northwestern"><div class="exp__inner"><div class="exp__body"><p><span class="tbd">Summary of the role to come.</span></p><ul><li><span class="tbd">Highlight to come</span></li><li><span class="tbd">Highlight to come</span></li><li><span class="tbd">Highlight to come</span></li></ul></div></div></div></li>
-      </ul>
-      <h3 class="t-card edu-h" id="education">Education</h3>
-      <ul class="rows exp">
-        <li><span class="rows__when">2017</span><span class="rows__name">M.S., Human Factors Engineering and Human-Computer Interaction</span><span class="rows__value"><img class="logo" src="assets/logos/cornell.png" alt="Cornell University" style="--logo-w: 92px" loading="lazy"></span></li>
-      </ul>
-      <p class="pub">Published: Corden, M.E., Koucky, E.M., Brenner, C., Palac, H.L., Soren, A.D., et al. (2016). <a class="pub__link" href="https://pubmed.ncbi.nlm.nih.gov/29942564/" target="_blank" rel="noopener">MedLink: A mobile intervention to improve medication adherence and processes of care for treatment of depression in general medicine</a>. <i>Digital Health</i>, 2.</p>
-    </div>
-  </section>
-</main>
-
-<footer class="footer closing" id="contact" aria-labelledby="close-h">
-  <div class="wrap">
-    <div class="closing__cta close--type">
+      <div class="tour__panel tour__panel--contact" id="contact" role="region" aria-labelledby="close-h">
+        <div class="wrap">
       <div class="section-head">
         <h2 id="close-h">Contact Adisa</h2>
         <div class="contact-lines">
@@ -535,12 +616,17 @@
         </div>
       </div>
       <a class="btn btn--primary btn--xl btn--wide" href="mailto:brc83@cornell.edu">Email Adisa<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a>
-    </div>
-    <div class="closing__links">
-      <div class="footer__legal">
-        <span>&copy; 2026 Adisa Soren · New York <span class="tm">· Logos are trademarks of their owners.</span></span>
-        <span><a href="#work">Work</a> &nbsp; <a href="#experience">Experience</a> &nbsp; <a href="workbench.html">Case study</a></span>
+        </div>
       </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer footer--slim">
+  <div class="wrap">
+    <div class="footer__legal">
+      <span>&copy; 2026 Adisa Soren · New York <span class="tm">· Logos are trademarks of their owners.</span></span>
+      <span><a href="#work">Work</a> &nbsp; <a href="#experience">Experience</a> &nbsp; <a href="workbench.html">Case study</a></span>
     </div>
   </div>
 </footer>
@@ -689,6 +775,45 @@ document.querySelectorAll('.exp__row').forEach(function (b) {
     li.classList.toggle('is-open', open); b.setAttribute('aria-expanded', String(open));
   });
 });
+</script>
+<script>
+/* the tour: the page's scroll position inside the tall tour section picks the open section; the wheel turns to it and its
+   panel fades in. The stops and every link to a section (header, drawer, footer) move the page to that section's place. */
+(function () {
+  var tour = document.getElementById('tour'); if (!tour || !window.matchMedia) return;
+  var mq = window.matchMedia('(min-width: 1024px)'), still = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var wheel = tour.querySelector('.tour__wheel'), link = tour.querySelector('.tour__link');
+  var panels = [].slice.call(tour.querySelectorAll('.tour__panel')), nodes = [].slice.call(tour.querySelectorAll('.tour__node'));
+  var ids = panels.map(function (p) { return p.id; }), n = panels.length, cur = -1, live = false;
+  function step() { return (tour.offsetHeight - window.innerHeight) / Math.max(1, n - 1); }
+  function top() { return tour.getBoundingClientRect().top + window.scrollY; }
+  function set(i) {
+    if (i === cur) return; cur = i;
+    wheel.style.setProperty('--a', i);
+    panels.forEach(function (p, k) { var on = k === i; p.classList.toggle('is-active', on); if (live) p.inert = !on; });
+    nodes.forEach(function (b, k) { b.classList.toggle('is-active', k === i); if (k === i) b.setAttribute('aria-current', 'step'); else b.removeAttribute('aria-current'); });
+    link.classList.add('is-redraw'); void link.offsetWidth; link.classList.remove('is-redraw');
+  }
+  function onScroll() { if (!live) return; var y = -tour.getBoundingClientRect().top; set(Math.max(0, Math.min(n - 1, Math.round(y / step())))); }
+  function go(i) { window.scrollTo({ top: top() + i * step() + 1, behavior: still.matches ? 'auto' : 'smooth' }); }
+  function mode() {
+    live = mq.matches; tour.classList.toggle('is-live', live);
+    if (!live) { panels.forEach(function (p) { p.inert = false; }); return; }
+    cur = -1; onScroll(); if (cur < 0) set(0);
+  }
+  nodes.forEach(function (b, k) { b.addEventListener('click', function () { go(k); }); });
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a[href^="#"]'); if (!a || !live) return;
+    var i = ids.indexOf(a.getAttribute('href').slice(1)); if (i < 0) return;
+    e.preventDefault(); go(i); if (history.replaceState) history.replaceState(null, '', '#' + ids[i]);
+  });
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  mq.addEventListener('change', mode);
+  mode();
+  var h = location.hash.slice(1), hi = ids.indexOf(h);
+  if (live && hi > -1) window.addEventListener('load', function () { window.scrollTo(0, top() + hi * step() + 1); });
+})();
 </script>
 </body>
 </html>
