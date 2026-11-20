@@ -206,6 +206,70 @@
     .exp > li > p { grid-column: 1 / -1; grid-row: 3; }
     .work-card dl { grid-template-columns: 1fr 1fr; }
   }
+  /* ---- the full-screen drawer (after intrinsic.ai): hovering or focusing a header tab fills the screen with a colour field that
+     drifts along the spectrum from Kitsune blue to violet; the header turns white over it and the tab's links sit on the right.
+     Desktop only (the tabs show from 1024px); phones keep the menu button. */
+  @property --mh { syntax: "<number>"; inherits: true; initial-value: 268; }
+  .mega { display: none; }
+  @media (min-width: 1024px) {
+    .mega { --mx: cubic-bezier(.645, .045, .355, 1); display: block; position: fixed; inset: 0; z-index: -1; color: #fff; overflow: hidden;
+      visibility: hidden; opacity: 0; clip-path: inset(0 0 100% 0);
+      /* it opens by unrolling down from the header and closes by fading, so the header turns grey only as the colour leaves */
+      transition: opacity .35s var(--mx), clip-path 0s linear .35s, visibility 0s linear .35s;
+      background:
+        radial-gradient(55% 75% at 82% 18%, oklch(.64 .22 calc(var(--mh) + 22)) 0%, transparent 62%),
+        radial-gradient(60% 80% at 12% 88%, oklch(.36 .19 calc(var(--mh) - 8)) 0%, transparent 64%),
+        radial-gradient(45% 60% at 40% 30%, oklch(.56 .24 calc(var(--mh) + 8)) 0%, transparent 70%),
+        oklch(.48 .235 var(--mh));
+      animation: megaHue 10s ease-in-out infinite alternate; animation-play-state: paused; }
+    .mega.is-open { visibility: visible; opacity: 1; clip-path: inset(0); transition: clip-path .55s var(--mx), opacity 0s, visibility 0s; animation-play-state: running; }
+    @keyframes megaHue { 0% { --mh: 266; } 50% { --mh: 284; } 100% { --mh: 302; } }
+    .mega__in { position: absolute; inset: calc(var(--nav) + clamp(32px, 7svh, 88px)) 0 clamp(32px, 6svh, 72px); }
+    .mega__in > .wrap { position: relative; height: 100%; }
+    .mega__panel { position: absolute; inset: 0; display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: var(--s-8);
+      align-items: start; opacity: 0; visibility: hidden; transform: translateY(14px);
+      transition: opacity .3s var(--mx), transform .4s var(--mx), visibility 0s linear .3s; }
+    .mega.is-open .mega__panel.is-active { opacity: 1; visibility: visible; transform: none; transition-delay: .12s, .12s, 0s; }
+    .mega__blurb { margin: 0; max-width: 30ch; font-size: clamp(18px, .5vw + 12px, 22px); line-height: 1.5; font-weight: 500; color: rgba(255, 255, 255, .92); }
+    .mega__more { display: inline-flex; align-items: center; gap: 10px; margin-top: var(--s-5); font-size: 13px; font-weight: 600;
+      letter-spacing: .14em; text-transform: uppercase; color: #fff; }
+    .mega__more::after { content: "\2192"; letter-spacing: 0; font-size: 16px; transition: transform .3s var(--mx); }
+    .mega__more:hover::after, .mega__more:focus-visible::after { transform: translateX(4px); }
+    .mega__list { list-style: none; margin: 0; padding: 0; border-top: 1px solid rgba(255, 255, 255, .28); }
+    .mega__list > li { border-bottom: 1px solid rgba(255, 255, 255, .28); padding: clamp(14px, 2.4svh, 26px) 0; }
+    .mega__h { display: inline-block; font: 500 clamp(30px, 1.6vw + 14px, 46px)/1.08 var(--font-display); letter-spacing: -0.015em; color: #fff;
+      background: linear-gradient(currentColor, currentColor) 0 100% / 0 1.5px no-repeat; padding-bottom: 3px; transition: background-size .35s var(--mx); }
+    a.mega__h:hover, a.mega__h:focus-visible { background-size: 100% 1.5px; }
+    .mega__sub { display: flex; flex-wrap: wrap; gap: 6px 22px; margin: 10px 0 0; padding: 0; list-style: none;
+      font-size: 12.5px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: rgba(255, 255, 255, .78); }
+    .mega__sub a { color: inherit; } .mega__sub a:hover, .mega__sub a:focus-visible { color: #fff; }
+    /* each row rises into place, one after another, as the panel opens */
+    .mega__list > li { opacity: 0; transform: translateY(12px); transition: opacity .35s var(--mx), transform .45s var(--mx); }
+    .mega.is-open .is-active .mega__list > li { opacity: 1; transform: none; }
+    .mega.is-open .is-active .mega__list > li:nth-child(1) { transition-delay: .16s; }
+    .mega.is-open .is-active .mega__list > li:nth-child(2) { transition-delay: .21s; }
+    .mega.is-open .is-active .mega__list > li:nth-child(3) { transition-delay: .26s; }
+    .mega.is-open .is-active .mega__list > li:nth-child(4) { transition-delay: .31s; }
+    .mega.is-open .is-active .mega__list > li:nth-child(5) { transition-delay: .36s; }
+    /* the thin rail on the right: its bright segment slides to the open tab */
+    .mega__rail { position: absolute; right: clamp(20px, 2.2vw, 40px); top: 50%; width: 2px; height: 168px; margin-top: -84px; border-radius: 2px; background: rgba(255, 255, 255, .22); }
+    .mega__rail::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 25%; border-radius: 2px; background: #fff;
+      transform: translateY(calc(var(--mi, 0) * 100%)); transition: transform .3s var(--mx); }
+    /* the header over the drawer: see-through, everything in white, the open tab underlined in white */
+    .nav--home.is-mega, .nav--home.is-mega.is-top { background: transparent; border-bottom-color: transparent; }
+    .nav--home.is-mega .nav__lockup-img { filter: brightness(0) invert(1); }
+    .nav--home.is-mega .nav__link, .nav--home.is-mega .nav__icon { color: #fff !important; text-shadow: none !important; background-image: none !important; -webkit-text-fill-color: currentColor; }
+    .nav--home.is-mega a.nav__icon:hover, .nav--home.is-mega a.nav__icon:focus-visible { color: #fff !important; opacity: .72; background: none; }
+    .nav--home.is-mega .nav__item.is-active > .nav__link::before { transform: scaleX(1); transform-origin: left; }
+    .nav--home.is-mega .nav__link::before { background: #fff !important; }
+    .nav--home .nav__lockup-img { transition: filter .35s var(--mx); }
+    .nav--home .nav__link, .nav--home .nav__icon { transition: color .35s var(--mx), opacity .2s linear; }
+  }
+  @media (min-width: 1024px) and (prefers-reduced-motion: reduce) {
+    .mega, .mega.is-open { animation: none; clip-path: none; transition: opacity .2s linear, visibility 0s linear .2s; opacity: 0; }
+    .mega.is-open { opacity: 1; transition: opacity .2s linear, visibility 0s; }
+    .mega__panel, .mega__list > li, .mega.is-open .mega__panel.is-active { transform: none; transition-property: opacity, visibility; }
+  }
 </style>
 </head>
 <body>
@@ -227,6 +291,45 @@
     <button class="nav__toggle" type="button" aria-expanded="false" aria-label="Menu">
       <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M2 5h14M2 13h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
     </button>
+  </div>
+  <div class="mega" id="mega" aria-hidden="true">
+    <div class="mega__in"><div class="wrap">
+      <section class="mega__panel" data-for="work" aria-label="Case studies">
+        <div><p class="mega__blurb">Three studies from Verily: an AI roadmap, a health agent and AI for care teams.</p><a class="mega__more" href="#work">All case studies</a></div>
+        <ul class="mega__list">
+          <li><a class="mega__h" href="workbench.html">Workbench AI</a><ul class="mega__sub"><li>AI roadmap</li><li>300 researchers surveyed</li></ul></li>
+          <li><a class="mega__h" href="violet.html">Vi, LLM health agent</a><ul class="mega__sub"><li>Verily Me</li><li>86% CSAT after launch</li></ul></li>
+          <li><a class="mega__h" href="lightpath.html">Verily Lightpath</a><ul class="mega__sub"><li>Care team capacity</li><li>35% faster time to action</li></ul></li>
+        </ul>
+      </section>
+      <section class="mega__panel" data-for="approach" aria-label="Research strategy">
+        <div><p class="mega__blurb">Insight to influence. Evidence is half the job. Getting it acted on is the other half.</p><a class="mega__more" href="#approach">Research strategy</a></div>
+        <ul class="mega__list">
+          <li><a class="mega__h" href="#approach">Methods sized to the decision</a><ul class="mega__sub"><li>MaxDiff</li><li>Concept tests</li><li>Contextual inquiry</li><li>RITE</li></ul></li>
+          <li><a class="mega__h" href="#approach">Decision makers in the room</a><ul class="mega__sub"><li>Executive sponsors</li><li>Alignment sessions</li><li>Vision workshops</li></ul></li>
+          <li><a class="mega__h" href="#approach">Evaluation for LLM products</a><ul class="mega__sub"><li>Eval harnesses</li><li>LLM-as-a-judge</li><li>Synthetic data</li></ul></li>
+        </ul>
+      </section>
+      <section class="mega__panel" data-for="experience" aria-label="Employment history">
+        <div><p class="mega__blurb">Research across enterprise AI, healthcare and financial services, from mHealth to portfolio management.</p><a class="mega__more" href="#experience">Experience and education</a></div>
+        <ul class="mega__list">
+          <li><a class="mega__h" href="#experience">Verily</a><ul class="mega__sub"><li>Staff UX Researcher</li><li>2020 to 2026</li></ul></li>
+          <li><a class="mega__h" href="#experience">BlackRock</a><ul class="mega__sub"><li>UX Research Lead</li><li>2018 to 2020</li></ul></li>
+          <li><a class="mega__h" href="#experience">Google</a><ul class="mega__sub"><li>UX Researcher</li><li>2017 to 2018</li></ul></li>
+          <li><a class="mega__h" href="#experience">Fidelity Investments</a><ul class="mega__sub"><li>User Research Intern</li><li>2016</li></ul></li>
+          <li><a class="mega__h" href="#experience">Northwestern Medicine</a><ul class="mega__sub"><li>Usability Specialist</li><li>2013 to 2015</li></ul></li>
+        </ul>
+      </section>
+      <section class="mega__panel" data-for="contact" aria-label="Contact">
+        <div><p class="mega__blurb">The quickest way to reach Adisa is by email.</p><a class="mega__more" href="mailto:brc83@cornell.edu">Email Adisa</a></div>
+        <ul class="mega__list">
+          <li><a class="mega__h" href="mailto:brc83@cornell.edu">Email</a><ul class="mega__sub"><li>brc83@cornell.edu</li></ul></li>
+          <li><a class="mega__h" href="https://www.linkedin.com/in/adsoren/" target="_blank" rel="noopener">LinkedIn</a><ul class="mega__sub"><li>linkedin.com/in/adsoren</li></ul></li>
+          <li><a class="mega__h" href="assets/docs/adisa-soren-resume.pdf" target="_blank" rel="noopener">Résumé</a><ul class="mega__sub"><li>PDF</li></ul></li>
+        </ul>
+      </section>
+    </div></div>
+    <span class="mega__rail" aria-hidden="true"></span>
   </div>
 </header>
 
@@ -453,6 +556,52 @@
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(mark);
   window.addEventListener('resize', function () { var u = url(); if (u && img.src.indexOf(u.split('/').pop()) < 0) img.src = u; else mark(); });
   window.addEventListener('scroll', function () { mark(); }, { passive: true });
+})();
+</script>
+<script>
+/* the full-screen drawer: a header tab opens it (hover with a short pause for intent, or keyboard focus); it stays open while the
+   pointer is over the header or the drawer's content, and closes on Escape, on leaving the window, on scrolling or after a link */
+(function () {
+  var nav = document.querySelector('.nav--home'), mega = document.getElementById('mega');
+  if (!nav || !mega || !window.matchMedia) return;
+  var mq = window.matchMedia('(min-width: 1024px)'), items = [].slice.call(nav.querySelectorAll('.nav__links .nav__item')), panels = {}, openT, closeT, navT, cur = null;
+  mega.querySelectorAll('.mega__panel').forEach(function (p) { panels[p.dataset.for] = p; });
+  function key(it) { return it.querySelector('.nav__link').getAttribute('href').slice(1); }
+  function show(it) {
+    var k = key(it), p = panels[k]; if (!p || !mq.matches) return;
+    clearTimeout(closeT); closing = false; cur = it;
+    items.forEach(function (x) { x.classList.toggle('is-active', x === it); });
+    Object.keys(panels).forEach(function (n) { panels[n].classList.toggle('is-active', n === k); });
+    mega.style.setProperty('--mi', items.indexOf(it));
+    mega.classList.add('is-open'); mega.setAttribute('aria-hidden', 'false'); nav.classList.add('is-mega');
+  }
+  function hide() {
+    clearTimeout(openT); clearTimeout(closeT); if (!mega.classList.contains('is-open')) return;
+    mega.classList.remove('is-open'); mega.setAttribute('aria-hidden', 'true');
+    /* the header stays white while most of the colour fades, then eases back to its own colours */
+    clearTimeout(navT); navT = setTimeout(function () { if (!mega.classList.contains('is-open')) nav.classList.remove('is-mega'); }, 170);
+    items.forEach(function (x) { x.classList.remove('is-active'); }); cur = null;
+  }
+  function later() { clearTimeout(openT); clearTimeout(closeT); closeT = setTimeout(hide, 260); }
+  items.forEach(function (it) {
+    it.addEventListener('mouseenter', function () { clearTimeout(closeT); clearTimeout(openT); openT = setTimeout(function () { show(it); }, mega.classList.contains('is-open') ? 40 : 110); });
+    it.addEventListener('focusin', function () { show(it); });
+  });
+  /* the pointer keeps the drawer open while it is on a tab, on the content, or on the white header controls; anywhere else
+     (the logo, the empty colour field) starts a short close */
+  var closing = false;
+  document.addEventListener('mousemove', function (e) {
+    if (!mega.classList.contains('is-open')) return;
+    if (e.target.closest('.nav__item, .nav__actions, .mega__panel.is-active > *')) { clearTimeout(closeT); closing = false; }
+    else if (!closing) { closing = true; closeT = setTimeout(function () { closing = false; hide(); }, 260); }
+  });
+  document.documentElement.addEventListener('mouseleave', later);
+  nav.addEventListener('focusout', function (e) { if (!nav.contains(e.relatedTarget)) hide(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && cur) { var l = cur.querySelector('.nav__link'); hide(); l.focus({ preventScroll: true }); } });
+  mega.addEventListener('click', function (e) { if (e.target.closest('a') || !e.target.closest('.mega__panel')) hide(); });
+  nav.querySelectorAll('.nav__links .nav__link').forEach(function (a) { a.addEventListener('click', hide); });
+  window.addEventListener('scroll', function () { if (cur) hide(); }, { passive: true });
+  mq.addEventListener('change', hide);
 })();
 </script>
 </body>
