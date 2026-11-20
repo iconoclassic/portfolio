@@ -466,11 +466,11 @@
       <section class="mega__panel" data-for="experience" aria-label="Employment history">
         <div><p class="mega__blurb">Research across enterprise AI, healthcare and financial services, from mHealth to portfolio management.</p><a class="mega__more" href="#experience">Experience and education</a></div>
         <ul class="mega__list">
-          <li><a class="mega__h" href="#experience">Verily</a><ul class="mega__sub"><li>Staff UX Researcher</li><li>2020 to 2026</li></ul></li>
-          <li><a class="mega__h" href="#experience">BlackRock</a><ul class="mega__sub"><li>UX Research Lead</li><li>2018 to 2020</li></ul></li>
-          <li><a class="mega__h" href="#experience">Google</a><ul class="mega__sub"><li>UX Researcher</li><li>2017 to 2018</li></ul></li>
-          <li><a class="mega__h" href="#experience">Fidelity Investments</a><ul class="mega__sub"><li>User Research Intern</li><li>2016</li></ul></li>
-          <li><a class="mega__h" href="#experience">Northwestern Medicine</a><ul class="mega__sub"><li>Usability Specialist</li><li>2013 to 2015</li></ul></li>
+          <li><a class="mega__h" href="#experience" data-open="exp-verily">Verily</a><ul class="mega__sub"><li>Staff UX Researcher</li><li>2020 to 2026</li></ul></li>
+          <li><a class="mega__h" href="#experience" data-open="exp-blackrock">BlackRock</a><ul class="mega__sub"><li>UX Research Lead</li><li>2018 to 2020</li></ul></li>
+          <li><a class="mega__h" href="#experience" data-open="exp-google">Google</a><ul class="mega__sub"><li>UX Researcher</li><li>2017 to 2018</li></ul></li>
+          <li><a class="mega__h" href="#experience" data-open="exp-fidelity">Fidelity Investments</a><ul class="mega__sub"><li>User Research Intern</li><li>2016</li></ul></li>
+          <li><a class="mega__h" href="#experience" data-open="exp-northwestern">Northwestern Medicine</a><ul class="mega__sub"><li>Usability Specialist</li><li>2013 to 2015</li></ul></li>
           <li><a class="mega__h" href="assets/docs/adisa-soren-resume.pdf" target="_blank" rel="noopener">Résumé</a><ul class="mega__sub"><li>PDF</li></ul></li>
         </ul>
       </section>
@@ -973,6 +973,35 @@ document.querySelectorAll('.exp__row').forEach(function (b) {
   seed();
   if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { es[0].isIntersecting ? start() : stop(); }).observe(tour); else start();
   window.addEventListener('resize', function () { if (run || still.matches) { size(); } });
+})();
+</script>
+<script>
+/* the drawer's Employment History links: each goes to Professional experience with its own role already open (the others closed),
+   scrolled into view if the list runs past the screen */
+(function () {
+  function openRow(id) {
+    var btn = document.querySelector('.exp__row[aria-controls="' + id + '"]'); if (!btn) return;
+    document.querySelectorAll('.exp-item').forEach(function (li) {
+      var b = li.querySelector('.exp__row'), on = b === btn; li.classList.toggle('is-open', on); b.setAttribute('aria-expanded', String(on));
+    });
+    var li = btn.closest('.exp-item'), tour = document.getElementById('tour');
+    setTimeout(function () {
+      var box = li.closest('.tour__panel > .wrap');
+      if (tour && tour.classList.contains('is-live') && box) {
+        var r = li.getBoundingClientRect(), bb = box.getBoundingClientRect();
+        if (r.bottom > bb.bottom - 24 || r.top < bb.top) box.scrollTo({ top: box.scrollTop + r.top - bb.top - 24, behavior: 'smooth' });
+      } else {
+        var nav = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--nav')) || 72;
+        window.scrollTo({ top: li.getBoundingClientRect().top + window.scrollY - nav - 16, behavior: 'smooth' });
+      }
+    }, 450);
+  }
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a[data-open]'); if (!a) return;
+    var tour = document.getElementById('tour'), live = tour && tour.classList.contains('is-live');
+    var near = live && Math.abs(tour.getBoundingClientRect().top) <= (tour.offsetHeight - window.innerHeight) + 3 && tour.getBoundingClientRect().top <= 3;
+    setTimeout(function () { openRow(a.getAttribute('data-open')); }, live ? (near ? 350 : 1150) : 150);
+  });
 })();
 </script>
 </body>
