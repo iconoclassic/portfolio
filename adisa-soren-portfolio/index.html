@@ -307,6 +307,39 @@
     .exp__body { padding-left: 0; }
   }
   @media (prefers-reduced-motion: reduce) { .exp__more, .exp__body, .exp__chev svg { transition: none; } }
+  /* ---- case study cards: a deep-blue band with a sweep of light across it, the company as a dark pill on the band, and a
+     white panel that rises over the band with the title, the line, and the result (a big blue figure, a hairline, its caption and
+     a round blue arrow). All three cards share the one band. */
+  .work-grid { --card-gap: var(--s-6); }
+  .work-grid .wc { position: relative; display: flex; flex-direction: column; padding: 0; overflow: hidden; border: 0; border-radius: 22px; background: #fff; color: #171b5b;
+    box-shadow: 0 1px 2px rgba(23, 27, 91, .06), 0 22px 44px -18px rgba(50, 57, 242, .45), 0 10px 28px -14px rgba(83, 74, 230, .28);
+    transition: transform .35s cubic-bezier(.645, .045, .355, 1), box-shadow .35s cubic-bezier(.645, .045, .355, 1); }
+  .work-grid .wc:hover, .work-grid .wc:focus-visible { transform: translateY(-4px);
+    box-shadow: 0 1px 2px rgba(23, 27, 91, .06), 0 30px 56px -18px rgba(50, 57, 242, .55), 0 14px 32px -14px rgba(83, 74, 230, .34); }
+  .work-grid .wc:focus-visible { outline: 2px solid var(--brand-blue, #3239f2); outline-offset: 4px; }
+  .wc__band { position: relative; height: 104px; padding: 20px 22px; display: flex; align-items: flex-start; gap: 8px; isolation: isolate;
+    background:
+      /* the sweep of light: the rim of a large ellipse centred low on the left, bright on its edge, dark inside */
+      radial-gradient(78% 190% at 32% 175%, rgba(4, 9, 58, .62) 0%, rgba(4, 9, 58, .3) 80%, transparent 89%, rgba(120, 130, 255, .32) 93.4%, rgba(212, 218, 255, .88) 95.8%, rgba(150, 160, 255, .42) 97.9%, transparent 100%),
+      radial-gradient(60% 150% at 100% 0%, rgba(132, 98, 252, .9), transparent 72%),
+      linear-gradient(100deg, #0a1360 0%, #15259a 38%, #2a38d6 64%, #3f42f2 84%, #6552f5 100%); }
+  .wc__pill { display: inline-flex; align-items: center; height: 28px; padding: 0 13px; border-radius: 999px; font: 600 13px/1 var(--font-text); letter-spacing: .01em;
+    color: #fff; background: rgba(6, 10, 46, .72); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .28); }
+  .wc__body { position: relative; z-index: 1; display: flex; flex-direction: column; gap: var(--s-3); flex: 1; margin-top: -18px; padding: 24px 24px 22px;
+    border-radius: 18px 18px 0 0; background: #fff; }
+  .wc__body h3 { font-family: var(--font-display); font-weight: 700; font-size: clamp(22px, .6vw + 15px, 26px); line-height: 1.18; letter-spacing: -0.01em; color: #171b5b; }
+  .wc__body > p { margin: 0; color: #3d4178; font-size: var(--t-small); line-height: 1.55; }
+  .wc__body > .wc__foot { display: flex; align-items: center; gap: 16px; margin-top: auto; padding-top: var(--s-4); }
+  .wc__stat { font: 700 clamp(40px, 1vw + 26px, 48px)/1 var(--font-display); letter-spacing: -0.02em; color: var(--brand-blue, #3239f2); font-variant-numeric: tabular-nums; }
+  .wc__cap { align-self: stretch; display: flex; align-items: center; max-width: 21ch; padding-left: 16px; text-wrap: balance; border-left: 1px solid rgba(23, 27, 91, .2); font-size: 13.5px; line-height: 1.35; color: #3d4178; }
+  /* the arrow: a pale lavender disc with a fine deep-indigo arrow */
+  .wc__go { display: grid; place-items: center; flex: none; width: 36px; height: 36px; margin-left: auto; border-radius: 50%; color: #221d8c;
+    background: #e5e4fc; transition: transform .35s cubic-bezier(.645, .045, .355, 1), background-color .25s ease; }
+  .wc__go svg { width: 15px; height: 15px; }
+  .work-grid .wc:hover .wc__go { background: #d8d6fa; }
+  .work-grid .wc:hover .wc__go { transform: translateX(3px); }
+  .work-grid .wc:hover h3 { text-decoration: none; }
+  @media (prefers-reduced-motion: reduce) { .work-grid .wc, .wc__go { transition: none; } .work-grid .wc:hover { transform: none; } }
 </style>
 </head>
 <body>
@@ -401,23 +434,29 @@
         <h2 id="work-h">Case studies. <span class="muted">An AI roadmap, a health agent and AI for care teams.</span></h2>
       </div>
       <div class="grid work-grid">
-        <a class="card work-card span-4" href="workbench.html">
-          <p class="t-label">Verily </p>
-          <h3>Breaking the deadlock on an AI roadmap</h3>
-          <p>30 AI feature ideas, an offsite eight weeks away. A two-phase study showed leadership what to build first.</p>
-          <p class="work-card__metric"><span class="t-stat">300</span><span class="t-small muted">researchers surveyed in eight weeks</span></p>
+        <a class="card work-card wc span-4" href="workbench.html">
+          <div class="wc__band"><span class="wc__pill">Verily</span></div>
+          <div class="wc__body">
+            <h3>Breaking the deadlock on an AI roadmap</h3>
+            <p>30 AI feature ideas, an offsite eight weeks away. A two-phase study showed leadership what to build first.</p>
+            <p class="wc__foot"><span class="wc__stat">300</span><span class="wc__cap">researchers surveyed in eight weeks</span><span class="wc__go" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></p>
+          </div>
         </a>
-        <a class="card work-card span-4" href="violet.html">
-          <p class="t-label">Verily</p>
-          <h3>Giving an AI health agent a bedside manner</h3>
-          <p>Foundational research set the character of Vi, an LLM health agent for people managing type 2 diabetes: how it sounds, and when it hands off to the care team.</p>
-          <p class="work-card__metric"><span class="t-stat">86%</span><span class="t-small muted">CSAT three months after launch</span></p>
+        <a class="card work-card wc span-4" href="violet.html">
+          <div class="wc__band"><span class="wc__pill">Verily</span></div>
+          <div class="wc__body">
+            <h3>Giving an AI health agent a bedside manner</h3>
+            <p>Foundational research set the character of Vi, an LLM health agent for people managing type 2 diabetes: how it sounds, and when it hands off to the care team.</p>
+            <p class="wc__foot"><span class="wc__stat">86%</span><span class="wc__cap">CSAT three months after launch</span><span class="wc__go" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></p>
+          </div>
         </a>
-        <a class="card work-card span-4" href="lightpath.html">
-          <p class="t-label">Verily <span class="draft-note">Draft</span></p>
-          <h3>Care team capacity for chronic disease</h3>
-          <p>A three-year vision for a two-sided care platform, then an LLM record summary that helps clinicians act sooner.</p>
-          <p class="work-card__metric"><span class="t-stat">35%</span><span class="t-small muted">faster provider time to action</span></p>
+        <a class="card work-card wc span-4" href="lightpath.html">
+          <div class="wc__band"><span class="wc__pill">Verily</span><span class="wc__pill">Draft</span></div>
+          <div class="wc__body">
+            <h3>Care team capacity for chronic disease</h3>
+            <p>A three-year vision for a two-sided care platform, then an LLM record summary that helps clinicians act sooner.</p>
+            <p class="wc__foot"><span class="wc__stat">35%</span><span class="wc__cap">faster provider time to action</span><span class="wc__go" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></p>
+          </div>
         </a>
       </div>
     </div>
