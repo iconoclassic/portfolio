@@ -125,6 +125,15 @@
     #console .group:first-child .console__fig img { max-height: calc(100svh - 430px); }
     #console .group:last-child .console__fig img { max-height: calc(100svh - 250px); }
   }
+  /* the hero picture: the member at the centre of his care team, on the right of the words; on narrow screens it sits under them */
+  .lp-hero { flex: 1 1 auto; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr); row-gap: var(--s-6); }
+  .lp-art { margin: 0; display: flex; align-items: center; justify-content: center; min-height: 0; }
+  .lp-art img { display: block; width: auto; height: auto; max-width: 100%; max-height: 100%; }
+  @media (max-width: 1023px) { .lp-art img { width: min(100%, 460px); } }
+  @media (min-width: 1024px) {
+    .lp-hero { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); grid-template-rows: minmax(0, 1fr); column-gap: var(--gutter); }
+    .lp-art { height: 100%; align-items: flex-start; justify-content: flex-end; padding-block: var(--s-2) var(--s-6); }
+  }
 </style>
 </head>
 <body>
@@ -151,7 +160,7 @@
 <main id="top">
   <section class="hero hero--statement" aria-labelledby="hero-h">
     <div class="wrap"><div class="hero-text hero__in">
-      <div>
+      <div class="lp-hero"><div>
         <p class="hero-notice">Case study · Verily Lightpath · <span class="tbd">2021 to 2025</span> &nbsp; <span class="draft-note">Draft · highlighted text is placeholder</span></p>
         <h1 id="hero-h">Helping care teams act 35% faster in chronic care</h1>
         <p class="hero__lead">Verily Lightpath is a care program for chronic conditions in the Verily Me app. I aligned senior leaders on its three-year vision, then helped define and evaluate an LLM capability that summarizes member records and suggests next-best clinical actions.</p>
@@ -160,6 +169,7 @@
           <a class="btn btn--secondary" href="index.html#work">Back to all work</a>
         </div>
       </div>
+      <figure class="lp-art"><img src="assets/img/lightpath-care-team.webp" width="764" height="760" alt="A Lightpath member at the centre of his care team: a health coach, an RN, a dietitian and an MD" fetchpriority="high"></figure></div>
       <dl class="hero__facts"><div><dt>Role</dt><dd>Staff UX researcher</dd></div><div><dt>Partners</dt><dd>PM, design, clinical, analytics</dd></div><div><dt>Users</dt><dd>Physicians, NPs, health coaches, members</dd></div><div><dt>Methods</dt><dd>Interviews, survey, vision workshops, evaluation rounds</dd></div></dl>
     </div></div>
   </section>
