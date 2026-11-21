@@ -434,7 +434,8 @@
     /* under the header the photo is only a faint wash (so the links read clearly), coming to full strength a little below it */
     -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, .06) 0, rgba(0, 0, 0, .16) var(--nav), #000 calc(var(--nav) + 170px), #000 calc(100% - 28px), transparent 100%);
             mask-image: linear-gradient(180deg, rgba(0, 0, 0, .06) 0, rgba(0, 0, 0, .16) var(--nav), #000 calc(var(--nav) + 170px), #000 calc(100% - 28px), transparent 100%); }
-  .hero-photo--wide { position: absolute; right: 0; bottom: calc(40px - 7.8%); height: 130%; width: auto; aspect-ratio: 1108 / 1478; max-width: none; object-fit: cover;
+  /* its right edge lines up with the content's right edge, so the margin on the right matches the one on the left */
+  .hero-photo--wide { position: absolute; right: calc((100% - min(100% - 2 * var(--gut), var(--container))) / 2); bottom: calc(40px - 7.8%); height: 130%; width: auto; aspect-ratio: 1108 / 1478; max-width: none; object-fit: cover;
     -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 34%, #000 84%, transparent 100%); mask-image: linear-gradient(90deg, transparent 0, #000 34%, #000 84%, transparent 100%); }
   .hero-photo--panel { display: none; }
   @media (min-width: 1180px) { .oct-art.oct-mark.has-photo { visibility: hidden; } }
