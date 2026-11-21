@@ -6,11 +6,12 @@
   --p-surface: #ecf0f2;
   --p-ink: #1f3038;
   --p-muted: #5d6b72;
-  --p-accent: #3239f2;
-  --p-accent-ink: #f7f9fa;
-  --p-action: #3239f2;
-  --p-action-ink: #f7f9fa;
-  --brand-blue: #3239f2;
+  --p-accent: #ffc629;
+  --p-accent-ink: #2a1f00;
+  --p-action: #ffc629;
+  --p-action-ink: #2a1f00;
+  --brand-blue: #ffc629;
+  --gold-text: #b07800;
   --p-inv-bg: #1f3038;
   --p-inv-surface: #2c3c44;
   --p-inv-ink: #f7f9fa;
@@ -376,7 +377,7 @@ main > :is(.hero, .section--hero) {
 /* a notice line above the h1 (changed hours, a delivery cut-off): one line with a number, static,
    starting on the left line like the h1 under it */
 .hero-notice { font-size: var(--t-small); font-weight: 500; color: var(--ink); }
-.hero-notice b, .hero-notice strong { font-weight: 500; color: var(--accent); }
+.hero-notice b, .hero-notice strong { font-weight: 500; color: var(--gold-text, var(--accent)); }
 .hero-copy > .hero-notice + h1 { margin-top: var(--s-5); }
 
 /* a phone: open tiles from a row of three or four (rooms, goods, beans) go two-up, an odd last one
@@ -746,7 +747,7 @@ html:not([data-tone="dark"]) :is(.frame--cta, .frame--lit, .footer--statement) {
 .menu-col > .t-label { color: var(--muted); margin-bottom: var(--s-2); }
 .menu-col a { display: grid; gap: var(--s-1); padding: var(--s-2) 0; font-weight: 500; }
 .menu-col a span { font-weight: 400; color: var(--muted); font-size: var(--t-small); }
-.menu-col a:hover { color: var(--action); }
+.menu-col a:hover { color: var(--gold-text, var(--action)); }
 .menu-card { display: grid; gap: var(--s-3); }
 .menu-card .panel { --ratio: 56.25%; }
 
@@ -925,7 +926,7 @@ html:not([data-tone="dark"]) :is(.frame--cta, .frame--lit, .footer--statement) {
 .footer .grid { row-gap: var(--s-7); }
 .footer :is(h3, h4):not(.closing__cta *) { font: 500 var(--t-small)/1.4 var(--font-text); letter-spacing: 0; color: var(--muted); margin-bottom: var(--s-4); }
 .footer ul { display: grid; gap: var(--s-3); font-size: var(--t-small); }
-.footer ul a:hover { color: var(--action); }
+.footer ul a:hover { color: var(--gold-text, var(--action)); }
 .footer__legal { display: flex; flex-wrap: wrap; gap: var(--s-4) var(--s-6); justify-content: space-between;
                  margin-top: var(--s-8); padding-top: var(--s-5); border-top: 1px solid var(--line);
                  font-size: var(--t-label); color: var(--muted); }
@@ -960,7 +961,7 @@ html[data-tone="dark"] .footer--dark {
    one row of the nav's words; no third ask for the main action */
 .footer__address { font: var(--display-weight) var(--t-h2)/1.1 var(--font-display); letter-spacing: var(--display-tracking); font-style: normal; }
 .footer__nav { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-3) var(--s-6); margin-top: var(--s-8); padding-top: var(--s-5); border-top: 1px solid var(--line); font-weight: 500; }
-.footer__nav a:hover { color: var(--action); }
+.footer__nav a:hover { color: var(--gold-text, var(--action)); }
 .footer__nav .socials { margin-left: auto; }
 .footer--visit .footer__legal { margin-top: var(--s-5); border-top: 0; padding-top: 0; }
 /* .footer--statement: the close and the footer in one inset slab on the page's lit ground (sand,
@@ -1945,7 +1946,7 @@ h1.ly-locked { white-space: nowrap; text-wrap: nowrap; }
 .nav__icon .nav__icon-svg { width: 24px; height: 24px; display: block; position: relative; top: .5px; }
 /* 24px exactly, as the icons are drawn on a 24px grid; centred in the header's odd-height bar the icon would
    sit on a half pixel (and blur), so it drops half a pixel onto the grid */
-a.nav__icon:hover, a.nav__icon:focus-visible { color: var(--brand-blue, #3239f2); background: color-mix(in oklab, var(--brand-blue, #3239f2) 6%, transparent); }
+a.nav__icon:hover, a.nav__icon:focus-visible { color: var(--gold-text, #b07800); background: color-mix(in oklab, var(--brand-blue, #3239f2) 6%, transparent); }
 .nav__icon:focus-visible { outline: 2px solid var(--brand-blue, #3239f2); outline-offset: 2px; }
 .nav__icon--off { cursor: default; }   /* X: shown, not linked yet, so no hover */
 @media (max-width: 1023px) {
@@ -1961,3 +1962,7 @@ a.nav__icon:hover, a.nav__icon:focus-visible { color: var(--brand-blue, #3239f2)
 .nav { background: rgba(247, 245, 240, .9); }
 .nav.is-open { background: #f7f5f0; }
 @media (max-width: 1023px) { .nav.is-open .nav__links { background: #f7f5f0; } }
+
+/* gold accent: #FFC629 is a fill colour (buttons, discs, tags) with dark ink on it; it is too light to read as text on the
+   light page, so wherever a case study sets the accent as a text colour, the deep gold --gold-text takes its place */
+html :is(.step__n, .bigfig__n, .out b, .tbl tr.is-key td:first-child, .mode-tag, .changed b, .shared svg, .own .who, .result-n) { color: var(--gold-text); }
