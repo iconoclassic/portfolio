@@ -217,13 +217,13 @@
       /* it opens by unrolling down from the header and closes by fading, so the header turns grey only as the colour leaves */
       transition: opacity .35s var(--mx), clip-path 0s linear .35s, visibility 0s linear .35s;
       background:
-        radial-gradient(55% 75% at 82% 18%, oklch(.64 .22 calc(var(--mh) + 22)) 0%, transparent 62%),
-        radial-gradient(60% 80% at 12% 88%, oklch(.36 .19 calc(var(--mh) - 8)) 0%, transparent 64%),
-        radial-gradient(45% 60% at 40% 30%, oklch(.56 .24 calc(var(--mh) + 8)) 0%, transparent 70%),
-        oklch(.48 .235 var(--mh));
+        radial-gradient(55% 75% at 82% 18%, oklch(.93 .13 calc(var(--mh) + 10)) 0%, transparent 62%),
+        radial-gradient(60% 80% at 12% 88%, oklch(.74 .18 calc(var(--mh) - 26)) 0%, transparent 64%),
+        radial-gradient(45% 60% at 40% 30%, oklch(.88 .17 calc(var(--mh) + 4)) 0%, transparent 70%),
+        oklch(.845 .17 var(--mh));
       animation: megaHue 10s ease-in-out infinite alternate; animation-play-state: paused; }
     .mega.is-open { visibility: visible; opacity: 1; clip-path: inset(0); transition: clip-path .55s var(--mx), opacity 0s, visibility 0s; animation-play-state: running; }
-    @keyframes megaHue { 0% { --mh: 266; } 50% { --mh: 284; } 100% { --mh: 302; } }
+    @keyframes megaHue { 0% { --mh: 70; } 50% { --mh: 82; } 100% { --mh: 94; } }
     .mega__in { position: absolute; inset: calc(var(--nav) + clamp(32px, 7svh, 88px)) 0 clamp(32px, 6svh, 72px); }
     .mega__in > .wrap { position: relative; height: 100%; }
     .mega__panel { position: absolute; inset: 0; display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: var(--s-8);
@@ -311,33 +311,33 @@
      white panel that rises over the band with the title, the line, and the result (a big blue figure, a hairline, its caption and
      a round blue arrow). All three cards share the one band. */
   .work-grid { --card-gap: var(--s-6); }
-  .work-grid .wc { position: relative; display: flex; flex-direction: column; padding: 0; overflow: hidden; border: 0; border-radius: 22px; background: #fff; color: #171b5b;
-    box-shadow: 0 1px 2px rgba(23, 27, 91, .06), 0 22px 44px -18px rgba(50, 57, 242, .45), 0 10px 28px -14px rgba(83, 74, 230, .28);
+  .work-grid .wc { position: relative; display: flex; flex-direction: column; padding: 0; overflow: hidden; border: 0; border-radius: 22px; background: #fff; color: #2a2212;
+    box-shadow: 0 1px 2px rgba(42, 34, 18, .06), 0 22px 44px -18px rgba(214, 150, 0, .42), 0 10px 28px -14px rgba(255, 140, 40, .26);
     transition: transform .35s cubic-bezier(.645, .045, .355, 1), box-shadow .35s cubic-bezier(.645, .045, .355, 1); }
   .work-grid .wc:hover, .work-grid .wc:focus-visible { transform: translateY(-4px);
-    box-shadow: 0 1px 2px rgba(23, 27, 91, .06), 0 30px 56px -18px rgba(50, 57, 242, .55), 0 14px 32px -14px rgba(83, 74, 230, .34); }
+    box-shadow: 0 1px 2px rgba(42, 34, 18, .06), 0 30px 56px -18px rgba(214, 150, 0, .52), 0 14px 32px -14px rgba(255, 140, 40, .32); }
   .work-grid .wc:focus-visible { outline: 2px solid var(--brand-blue, #3239f2); outline-offset: 4px; }
   .wc__band { position: relative; height: 104px; padding: 20px 22px; display: flex; align-items: flex-start; gap: 8px; isolation: isolate;
     background:
       /* the sweep of light: the rim of a large ellipse centred low on the left, bright on its edge, dark inside */
-      radial-gradient(78% 190% at 32% 175%, rgba(4, 9, 58, .62) 0%, rgba(4, 9, 58, .3) 80%, transparent 89%, rgba(120, 130, 255, .32) 93.4%, rgba(212, 218, 255, .88) 95.8%, rgba(150, 160, 255, .42) 97.9%, transparent 100%),
-      radial-gradient(60% 150% at 100% 0%, rgba(132, 98, 252, .9), transparent 72%),
-      linear-gradient(100deg, #0a1360 0%, #15259a 38%, #2a38d6 64%, #3f42f2 84%, #6552f5 100%); }
+      radial-gradient(78% 190% at 32% 175%, rgba(48, 24, 0, .55) 0%, rgba(48, 24, 0, .25) 80%, transparent 89%, rgba(255, 210, 110, .34) 93.4%, rgba(255, 244, 205, .9) 95.8%, rgba(255, 205, 95, .45) 97.9%, transparent 100%),
+      radial-gradient(60% 150% at 100% 0%, rgba(255, 138, 40, .85), transparent 72%),
+      linear-gradient(100deg, #3d2300 0%, #7c4a00 36%, #c47e00 62%, #f0a600 82%, #ffc629 100%); }
   /* the company tag: a vivid blue pill with white type and a white outline, so it stands out clearly on the dark band */
   .wc__pill { display: inline-flex; align-items: center; height: 28px; padding: 0 13px; border-radius: 999px; font: 700 13px/1 var(--font-text); letter-spacing: .01em;
-    color: #fff; background: #2b24e8; box-shadow: inset 0 0 0 1.5px #fff; }
+    color: #2a1f00; background: #ffc629; box-shadow: inset 0 0 0 1.5px #fff; }
   .wc__body { position: relative; z-index: 1; display: flex; flex-direction: column; gap: var(--s-3); flex: 1; margin-top: -18px; padding: 24px 24px 22px;
     border-radius: 18px 18px 0 0; background: #fff; }
-  .wc__body h3 { font-family: var(--font-display); font-weight: 700; font-size: clamp(22px, .6vw + 15px, 26px); line-height: 1.18; letter-spacing: -0.01em; color: #171b5b; }
-  .wc__body > p { margin: 0; color: #3d4178; font-size: var(--t-small); line-height: 1.55; }
+  .wc__body h3 { font-family: var(--font-display); font-weight: 700; font-size: clamp(22px, .6vw + 15px, 26px); line-height: 1.18; letter-spacing: -0.01em; color: #2a2212; }
+  .wc__body > p { margin: 0; color: #5b4e36; font-size: var(--t-small); line-height: 1.55; }
   .wc__body > .wc__foot { display: flex; align-items: center; gap: 16px; margin-top: auto; padding-top: var(--s-4); }
   .wc__stat { font: 700 clamp(40px, 1vw + 26px, 48px)/1 var(--font-display); letter-spacing: -0.02em; color: var(--brand-blue, #3239f2); font-variant-numeric: tabular-nums; }
-  .wc__cap { align-self: stretch; display: flex; align-items: center; max-width: 21ch; padding-left: 16px; text-wrap: balance; border-left: 1px solid rgba(23, 27, 91, .2); font-size: 13.5px; line-height: 1.35; color: #3d4178; }
+  .wc__cap { align-self: stretch; display: flex; align-items: center; max-width: 21ch; padding-left: 16px; text-wrap: balance; border-left: 1px solid rgba(42, 34, 18, .2); font-size: 13.5px; line-height: 1.35; color: #5b4e36; }
   /* the arrow: a pale lavender disc with a fine deep-indigo arrow */
-  .wc__go { display: grid; place-items: center; flex: none; width: 36px; height: 36px; margin-left: auto; border-radius: 50%; color: #221d8c;
-    background: #e5e4fc; transition: transform .35s cubic-bezier(.645, .045, .355, 1), background-color .25s ease; }
+  .wc__go { display: grid; place-items: center; flex: none; width: 36px; height: 36px; margin-left: auto; border-radius: 50%; color: #6b4700;
+    background: #fff0c2; transition: transform .35s cubic-bezier(.645, .045, .355, 1), background-color .25s ease; }
   .wc__go svg { width: 15px; height: 15px; }
-  .work-grid .wc:hover .wc__go { background: #d8d6fa; }
+  .work-grid .wc:hover .wc__go { background: #ffe596; }
   .work-grid .wc:hover .wc__go { transform: translateX(3px); }
   .work-grid .wc:hover h3 { text-decoration: none; }
   @media (prefers-reduced-motion: reduce) { .work-grid .wc, .wc__go { transition: none; } .work-grid .wc:hover { transform: none; } }
@@ -360,13 +360,13 @@
        and out (no flicker, no change in size) */
     .tour__rings::before, .tour__rings::after { content: ""; position: absolute; inset: 58px; border-radius: 50%; pointer-events: none; }
     .tour__rings::before {
-      box-shadow: 0 0 14px 2px rgba(64, 72, 255, .5), 0 0 36px 8px rgba(138, 76, 255, .3), inset 0 0 16px 2px rgba(64, 72, 255, .38), inset 0 0 38px 8px rgba(150, 92, 255, .16);
+      box-shadow: 0 0 14px 2px rgba(255, 184, 20, .62), 0 0 36px 8px rgba(255, 130, 30, .3), inset 0 0 16px 2px rgba(255, 184, 20, .45), inset 0 0 38px 8px rgba(255, 150, 40, .18);
       animation: tourGlow 5s ease-in-out infinite; }
     .tour__rings::after { padding: 2px;
-      background: conic-gradient(from 200deg, #3239f2, #6a4dff, #b06cff, #7d5bff, #3a7bff, #3239f2);
+      background: conic-gradient(from 200deg, #ffc629, #ffa51f, #ff7a2e, #ffb347, #ffe07a, #ffc629);
       -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
               mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
-      filter: drop-shadow(0 0 3px rgba(120, 90, 255, .7)); animation: tourCurrent 8s linear infinite; }
+      filter: drop-shadow(0 0 3px rgba(255, 160, 30, .75)); animation: tourCurrent 8s linear infinite; }
     @keyframes tourGlow { 0%, 100% { opacity: .15; } 50% { opacity: 1; } }
     @keyframes tourCurrent { to { transform: rotate(360deg); } }
     /* the cyclone: a canvas over the inner ring where thin streaks of the blue-to-violet spectrum swirl round the ring at different
@@ -382,13 +382,13 @@
       transition: transform 1.1s var(--tx); }
     .tour__pill, .tour__icon { grid-area: 1 / 1; transition: opacity .35s ease, transform .45s var(--tx), background-color .2s ease, color .2s ease, border-color .2s ease; }
     .tour__pill { display: inline-flex; align-items: center; height: 32px; padding: 0 14px; border-radius: 999px; white-space: nowrap; font: 600 13px/1 var(--font-text); letter-spacing: .01em;
-      color: #4a4e86; background: #fff; border: 1px solid color-mix(in oklab, var(--brand-blue, #3239f2) 26%, transparent); box-shadow: 0 4px 12px -6px rgba(50, 57, 242, .25); }
+      color: #5b4e36; background: #fff; border: 1px solid color-mix(in oklab, var(--brand-blue, #3239f2) 26%, transparent); box-shadow: 0 4px 12px -6px rgba(214, 150, 0, .28); }
     .tour__node:hover .tour__pill, .tour__node:focus-visible .tour__pill { color: var(--brand-blue, #3239f2); border-color: var(--brand-blue, #3239f2); }
     .tour__node:focus-visible { outline: none; }
     .tour__node:focus-visible .tour__node-in { outline: 2px solid var(--brand-blue, #3239f2); outline-offset: 4px; border-radius: 999px; }
     /* the stop at three o'clock: its label gives way to a blue disc with the section's icon, ringed by a soft halo */
     .tour__icon { display: grid; place-items: center; width: 54px; height: 54px; border-radius: 50%; color: #fff; background: var(--brand-blue, #3239f2);
-      box-shadow: 0 0 0 9px color-mix(in oklab, var(--brand-blue, #3239f2) 12%, transparent), 0 10px 24px -8px rgba(50, 57, 242, .6); opacity: 0; transform: scale(.6); }
+      box-shadow: 0 0 0 9px color-mix(in oklab, var(--brand-blue, #3239f2) 12%, transparent), 0 10px 24px -8px rgba(214, 150, 0, .6); opacity: 0; transform: scale(.6); }
     .tour__icon svg { width: 24px; height: 24px; }
     .tour__node.is-active .tour__pill { opacity: 0; transform: scale(.85); }
     .tour__node.is-active .tour__icon { opacity: 1; transform: none; transition-delay: .35s; }
@@ -458,7 +458,7 @@
   @property --fx-shift { syntax: "<length>"; inherits: true; initial-value: 0px; }
   .oct-facts.has-fx .oct-facts__icon { display: none; }
   .oct-facts__fx { grid-row: 1 / span 2; align-self: center; display: block; width: 28px; height: 28px;
-    background: linear-gradient(90deg, #3239f2, #6a4dff, #b06cff, #7d5bff, #3a7bff, #33c2ff, #3239f2) 0 0 / var(--fx-w, 1200px) 100% repeat-x;
+    background: linear-gradient(90deg, #f0a600, #ff8c1a, #f2691d, #ffb21e, #ffc629, #e89400, #f0a600) 0 0 / var(--fx-w, 1200px) 100% repeat-x;
     background-position: calc(var(--fx-shift) - var(--fx-x, 0px)) 0;
     -webkit-mask: var(--fx-mask) center / contain no-repeat; mask: var(--fx-mask) center / contain no-repeat;
     animation: fxCurrent 9s linear infinite; }
@@ -479,7 +479,39 @@
      by the same soft blue shadow, centred on the first line */
   .exp__body li { padding-left: 22px; }
   .exp__body li::before { left: 2px; top: calc(.775em - 3.5px); width: 7px; height: 7px; border-radius: 50%; background: var(--brand-blue, #3239f2);
-    box-shadow: 0 0 0 3px color-mix(in oklab, var(--brand-blue, #3239f2) 12%, transparent), 0 2px 5px -1px rgba(50, 57, 242, .6); }
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--brand-blue, #3239f2) 12%, transparent), 0 2px 5px -1px rgba(214, 150, 0, .6); }
+
+  /* ===== gold accent mock-up: #FFC629 for fills, a deep gold for accent text on the light page, dark ink on gold ===== */
+  :root { --brand-blue: #ffc629; --p-accent: #ffc629; --p-accent-ink: #2a1f00; --p-action: #ffc629; --p-action-ink: #2a1f00;
+    --gold: #ffc629; --gold-deep: #f0a600; --gold-text: #b07800; --gold-ink: #2a1f00; }
+  .hero .oct-lead { color: var(--gold-text); }
+  .hero .hero-pill { background: color-mix(in oklab, var(--gold) 26%, var(--bg)); color: #6b4700; }
+  .hero--oct { background: radial-gradient(60% 70% at 18% 40%, color-mix(in oklab, var(--gold) 9%, var(--bg)), var(--bg) 70%); }
+  .oct-facts__icon { color: var(--gold-deep); }
+  #work-h .muted, #approach-h .muted { color: var(--gold-text); }
+  .wc__stat { color: #b07800; }
+  .pub__link { color: var(--gold-text); text-decoration-color: color-mix(in oklab, var(--gold-deep) 60%, transparent); }
+  a.nav__icon:hover, a.nav__icon:focus-visible, .nav--home.is-top a.nav__icon:hover, .nav--home.is-top a.nav__icon:focus-visible { color: var(--gold-text); background: color-mix(in oklab, var(--gold) 18%, transparent); }
+  :is(.exp__row, .work-grid .wc, .tour__node .tour__node-in):focus-visible { outline-color: var(--gold-deep); }
+  .tour__rings { border-color: color-mix(in oklab, var(--gold-deep) 50%, transparent); }
+  .tour__pill { border-color: color-mix(in oklab, var(--gold-deep) 40%, transparent); }
+  .tour__node:hover .tour__pill, .tour__node:focus-visible .tour__pill { color: var(--gold-text); border-color: var(--gold-deep); }
+  .tour__icon { color: var(--gold-ink); box-shadow: 0 0 0 9px color-mix(in oklab, var(--gold) 24%, transparent), 0 10px 24px -8px rgba(214, 150, 0, .6); }
+  .tour__link { background: linear-gradient(90deg, var(--gold-deep), transparent); }
+  .exp__body li::before { box-shadow: 0 0 0 3px color-mix(in oklab, var(--gold) 26%, transparent), 0 2px 5px -1px rgba(214, 150, 0, .6); }
+  @media (min-width: 1180px) {
+    .mega { color: var(--gold-ink); }
+    .mega__blurb { color: rgba(42, 31, 0, .88); }
+    .mega__more { color: var(--gold-ink); }
+    .mega__list, .mega__list > li { border-color: rgba(42, 31, 0, .22); }
+    .mega__h { color: var(--gold-ink); }
+    .mega__sub { color: rgba(42, 31, 0, .7); } .mega__sub a:hover, .mega__sub a:focus-visible { color: var(--gold-ink); }
+    .mega__rail { background: rgba(42, 31, 0, .18); } .mega__rail::before { background: var(--gold-ink); }
+    .nav--home.is-mega .nav__lockup-img { filter: brightness(0); opacity: .86; }
+    .nav--home.is-mega .nav__link, .nav--home.is-mega .nav__icon { color: var(--gold-ink) !important; }
+    .nav--home.is-mega a.nav__icon:hover, .nav--home.is-mega a.nav__icon:focus-visible { color: var(--gold-ink) !important; }
+    .nav--home.is-mega .nav__link::before { background: var(--gold-ink) !important; }
+  }
 </style>
 </head>
 <body>
@@ -975,7 +1007,7 @@ document.querySelectorAll('.exp__row').forEach(function (b) {
   var cv = document.querySelector('.tour__swirl'), tour = document.getElementById('tour');
   if (!cv || !cv.getContext || !tour) return;
   var ctx = cv.getContext('2d'), still = window.matchMedia('(prefers-reduced-motion: reduce)');
-  var PAL = [[50, 57, 242], [106, 77, 255], [176, 108, 255], [125, 91, 255], [58, 123, 255], [51, 194, 255]];
+  var PAL = [[255, 190, 20], [247, 150, 10], [240, 110, 30], [255, 170, 50], [255, 212, 80], [230, 140, 0]];
   var W = 0, H = 0, cx = 0, cy = 0, r0 = 0, dpr = 1, run = false, raf = 0, last = 0, t = 0, parts = [], arcs = [], sprites = [], stars = [];
   function mix(f) { f = ((f % 1) + 1) % 1 * PAL.length; var i = Math.floor(f), k = f - i, a = PAL[i], b = PAL[(i + 1) % PAL.length];
     return [a[0] + (b[0] - a[0]) * k, a[1] + (b[1] - a[1]) * k, a[2] + (b[2] - a[2]) * k]; }
