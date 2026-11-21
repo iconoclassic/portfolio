@@ -451,6 +451,20 @@
     .oct-art.oct-mark.has-photo > img:not(.hero-photo) { display: none; }
     .oct-art.oct-mark.has-photo > .hero-photo--panel { display: block; width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; aspect-ratio: auto; object-fit: cover; object-position: 50% 50%; }
   }
+  /* the facts icons as a current of colour: one band of the inner ring's spectrum (electric blue through violet and back) laid
+     across the whole facts row and drifting left to right, so each icon takes the colour passing over it and the colour travels
+     from icon to icon. The script swaps each icon for a span of that band cut to the icon's shape; it holds still for anyone who
+     prefers reduced motion. */
+  @property --fx-shift { syntax: "<length>"; inherits: true; initial-value: 0px; }
+  .oct-facts.has-fx .oct-facts__icon { display: none; }
+  .oct-facts__fx { grid-row: 1 / span 2; align-self: center; display: block; width: 28px; height: 28px;
+    background: linear-gradient(90deg, #3239f2, #6a4dff, #b06cff, #7d5bff, #3a7bff, #33c2ff, #3239f2) 0 0 / var(--fx-w, 1200px) 100% repeat-x;
+    background-position: calc(var(--fx-shift) - var(--fx-x, 0px)) 0;
+    -webkit-mask: var(--fx-mask) center / contain no-repeat; mask: var(--fx-mask) center / contain no-repeat;
+    animation: fxCurrent 9s linear infinite; }
+  @keyframes fxCurrent { to { --fx-shift: var(--fx-w, 1200px); } }
+  @media (min-width: 1180px) { .hero--oct .oct-facts .oct-facts__fx { align-self: start; margin-top: 2px; } }
+  @media (prefers-reduced-motion: reduce) { .oct-facts__fx { animation: none; } }
 </style>
 </head>
 <body>
@@ -1043,6 +1057,25 @@ document.querySelectorAll('.exp__row').forEach(function (b) {
   }
   measure(); window.addEventListener('resize', measure); window.addEventListener('load', measure);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
+})();
+</script>
+<script>
+/* the facts icons: cut the moving colour band to each icon's shape */
+(function () {
+  var facts = document.querySelector('.hero--oct .oct-facts'); if (!facts || !window.CSS || !CSS.supports('mask', 'url(x)') && !CSS.supports('-webkit-mask', 'url(x)')) return;
+  var icons = [].slice.call(facts.querySelectorAll('.oct-facts__icon'));
+  icons.forEach(function (svg) {
+    var c = svg.cloneNode(true); c.setAttribute('xmlns', 'http://www.w3.org/2000/svg'); c.setAttribute('stroke', '#000'); c.removeAttribute('class');
+    var fx = document.createElement('span'); fx.className = 'oct-facts__fx'; fx.setAttribute('aria-hidden', 'true');
+    fx.style.setProperty('--fx-mask', 'url("data:image/svg+xml,' + encodeURIComponent(c.outerHTML.replace(/currentColor/g, '#000')) + '")');
+    svg.parentNode.insertBefore(fx, svg);
+  });
+  function place() {
+    var r = facts.getBoundingClientRect(); facts.style.setProperty('--fx-w', Math.max(1, Math.round(r.width)) + 'px');
+    facts.querySelectorAll('.oct-facts__fx').forEach(function (fx) { fx.style.setProperty('--fx-x', Math.round(fx.getBoundingClientRect().left - r.left) + 'px'); });
+  }
+  facts.classList.add('has-fx'); place(); window.addEventListener('resize', place);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(place);
 })();
 </script>
 </body>
