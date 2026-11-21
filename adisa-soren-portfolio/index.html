@@ -443,6 +443,8 @@
     -webkit-mask-size: 100% 100%; mask-size: 100% 100%; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
     -webkit-mask-composite: source-in; mask-composite: intersect; }
   .hero-photo--panel { display: none; }
+  /* with the photo the facts' hairline runs grey all the way across (the white end was for the old dark-blue background) */
+  @media (min-width: 1180px) { .hero--oct:has(.has-photo) .oct-facts { border-image: linear-gradient(90deg, rgba(73, 72, 67, .3), rgba(73, 72, 67, .3)) 1; } }
   @media (min-width: 1180px) { .oct-art.oct-mark.has-photo { visibility: hidden; } }
   @media (max-width: 1179px) {
     .oct-art.oct-mark.has-photo { padding: 0; overflow: hidden; align-self: start; width: 100%; height: auto; aspect-ratio: 1108 / 1478; background: #dfe6ee; border-radius: 24px; }
