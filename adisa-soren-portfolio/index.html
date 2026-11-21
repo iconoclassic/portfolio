@@ -465,6 +465,12 @@
   @keyframes fxCurrent { to { --fx-shift: var(--fx-w, 1200px); } }
   @media (min-width: 1180px) { .hero--oct .oct-facts .oct-facts__fx { align-self: start; margin-top: 2px; } }
   @media (prefers-reduced-motion: reduce) { .oct-facts__fx { animation: none; } }
+  /* the facts spread across the full width of the line: the first starts at its left end, the last finishes at its right end, and
+     the space between them is shared equally */
+  @media (min-width: 1180px) and (min-height: 841px) {
+    .hero--oct .oct-facts { display: flex; justify-content: space-between; column-gap: var(--s-6); }
+    .hero--oct .oct-facts > div { flex: 0 1 auto; min-width: 0; grid-column: auto; }
+  }
 </style>
 </head>
 <body>
