@@ -423,6 +423,26 @@
   .footer--slim .footer__legal { margin: 0; padding: 0; border: 0; }
   /* the second sentence of the Case studies and Research strategy headings in Kitsune blue */
   #work-h .muted, #approach-h .muted { color: var(--brand-blue, #3239f2); }
+  /* ---- the hero photograph: Paris, on the right of the hero in place of the blue background and the mark. The page colour fades over
+     its left edge (the same fade as before) and over its foot, so the words and the facts sit on a light ground. Below 1180px it sits
+     in a rounded panel under the words. */
+  .hero--oct .oct-bg.has-photo { background-image: none; }
+  .hero-photo { display: block; background: #dfe6ee; }
+  /* the photograph sits in a box that ends exactly at the facts' hairline (the script measures it as --foot), so nothing of it reaches
+     the facts row; inside, it is scaled up a touch and lifted so the walker shows head to toe just above that line. Its left and right edges dissolve into the page, and its last few pixels fade out at the line. */
+  .hero-photo-box { position: absolute; z-index: -1; top: 0; right: 0; left: 0; height: var(--foot, 82%); overflow: hidden;
+    /* under the header the photo is only a faint wash (so the links read clearly), coming to full strength a little below it */
+    -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, .06) 0, rgba(0, 0, 0, .16) var(--nav), #000 calc(var(--nav) + 170px), #000 calc(100% - 28px), transparent 100%);
+            mask-image: linear-gradient(180deg, rgba(0, 0, 0, .06) 0, rgba(0, 0, 0, .16) var(--nav), #000 calc(var(--nav) + 170px), #000 calc(100% - 28px), transparent 100%); }
+  .hero-photo--wide { position: absolute; right: 0; bottom: calc(40px - 7.8%); height: 130%; width: auto; aspect-ratio: 1108 / 1478; max-width: none; object-fit: cover;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 34%, #000 84%, transparent 100%); mask-image: linear-gradient(90deg, transparent 0, #000 34%, #000 84%, transparent 100%); }
+  .hero-photo--panel { display: none; }
+  @media (min-width: 1180px) { .oct-art.oct-mark.has-photo { visibility: hidden; } }
+  @media (max-width: 1179px) {
+    .oct-art.oct-mark.has-photo { padding: 0; overflow: hidden; align-self: start; width: 100%; height: auto; aspect-ratio: 1108 / 1478; background: #dfe6ee; border-radius: 24px; }
+    .oct-art.oct-mark.has-photo > img:not(.hero-photo) { display: none; }
+    .oct-art.oct-mark.has-photo > .hero-photo--panel { display: block; width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; aspect-ratio: auto; object-fit: cover; object-position: 50% 50%; }
+  }
 </style>
 </head>
 <body>
@@ -488,7 +508,7 @@
 
 <main id="top">
   <section class="hero hero--statement hero--oct" aria-labelledby="hero-h">
-    <div class="oct-bg" aria-hidden="true"></div>
+    <div class="oct-bg has-photo" aria-hidden="true"><div class="hero-photo-box"><img class="hero-photo hero-photo--wide" src="assets/img/paris-hq.webp" srcset="assets/img/paris-640.webp 640w, assets/img/paris.webp 1000w, assets/img/paris-hq.webp 1108w" width="1108" height="1478" alt="" sizes="(min-width: 1180px) 74vh, 1px" fetchpriority="high"></div></div>
     <div class="wrap"><div class="hero-text hero__in">
       <div class="oct-grid">
         <div class="oct-copy">
@@ -498,8 +518,9 @@
             <a class="btn btn--primary" href="workbench.html">Read the Workbench AI case study<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a>
           </div>
         </div>
-        <figure class="oct-art oct-mark" aria-hidden="true">
+        <figure class="oct-art oct-mark has-photo" aria-hidden="true">
           <img src="assets/logos/soren-mark-white.svg" width="3855" height="3273" alt="">
+          <img class="hero-photo hero-photo--panel" src="assets/img/paris-hq.webp" srcset="assets/img/paris-640.webp 640w, assets/img/paris.webp 1000w, assets/img/paris-hq.webp 1108w" width="1108" height="1478" alt="" sizes="(max-width: 1179px) 92vw, 1px" loading="lazy">
         </figure>
       </div>
       <dl class="hero__facts oct-facts">
@@ -1002,6 +1023,18 @@ document.querySelectorAll('.exp__row').forEach(function (b) {
     var near = live && Math.abs(tour.getBoundingClientRect().top) <= (tour.offsetHeight - window.innerHeight) + 3 && tour.getBoundingClientRect().top <= 3;
     setTimeout(function () { openRow(a.getAttribute('data-open')); }, live ? (near ? 350 : 1150) : 150);
   });
+})();
+</script>
+<script>
+/* the hero photograph ends at the facts' hairline: measure where that line sits (it moves with the screen size and the fonts) */
+(function () {
+  var hero = document.querySelector('.hero--oct'), facts = hero && hero.querySelector('.oct-facts'); if (!hero || !facts || !hero.querySelector('.hero-photo-box')) return;
+  function measure() {
+    var shown = getComputedStyle(facts).display !== 'none';
+    hero.style.setProperty('--foot', (shown ? facts.getBoundingClientRect().top - hero.getBoundingClientRect().top : hero.offsetHeight) + 'px');
+  }
+  measure(); window.addEventListener('resize', measure); window.addEventListener('load', measure);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
 })();
 </script>
 </body>
